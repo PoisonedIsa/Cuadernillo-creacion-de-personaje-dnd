@@ -11,9 +11,6 @@
         :root { --border-thick: 1.5px solid #000; --border-thin: 0.75px solid #444; }
         body { font-family: 'Roboto Condensed', sans-serif; background-color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
         
-       
-
-    
         /* CONTENEDOR DE HOJA */
         .sheet-wrapper { position: relative; width: 297mm; display: flex; flex-direction: column; gap: 5px; }
         .sheet-header { display: flex; justify-content: space-between; color: white; font-family: sans-serif; font-size: 12px; padding: 0 5px; }
@@ -135,13 +132,13 @@
     <div class="fixed top-4 right-4 no-print z-50 flex gap-2">
          <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)">
          <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-sm flex items-center gap-2 transition-colors">SUBIR FONDO</button>
-         <button onclick="AllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR (IMG)</button>
+         <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR (IMG)</button>
          <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors">IMPRIMIR</button>
     </div>
 
     <!-- HOJA 1: P12 & P1 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 1 (Págs 12 - 1)</span><button onclick="Sheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 1 (Págs 12 - 1)</span><button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet1" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 12: MAPA -->
@@ -198,7 +195,7 @@
 
     <!-- HOJA 2: P2 & P11 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="Sheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet2" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 2: COMBATE Y HABILIDADES -->
@@ -229,7 +226,7 @@
             <div class="page-a5">
                 <h2 class="header-font text-xl font-bold text-center border-b-2 border-black mb-4">Compañeros y Monturas</h2>
                 <div class="flex flex-col gap-4 h-full">
-                    <div class="box-border p-3 flex flex-col bg-white/50 rounded">
+                    <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
                         <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="label-sm block">Nombre</label><input type="text" class="font-bold text-lg p-0 w-full bg-transparent no-line text-std"></div><div class="w-1/3"><label class="label-sm block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-std"></div></div>
                         <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">CA</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">HP</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">VEL</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div></div>
                         <!-- STATS EN CUADROS -->
@@ -243,16 +240,17 @@
                         </div>
                         <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-std" placeholder=""></textarea>
                     </div>
-                    <div class="box-border p-3 flex flex-col bg-white/50 rounded">
+                    <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
                         <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="label-sm block">Nombre</label><input type="text" class="font-bold text-lg p-0 w-full bg-transparent no-line text-std"></div><div class="w-1/3"><label class="label-sm block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-std"></div></div>
                         <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">CA</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">HP</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">VEL</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div></div>
+                        <!-- STATS EN CUADROS -->
                         <div class="flex justify-between text-center mb-2 px-2">
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">FUE</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">DES</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CON</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">INT</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">SAB</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CAR</span><div class="border border-gray-400 bg-white w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">FUE</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">DES</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">CON</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">INT</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">SAB</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="label-sm">CAR</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-std"></div></div>
                         </div>
                         <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-std" placeholder=""></textarea>
                     </div>
@@ -264,7 +262,7 @@
 
     <!-- HOJA 3: P10 & P3 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 3 (Páginas 10 y 3)</span><button onclick="Sheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 3 (Páginas 10 y 3)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 10: NOTAS ADICIONALES -->
@@ -305,7 +303,7 @@
 
     <!-- HOJA 4: P4 & P9 -->
     <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="Sheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet4" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 4 -->
@@ -362,7 +360,7 @@
 
     <!-- HOJA 5: P8 & P5 -->
     <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 5 (Páginas 8 y 5)</span><button onclick="Sheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 5 (Páginas 8 y 5)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet5" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
@@ -405,7 +403,7 @@
 
     <!-- HOJA 6: P6 & P7 -->
     <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 6 (Páginas 6 y 7)</span><button onclick="Sheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print"><span>Hoja 6 (Páginas 6 y 7)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet6" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
@@ -458,7 +456,15 @@
                 useCORS: true, 
                 backgroundColor: "#ffffff", 
                 onclone: (clonedDoc) => {
-                    clonedDoc.body.classList.add("exporting");
+                    const inputs = clonedDoc.querySelectorAll('input[type="text"]');
+                    inputs.forEach(input => {
+                        // Anti-gravity fix: slight negative margin to pull text up
+                        input.style.marginTop = '-3px'; 
+                    });
+                    const textareas = clonedDoc.querySelectorAll('textarea');
+                    textareas.forEach(t => {
+                         t.style.marginTop = '-2px';
+                    });
                 }
             }).then(canvas => {
                 const link = document.createElement('a');
@@ -493,16 +499,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
