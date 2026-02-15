@@ -124,12 +124,24 @@
             .print-guide { display: none; } 
             .page-a5 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             * { border-color: #000 !important; }
+         /* 🔹 BARRA SUPERIOR (botones) */
+        .top-bar {
+            position: static;          /* comportamiento normal */
+            width: 100%;
+            display: flex;
+            justify-content: flex-end; /* botones a la derecha */
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        /* opcional, solo estética */
+        .top-bar button {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="fixed top-4 right-4 no-print z-50 flex gap-2">
+    <div class="top-bar no-print">
          <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)">
          <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-sm flex items-center gap-2 transition-colors">SUBIR FONDO</button>
          <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR (IMG)</button>
@@ -499,3 +511,4 @@
 
 </body>
 </html>
+
