@@ -8,127 +8,93 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --border-thick: 1.5px solid #000; --border-thin: 0.75px solid #444; }
+        :root { 
+            --border-thick: 1.5px solid #000; 
+            --border-thin: 0.75px solid #444; 
+            
+            /* SISTEMA DE 4 TAMAÑOS HOMOGÉNEOS */
+            --s-title: 20px;  /* T1: Títulos */
+            --s-stat: 16px;   /* T2: Números Grandes/Destacados */
+            --s-body: 12px;   /* T3: Texto Standard, Inputs, Skills */
+            --s-label: 9px;   /* T4: Etiquetas, Detalles pequeños */
+        }
+
         body { font-family: 'Roboto Condensed', sans-serif; background-color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
         
+        /* CLASES DE TEXTO UNIFICADAS */
+        .text-title { font-size: var(--s-title) !important; line-height: 1.1; font-weight: 700; font-family: 'Cinzel', serif; text-transform: uppercase; }
+        .text-stat { font-size: var(--s-stat) !important; font-weight: 700; line-height: 1; }
+        .text-body { font-size: var(--s-body) !important; line-height: 1.3; font-weight: 400; }
+        .text-label { font-size: var(--s-label) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; }
+        
+        /* Reset de inputs para heredar tamaño body por defecto */
+        input[type="text"], textarea { 
+            background: transparent; border: none; border-bottom: 0.5px solid #888; 
+            font-family: 'Roboto Condensed', sans-serif; width: 100%; padding: 0 2px; margin: 0; 
+            display: block; height: 100%; line-height: 1.3; box-sizing: border-box;
+            font-size: var(--s-body); /* Por defecto T3 */
+        }
+        input:focus, textarea:focus { outline: none; border-bottom: 1px solid #000; background: rgba(255,255,255,0.5); }
+        .no-line { border-bottom: none !important; }
+
         /* CONTENEDOR DE HOJA */
         .sheet-wrapper { position: relative; width: 297mm; display: flex; flex-direction: column; gap: 5px; }
-        .sheet-header { display: flex; justify-content: space-between; color: white; font-family: sans-serif; font-size: 12px; padding: 0 5px; }
         
         /* HOJA PRINCIPAL */
         .sheet-landscape { 
-            background: white; 
-            width: 297mm; 
-            height: 210mm; 
-            padding: 0; 
-            display: flex; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.5); 
-            position: relative; 
-            box-sizing: border-box; 
-            overflow: hidden; 
-            page-break-after: always; 
+            background: white; width: 297mm; height: 210mm; padding: 0; display: flex; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; 
+            overflow: hidden; page-break-after: always; 
         }
         
         /* PÁGINA A5 */
         .page-a5 { 
-            width: 148.5mm; 
-            height: 210mm; 
-            padding: 6mm 8mm 14mm 8mm; 
-            box-sizing: border-box; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative; 
-            background-color: white; 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: 0;
+            width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
+            box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
+            background-color: white; background-size: cover; background-position: center; 
+            background-repeat: no-repeat; z-index: 0;
         }
 
         .divider { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #ccc; transform: translateX(-50%); z-index: 10; }
         
-        h1, h2, h3, .header-font { font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        /* TIPOGRAFÍA */
-        .title-20 { font-size: 20px !important; line-height: 1.2; font-weight: 700; }
-        .text-12 { font-size: 12px !important; line-height: 1.5; } 
-        .label-12 { font-size: 12px !important; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px; }
-        
-        /* Inputs y Textos */
-        input[type="text"], textarea { 
-            background: transparent; 
-            border: none; 
-            border-bottom: 0.5px solid #888; 
-            font-family: 'Roboto Condensed', sans-serif; 
-            font-size: 12px; 
-            font-weight: 400; 
-            color: #000; 
-            width: 100%; 
-            padding: 0 2px; 
-            margin: 0; 
-            display: block; 
-            height: 100%; 
-            line-height: 1.5; 
-            box-sizing: border-box; 
-        }
-        
-        .text-big { font-size: 20px !important; font-weight: 900 !important; line-height: 1.1 !important; }
-        input:focus, textarea:focus { outline: none; border-bottom: 1px solid #000; background: rgba(255,255,255,0.5); }
-        .no-line { border-bottom: none !important; }
-        .label-sm { font-size: 10px; color: #333; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-
+        /* Componentes UI */
         .box-border { border: var(--border-thick); border-radius: 5px; }
-        .box-border-thin { border: var(--border-thin); border-radius: 3px; }
-        
-        /* STATS */
         .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: var(--border-thick); border-radius: 6px; position: relative; background: rgba(255,255,255,0.8); z-index: 5;}
-        .stat-box span { font-weight: 900; font-size: 12px; } 
+        .stat-box span { font-weight: 900; font-size: var(--s-body); } 
         .stat-score-bubble { border: 1.5px solid black; border-radius: 50%; background: white; position: absolute; bottom: -8px; display: flex; align-items: center; justify-content: center; z-index: 10; width: 22px; height: 18px;}
         .shield-shape { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>') no-repeat center center; background-size: contain; }
         
-        /* CHECKS & UI */
-        .skill-row { font-size: 12px; display: flex; align-items: center; gap: 3px; line-height: 1.3; white-space: nowrap; font-weight: 400; margin-bottom: 0px; }
-        .skill-mod-input { width: 20px !important; border-bottom: 1px solid #000 !important; text-align: center; margin-right: 3px; font-size: 12px; height: 14px; font-weight: 400; padding: 0; display: inline-block; vertical-align: middle; }
+        /* Skills y Listas */
+        .skill-row { font-size: var(--s-body); display: flex; align-items: center; gap: 3px; line-height: 1.3; white-space: nowrap; font-weight: 400; margin-bottom: 0px; }
+        .skill-mod-input { width: 20px !important; border-bottom: 1px solid #000 !important; text-align: center; margin-right: 3px; font-size: var(--s-body); height: 14px; font-weight: 400; padding: 0; display: inline-block; vertical-align: middle; }
         
+        /* Checkboxes */
         .checkbox-round { width: 10px; height: 10px; border: 1px solid black; border-radius: 50%; appearance: none; cursor: pointer; flex-shrink: 0; margin-right: 2px; background: rgba(255,255,255,0.5); }
         .checkbox-round:checked { background-color: black; }
-        .hex-check { width: 13px; height: 13px; border: 1px solid #000; transform: rotate(45deg); display: inline-block; margin: 2px; cursor: pointer; background: rgba(255,255,255,0.5); }
+        .hex-check { width: 12px; height: 12px; border: 1px solid #000; transform: rotate(45deg); display: inline-block; margin: 2px; cursor: pointer; background: rgba(255,255,255,0.5); }
         .hex-check:checked { background: black; }
+        .comp-check { appearance: none; width: 11px; height: 11px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
+        .comp-check:checked { background: black; }
         
-        .rules-box { background: rgba(247, 247, 247, 0.8); border: 1px solid #333; border-radius: 4px; padding: 6px; margin-bottom: 4px; font-size: 12px; }
-        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #999; margin-bottom: 2px; display: block; font-size: 12px; }
-        .action-item { display: flex; justify-content: space-between; margin-bottom: 1px; border-bottom: 1px dotted #ccc; padding-bottom: 0px; font-size: 12px; }
+        .rules-box { background: rgba(247, 247, 247, 0.8); border: 1px solid #333; border-radius: 4px; padding: 6px; margin-bottom: 4px; font-size: var(--s-body); }
+        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #999; margin-bottom: 2px; display: block; font-size: var(--s-label); }
+        .action-item { display: flex; justify-content: space-between; margin-bottom: 1px; border-bottom: 1px dotted #ccc; padding-bottom: 0px; font-size: var(--s-label); }
         .action-name { font-weight: 700; }
         
-        /* LINED BACKGROUND */
-        .lined-bg { 
-            background-image: linear-gradient(#ccc 1px, transparent 1px); 
-            background-size: 100% 20px; 
-            background-position: 0 19px; 
-            line-height: 20px !important; 
-        }
+        /* Fondos */
+        .lined-bg { background-image: linear-gradient(#ccc 1px, transparent 1px); background-size: 100% 20px; background-position: 0 19px; line-height: 20px !important; }
         .dot-grid { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiM5OTkiLz48L3N2Zz4='); background-repeat: repeat; }
-        .page-num { position: absolute; bottom: 5mm; width: 100%; left: 0; text-align: center; font-size: 12px; color: #000; font-weight: 700; font-family: 'Cinzel', serif; z-index: 50; }
+        .page-num { position: absolute; bottom: 5mm; width: 100%; left: 0; text-align: center; font-size: var(--s-body); color: #000; font-weight: 700; font-family: 'Cinzel', serif; z-index: 50; }
         .force-border { border: 1px solid #000 !important; background: white; }
 
-        /* --- ESTILOS DE GRIMORIO --- */
+        /* Grimorio */
         .spell-header-box { border: 2px solid black; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: white; }
-        .spell-header-title { font-size: 8px; font-weight: 700; text-align: center; text-transform: uppercase; line-height: 1; margin-top: 2px; }
-        
-        /* Tarjeta de Hechizo */
         .spell-card { position: relative; border-bottom: 1.5px dashed #666; padding-bottom: 8px; margin-bottom: 8px; display: flex; gap: 8px; }
-        
         .spell-level-diamond { width: 32px; height: 32px; border: 2px solid black; transform: rotate(45deg); display: flex; items-center; justify-content: center; background: white; margin: 4px auto 0 auto; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-        .spell-level-input { width: 100%; height: 100%; transform: rotate(-45deg); text-align: center; font-weight: 900; font-size: 20px; border: none !important; background: transparent; padding: 0; }
-        
-        /* Component Checkbox - Solo Círculo */
-        .comp-check { appearance: none; width: 12px; height: 12px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
-        .comp-check:checked { background: black; }
-
-        /* Contenedor de descripción fijo a 4 líneas (80px) */
+        .spell-level-input { width: 100%; height: 100%; transform: rotate(-45deg); text-align: center; font-weight: 900; font-size: var(--s-stat); border: none !important; background: transparent; padding: 0; }
         .desc-4-lines { height: 80px; width: 100%; }
 
-        /* --- MODOS --- */
+        /* Modos */
         .martial-content { display: none !important; }
         .magic-content { display: block !important; }
         body.mode-martial .martial-content { display: block !important; }
@@ -138,7 +104,7 @@
             body { background: white; margin: 0; padding: 0; display: block; } 
             .sheet-container { margin: 0; page-break-after: always; }
             .sheet-landscape { margin: 0; box-shadow: none; } 
-            .no-print, .sheet-controls, .fixed { display: none !important; } 
+            .no-print, .sheet-controls { display: none !important; } 
             .top-bar { display: none !important; }
             .page-a5 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             * { border-color: #000 !important; }
@@ -161,51 +127,51 @@
         <div class="sheet-controls no-print"><span>Hoja 1 (Págs 12 - 1)</span><button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet1" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 12: MAPA -->
+            <!-- PÁGINA 12 -->
             <div class="page-a5">
-                <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Mapa / Bocetos</h2>
+                <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
                 <div class="h-full w-full border border-gray-400 dot-grid rounded" style="background-color: transparent;"></div>
                 <div class="page-num">12</div>
             </div>
-            <!-- PÁGINA 1: PERSONAJE PRINCIPAL -->
+            <!-- PÁGINA 1 -->
             <div class="page-a5">
                 <div class="grid grid-cols-12 gap-2 mb-2 border-b border-black pb-1 items-end">
-                    <div class="col-span-10"><input type="text" class="header-font uppercase h-7 border-b-2 border-black w-full title-20"><label class="label-sm">Nombre del Personaje</label></div>
-                    <div class="col-span-2 flex flex-col items-center"><div class="border border-black w-8 h-8 flex items-center justify-center rounded bg-white"><input type="text" class="text-center text-xl font-bold w-full h-full p-0 no-line text-big"></div><label class="label-sm mt-0.5">NIVEL</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">Clase</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">Subclase</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">Raza</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">Trasfondo</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">Alineación</label></div>
-                    <div class="col-span-4"><input type="text" class="h-4 text-12 w-full border-b border-gray-400"><label class="label-sm">XP</label></div>
+                    <div class="col-span-10"><input type="text" class="text-title h-7 border-b-2 border-black w-full"><label class="text-label">Nombre del Personaje</label></div>
+                    <div class="col-span-2 flex flex-col items-center"><div class="border border-black w-8 h-8 flex items-center justify-center rounded bg-white"><input type="text" class="text-center text-stat w-full h-full p-0 no-line"></div><label class="text-label mt-0.5">NIVEL</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Clase</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Subclase</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Raza</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Trasfondo</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Alineación</label></div>
+                    <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">XP</label></div>
                 </div>
                 <div class="flex gap-2 h-full">
                     <div class="w-[58%] flex flex-col gap-1">
                         <div class="bg-gray-50/50 p-1.5 rounded box-border-thin flex-grow flex flex-col">
-                            <div class="flex justify-between items-center border-b border-gray-400 pb-1 mb-1"><span class="label-sm text-[9px]">BONO DE COMPETENCIA</span><div class="border border-black rounded-full w-7 h-7 flex items-center justify-center bg-white"><input type="text" class="text-center text-lg font-bold w-full h-full p-0 bg-transparent no-line text-big"></div></div>
+                            <div class="flex justify-between items-center border-b border-gray-400 pb-1 mb-1"><span class="text-label">BONO DE COMPETENCIA</span><div class="border border-black rounded-full w-7 h-7 flex items-center justify-center bg-white"><input type="text" class="text-center text-stat w-full h-full p-0 bg-transparent no-line"></div></div>
                             <div class="flex-grow flex flex-col justify-around gap-0.5">
-                                <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>FUE</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center text-[10px] w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Atletismo</div></div></div>
-                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>DES</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center text-[10px] w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Acrobacia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Sigilo</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Jue. de Manos</div></div></div></div>
-                                <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>CON</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center text-[10px] w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div></div></div>
-                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>INT</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center text-[10px] w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Arcano</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Historia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Investigacion</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Naturaleza</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Religión</div></div></div></div>
-                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>SAB</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center text-[10px] w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Animales</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Medicina</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Percepción</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Perspicacia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Superviv.</div></div></div></div>
-                                <div class="flex items-start gap-1"><div class="stat-box w-12 h-12 flex-shrink-0"><span>CAR</span><input type="text" class="text-center text-lg font-bold p-0 h-5 no-line text-big"><div class="stat-score-bubble"><input type="text" class="text-center w-full p-0 bg-transparent no-line text-std"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="label-sm text-[12px]">SALVACIÓN</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Engaño</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Intimidar</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Interpretacion</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Persuasion</div></div></div></div>
+                                <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>FUE</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Atletismo</div></div></div>
+                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>DES</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Acrobacia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Sigilo</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Jue. de Manos</div></div></div></div>
+                                <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>CON</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div></div></div>
+                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>INT</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Arcano</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Historia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Investigacion</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Naturaleza</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Religión</div></div></div></div>
+                                <div class="flex items-start gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>SAB</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Animales</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Medicina</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Percepción</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Perspicacia</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Superviv.</div></div></div></div>
+                                <div class="flex items-start gap-1"><div class="stat-box w-12 h-12 flex-shrink-0"><span>CAR</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="grid grid-cols-2 gap-x-1"><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Engaño</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Intimidar</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Interpretacion</div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Persuasion</div></div></div></div>
                             </div>
                             <div class="flex justify-between gap-2 mt-1">
-                                <div class="border border-black p-0.5 text-center flex-[2] bg-white rounded"><span class="label-sm block text-[9px]">PERCEPCION PASIVA</span><input type="text" class="text-center text-base font-bold p-0 no-line bg-transparent text-big"></div>
-                                <div class="border border-black p-0.5 text-center flex-1 bg-white rounded"><span class="label-sm block text-[9px]">INSPIRACION</span><input type="checkbox" class="mx-auto mt-1 w-4 h-4"></div>
+                                <div class="border border-black p-0.5 text-center flex-[2] bg-white rounded"><span class="text-label block">PERCEPCION PASIVA</span><input type="text" class="text-center text-stat p-0 no-line bg-transparent"></div>
+                                <div class="border border-black p-0.5 text-center flex-1 bg-white rounded"><span class="text-label block">INSPIRACION</span><input type="checkbox" class="mx-auto mt-1 w-4 h-4"></div>
                             </div>
                         </div>
                     </div>
                     <div class="w-[42%] flex flex-col gap-2">
                         <div class="flex items-center justify-between bg-gray-50/50 rounded p-1.5 border border-gray-300">
-                            <div class="text-center w-12"><div class="shield-shape w-10 h-12 mx-auto flex items-center justify-center"><input type="text" class="text-center w-8 text-lg font-bold bg-transparent no-line text-big"></div><span class="label-sm block mt-0.5">CA</span></div>
-                            <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center font-bold w-full p-0 no-line text-12"><span class="label-sm block mt-[-2px] text-[12px]">INIC.</span></div>
-                            <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center font-bold w-full p-0 no-line text-12"><span class="label-sm block mt-[-2px] text-[12px]">VEL.</span></div>
+                            <div class="text-center w-12"><div class="shield-shape w-10 h-12 mx-auto flex items-center justify-center"><input type="text" class="text-center w-8 text-stat bg-transparent no-line"></div><span class="text-label block mt-0.5">CA</span></div>
+                            <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center text-stat w-full p-0 no-line"><span class="text-label block mt-[-2px]">INIC.</span></div>
+                            <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center text-stat w-full p-0 no-line"><span class="text-label block mt-[-2px]">VEL.</span></div>
                         </div>
-                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="label-sm block text-[8px]">Vida Máxima</label><input type="text" class="text-center text-12 p-0 no-line text-std"></div><div class="w-1/2 text-center"><label class="label-sm block text-[8px]">Temporales</label><input type="text" class="text-center text-12 p-0 no-line text-std"></div></div><textarea class="w-full text-center text-3xl font-bold h-14 p-0 resize-none no-line bg-transparent text-big" style="font-size: 24px !important;"></textarea><span class="label-sm block text-center mt-1">PUNTOS DE GOLPE</span></div>
-                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between items-center border-b border-black mb-1"><span class="label-sm font-bold">DADOS GOLPE</span><span class="text-[11px] text-gray-800 font-bold">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="label-sm block text-gray-500 text-[8px]">TOTAL</label><input type="text" class="text-center text-lg font-bold w-full p-0 no-line bg-transparent text-big"></div><div class="w-1/2 text-center"><label class="label-sm block text-gray-500 text-[8px]">RESTANTES</label><input type="text" class="text-center text-lg font-bold w-full p-0 no-line bg-transparent text-big"></div></div></div>
-                        <div class="box-border p-1.5 bg-white/60"><label class="label-sm block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-[10px] font-bold">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-[10px] font-bold">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
+                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="text-label block">Vida Máxima</label><input type="text" class="text-center text-body p-0 no-line"></div><div class="w-1/2 text-center"><label class="text-label block">Temporales</label><input type="text" class="text-center text-body p-0 no-line"></div></div><textarea class="w-full text-center text-title h-14 p-0 resize-none no-line bg-transparent"></textarea><span class="text-label block text-center mt-1">PUNTOS DE GOLPE</span></div>
+                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between items-center border-b border-black mb-1"><span class="text-label">DADOS GOLPE</span><span class="text-label text-gray-800">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="text-label block text-gray-500">TOTAL</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div><div class="w-1/2 text-center"><label class="text-label block text-gray-500">RESTANTES</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div></div></div>
+                        <div class="box-border p-1.5 bg-white/60"><label class="text-label block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-label">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-label">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
                         <div class="flex-grow"></div>
                     </div>
                 </div>
@@ -218,59 +184,59 @@
         <div class="sheet-controls no-print"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet2" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 2: COMBATE Y HABILIDADES -->
+            <!-- PÁGINA 2 -->
             <div class="page-a5">
-                <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Combate y Habilidades</h2>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Combate y Habilidades</h2>
                 <div class="box-border p-2 mb-3 bg-white/40">
-                    <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-6 mb-1 px-2 items-center text-xs font-bold leading-tight text-center"><div class="px-2">ARMA / CONJURO</div><div>BONO</div><div class="px-2">DAÑO / TIPO</div></div>
+                    <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-6 mb-1 px-2 items-center text-label text-center"><div class="px-2">ARMA / CONJURO</div><div>BONO</div><div class="px-2">DAÑO / TIPO</div></div>
                     <div class="flex flex-col gap-2">
-                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-std"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-center text-std"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 text-std"></div></div>
-                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-std"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-center text-std"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 text-std"></div></div>
-                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-std"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-center text-std"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 text-std"></div></div>
-                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-std"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-12 font-bold text-center text-std"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-12 text-std"></div></div>
+                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
+                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
+                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
+                        <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
                     </div>
                 </div>
                 <div class="flex-grow box-border p-3 flex flex-col bg-white/40">
-                    <span class="header-font text-center border-b-2 border-black mb-2 block" style="font-size: 12px !important; font-weight: bold;">RASGOS DE CLASE Y TALENTOS</span>
+                    <span class="text-label text-center border-b-2 border-black mb-2 block">RASGOS DE CLASE Y TALENTOS</span>
                     <div class="flex flex-col gap-2 mb-2">
-                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-12"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-12"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-12"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-12"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-body"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-body"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-body"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                        <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-body"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
                     </div>
-                    <textarea class="w-full flex-grow border-none resize-none p-0 lined-bg bg-transparent text-12"></textarea>
+                    <textarea class="w-full flex-grow border-none resize-none p-0 lined-bg bg-transparent text-body"></textarea>
                 </div>
                 <div class="page-num">2</div>
             </div>
             <!-- PÁGINA 11 -->
             <div class="page-a5">
-                <h2 class="header-font font-bold text-center border-b-2 border-black mb-4 title-20">Compañeros y Monturas</h2>
+                <h2 class="text-title text-center border-b-2 border-black mb-4">Compañeros y Monturas</h2>
                 <div class="flex flex-col gap-4 h-full">
                     <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
-                        <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="label-sm block">Nombre</label><input type="text" class="font-bold text-lg p-0 w-full bg-transparent no-line text-12"></div><div class="w-1/3"><label class="label-sm block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-12"></div></div>
-                        <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">CA</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">HP</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">VEL</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div></div>
+                        <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="text-label block">Nombre</label><input type="text" class="font-bold text-stat p-0 w-full bg-transparent no-line"></div><div class="w-1/3"><label class="text-label block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-body"></div></div>
+                        <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">CA</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">HP</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">VEL</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div></div>
                         <div class="flex justify-between text-center mb-2 px-2">
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">FUE</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">DES</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CON</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">INT</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">SAB</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CAR</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">FUE</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">DES</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">CON</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">INT</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">SAB</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">CAR</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
                         </div>
-                        <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-12" placeholder=""></textarea>
+                        <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-body"></textarea>
                     </div>
                     <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
-                        <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="label-sm block">Nombre</label><input type="text" class="font-bold text-lg p-0 w-full bg-transparent no-line text-12"></div><div class="w-1/3"><label class="label-sm block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-12"></div></div>
-                        <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">CA</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">HP</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="label-sm block">VEL</span><input type="text" class="text-center w-full font-bold text-lg border-none no-line bg-transparent text-std"></div></div>
+                        <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="text-label block">Nombre</label><input type="text" class="font-bold text-stat p-0 w-full bg-transparent no-line"></div><div class="w-1/3"><label class="text-label block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-body"></div></div>
+                        <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">CA</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">HP</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">VEL</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div></div>
                         <div class="flex justify-between text-center mb-2 px-2">
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">FUE</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">DES</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CON</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">INT</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">SAB</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
-                            <div class="flex flex-col items-center w-8"><span class="label-sm">CAR</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-12"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">FUE</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">DES</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">CON</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">INT</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">SAB</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
+                            <div class="flex flex-col items-center w-8"><span class="text-label">CAR</span><div class="force-border w-full h-6 rounded"><input type="text" class="border-none w-full h-full text-center bg-transparent no-line text-body"></div></div>
                         </div>
-                        <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-12" placeholder=""></textarea>
+                        <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-body"></textarea>
                     </div>
                 </div>
                 <div class="page-num">11</div>
@@ -284,39 +250,39 @@
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <div class="page-a5">
-                 <h2 class="header-font font-bold text-center border-b-2 border-black mb-4 title-20">Notas Adicionales</h2>
+                 <h2 class="text-title text-center border-b-2 border-black mb-4">Notas Adicionales</h2>
                  <div class="h-full w-full lined-bg box-border p-4 bg-white/40"></div>
                  <div class="page-num">10</div>
             </div>
             <div class="page-a5">
-                <h2 class="header-font font-bold text-center border-b-2 border-black mb-4 title-20">Inventario y Personalidad</h2>
+                <h2 class="text-title text-center border-b-2 border-black mb-4">Inventario y Personalidad</h2>
                 <div class="w-full box-border p-3 flex flex-col h-full">
                      <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 gap-2 bg-white/30 p-1">
-                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="label-sm block">PC</span><input type="text" class="text-center font-bold no-line bg-transparent text-12"></div>
-                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="label-sm block">PP</span><input type="text" class="text-center font-bold no-line bg-transparent text-12"></div>
-                        <div class="flex-1 text-center bg-yellow-50 rounded p-1 border border-yellow-200"><span class="label-sm block">PO</span><input type="text" class="text-center font-bold no-line bg-transparent text-12"></div>
-                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="label-sm block">PE</span><input type="text" class="text-center font-bold no-line bg-transparent text-12"></div>
-                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="label-sm block">PT</span><input type="text" class="text-center font-bold no-line bg-transparent text-12"></div>
+                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PC</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
+                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PP</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
+                        <div class="flex-1 text-center bg-yellow-50 rounded p-1 border border-yellow-200"><span class="text-label block">PO</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
+                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PE</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
+                        <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PT</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
                     </div>
-                    <textarea class="w-full flex-grow border-none resize-none p-0 leading-tight lined-bg bg-transparent mb-2 text-12"></textarea>
+                    <textarea class="w-full flex-grow border-none resize-none p-0 leading-tight lined-bg bg-transparent mb-2 text-body"></textarea>
                     <div class="mt-2 border-t border-black pt-2 flex gap-2 h-16">
                         <div class="w-12 border border-gray-400 rounded bg-white/50 flex flex-col items-center justify-center">
-                            <span class="label-sm text-[12px] block">CANT.</span>
-                            <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-12">
+                            <span class="text-label block">CANT.</span>
+                            <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-body">
                         </div>
                         <div class="flex-grow border border-gray-400 rounded bg-white/50 p-1 relative">
-                             <span class="label-sm block absolute top-1 left-1 text-[12px] bg-white/80 px-1">MUNICIÓN / TIPO</span>
-                             <textarea class="w-full h-full text-xs border-none resize-none bg-transparent pt-4 text-12"></textarea>
+                             <span class="text-label block absolute top-1 left-1 bg-white/80 px-1">MUNICIÓN / TIPO</span>
+                             <textarea class="w-full h-full border-none resize-none bg-transparent pt-4 text-body"></textarea>
                         </div>
                     </div>
                     <div class="mt-2 border-t border-black pt-2 flex gap-2 h-16">
                         <div class="w-12 border border-gray-400 rounded bg-white/50 flex flex-col items-center justify-center">
-                            <span class="label-sm text-[12px] block">CANT.</span>
-                            <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-12">
+                            <span class="text-label block">CANT.</span>
+                            <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-body">
                         </div>
                         <div class="flex-grow border border-gray-400 rounded bg-white/50 p-1 relative">
-                            <span class="label-sm block absolute top-1 left-1 text-[12px] bg-white/80 px-1">POCIONES Y CURACIÓN</span>
-                            <textarea class="w-full h-full text-xs border-none resize-none bg-transparent pt-4 text-12"></textarea>
+                            <span class="text-label block absolute top-1 left-1 bg-white/80 px-1">POCIONES Y CURACIÓN</span>
+                            <textarea class="w-full h-full border-none resize-none bg-transparent pt-4 text-body"></textarea>
                         </div>
                     </div>
                 </div>
@@ -325,78 +291,72 @@
         </div>
     </div>
 
-    <!-- HOJA 4: P4 & P9 -->
+    <!-- HOJA 4 -->
     <div class="sheet-container">
         <div class="sheet-controls no-print"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
         <div id="sheet4" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 4 (MAGIC VS MARTIAL) -->
+            <!-- PÁGINA 4 -->
             <div class="page-a5">
                  
                  <!-- HEADER UNIFICADO (Solo Mágico) -->
-                 <h2 class="header-font font-bold text-center border-b-2 border-black mb-2 title-20 magic-content">Libro de Hechizos</h2>
+                 <h2 class="text-title text-center border-b-2 border-black mb-2 magic-content">Libro de Hechizos</h2>
 
-                 <!-- NUEVO PANEL DE GESTIÓN MÁGICA -->
+                 <!-- PANEL DE GESTIÓN MÁGICA -->
                  <div class="magic-content mb-2 border-2 border-black rounded-lg p-1 bg-white">
                     <div class="flex gap-2 h-24">
-                        
-                        <!-- Izquierda: Preparados/Conocidos -->
+                        <!-- Izquierda -->
                         <div class="w-20 flex flex-col gap-1 justify-between py-1">
                              <div class="flex flex-col items-center h-1/2">
-                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Preparados</span>
+                                <span class="text-label mb-1">Preparados</span>
                                 <div class="border-2 border-black rounded-xl w-full flex-grow bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-2xl font-bold bg-transparent border-none focus:ring-0">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0">
                                 </div>
                              </div>
                              <div class="flex flex-col items-center h-1/2">
-                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Conocidos</span>
+                                <span class="text-label mb-1">Conocidos</span>
                                 <div class="border-2 border-black rounded-xl w-full flex-grow bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-2xl font-bold bg-transparent border-none focus:ring-0">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0">
                                 </div>
                              </div>
                         </div>
 
-                        <!-- Centro: Espacios de Conjuro (Tabla 3 Columnas) -->
+                        <!-- Centro: Espacios de Conjuro -->
                         <div class="flex-grow flex flex-col">
-                            
                             <div class="flex-grow grid grid-cols-3 divide-x divide-gray-300">
-                                <!-- Columna 1: Niveles 1-3 -->
                                 <div class="px-1 flex flex-col justify-between py-1">
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">1</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">2</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">3</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">1</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">2</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">3</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
                                 </div>
-                                <!-- Columna 2: Niveles 4-6 -->
                                 <div class="px-1 flex flex-col justify-between py-1">
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">4</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">5</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">6</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">4</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">5</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">6</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
                                 </div>
-                                <!-- Columna 3: Niveles 7-9 -->
                                 <div class="px-1 flex flex-col justify-between py-1">
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">7</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">8</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">9</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">7</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">8</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">9</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Derecha: Concentración/Trucos -->
+                        <!-- Derecha -->
                         <div class="w-20 flex flex-col gap-1 justify-between py-1 items-center">
                              <div class="flex flex-col items-center">
-                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Concentración</span>
+                                <span class="text-label mb-1">Concentración</span>
                                 <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center bg-white relative shadow-sm">
                                     <input type="checkbox" class="appearance-none w-8 h-8 rounded-full checked:bg-black border border-gray-300 cursor-pointer absolute m-auto inset-0">
                                 </div>
                              </div>
                              <div class="flex flex-col items-center w-full h-full justify-end">
-                                <span class="text-[8px] font-bold uppercase text-center leading-none mb-0.5">Trucos Conocidos</span>
+                                <span class="text-label mb-0.5">Trucos Conocidos</span>
                                 <div class="border-2 border-black rounded-lg w-full h-8 bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-xl font-bold bg-transparent border-none">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none">
                                 </div>
                              </div>
                         </div>
-
                     </div>
                  </div>
 
@@ -407,33 +367,33 @@
                             document.write(`
                             <div class="spell-card flex-1 flex gap-2">
                                 <div class="w-10 flex flex-col items-center justify-start pt-1">
-                                    <label class="label-12 mb-1 block">NIVEL</label>
-                                    <div class="spell-level-diamond"><input class="spell-level-input title-20"></div>
+                                    <label class="text-label mb-1 block">NIVEL</label>
+                                    <div class="spell-level-diamond"><input class="spell-level-input"></div>
                                 </div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1">
-                                        <label class="label-12">NOMBRE</label>
-                                        <input class="border-b border-black flex-grow h-6 title-20">
+                                        <label class="text-label">NOMBRE</label>
+                                        <input class="border-b border-black flex-grow h-6 text-title">
                                     </div>
                                     <div class="flex gap-3 mb-1">
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-end gap-1"><label class="label-12">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
+                                            <div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                         </div>
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                             <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="label-12 mr-1">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                                <span class="text-label mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="relative mt-2">
-                                        <label class="label-12 absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
+                                        <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
                                         <div class="w-full lined-bg pt-2 desc-4-lines">
-                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-12 leading-[20px] p-0"></textarea>
+                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -445,30 +405,30 @@
 
                 <!-- CONTENIDO MARCIAL P4 -->
                 <div class="martial-content h-full flex flex-col gap-3">
-                     <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Recursos de Combate</h2>
+                     <h2 class="text-title text-center border-b-2 border-black mb-3">Recursos de Combate</h2>
                      <div class="box-border p-2 bg-gray-50/50">
-                         <div class="flex justify-between items-center mb-2"><input type="text" placeholder="Recurso (Ej: Ki / Furia)" class="font-bold uppercase border-b border-black w-2/3 text-12"><div class="w-1/3 flex items-center justify-end gap-1"><span class="label-sm">Total:</span><input type="text" class="w-8 text-center border border-gray-400 rounded text-12"></div></div>
+                         <div class="flex justify-between items-center mb-2"><input type="text" placeholder="Recurso (Ej: Ki / Furia)" class="font-bold uppercase border-b border-black w-2/3 text-body"><div class="w-1/3 flex items-center justify-end gap-1"><span class="text-label">Total:</span><input type="text" class="w-8 text-center border border-gray-400 rounded text-body"></div></div>
                          <div class="flex flex-wrap gap-2 justify-center p-1"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"><input type="checkbox" class="w-5 h-5"></div>
                      </div>
-                     <div class="flex-grow box-border p-3"><span class="label-sm block mb-1 border-b border-gray-300">MANIOBRAS / ESTILOS DE COMBATE</span><div class="h-full w-full lined-bg"></div></div>
+                     <div class="flex-grow box-border p-3"><span class="text-label block mb-1 border-b border-gray-300">MANIOBRAS / ESTILOS DE COMBATE</span><div class="h-full w-full lined-bg"></div></div>
                 </div>
                 <div class="page-num">4</div>
             </div>
             
             <!-- PÁGINA 9 -->
             <div class="page-a5">
-                 <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Biografía y Apariencia</h2>
+                 <h2 class="text-title text-center border-b-2 border-black mb-3">Biografía y Apariencia</h2>
                  <div class="flex flex-col gap-3 h-full">
                      <div class="flex gap-3">
-                         <div class="box-border p-2 w-1/3 h-44 flex flex-col items-center justify-center border-dashed bg-gray-50"><span class="label-sm text-center text-gray-400">Pegar Retrato</span></div>
+                         <div class="box-border p-2 w-1/3 h-44 flex flex-col items-center justify-center border-dashed bg-gray-50"><span class="text-label text-center text-gray-400">Pegar Retrato</span></div>
                          <div class="w-2/3 flex flex-col gap-2 justify-center">
-                             <div class="flex gap-3"><div class="w-full"><label class="label-sm">Edad</label><input type="text" class="border-b border-black w-full no-line text-12"></div><div class="w-full"><label class="label-sm">Altura</label><input type="text" class="border-b border-black w-full no-line text-12"></div></div>
-                             <div class="flex gap-3"><div class="w-full"><label class="label-sm">Peso</label><input type="text" class="border-b border-black w-full no-line text-12"></div><div class="w-full"><label class="label-sm">Ojos</label><input type="text" class="border-b border-black w-full no-line text-12"></div></div>
-                             <div class="flex gap-3"><div class="w-full"><label class="label-sm">Piel</label><input type="text" class="border-b border-black w-full no-line text-12"></div><div class="w-full"><label class="label-sm">Cabello</label><input type="text" class="border-b border-black w-full no-line text-12"></div></div>
-                             <textarea class="w-full h-full border border-gray-300 p-2 resize-none rounded bg-transparent text-12"></textarea>
+                             <div class="flex gap-3"><div class="w-full"><label class="text-label">Edad</label><input type="text" class="border-b border-black w-full no-line text-body"></div><div class="w-full"><label class="text-label">Altura</label><input type="text" class="border-b border-black w-full no-line text-body"></div></div>
+                             <div class="flex gap-3"><div class="w-full"><label class="text-label">Peso</label><input type="text" class="border-b border-black w-full no-line text-body"></div><div class="w-full"><label class="text-label">Ojos</label><input type="text" class="border-b border-black w-full no-line text-body"></div></div>
+                             <div class="flex gap-3"><div class="w-full"><label class="text-label">Piel</label><input type="text" class="border-b border-black w-full no-line text-body"></div><div class="w-full"><label class="text-label">Cabello</label><input type="text" class="border-b border-black w-full no-line text-body"></div></div>
+                             <textarea class="w-full h-full border border-gray-300 p-2 resize-none rounded bg-transparent text-body"></textarea>
                          </div>
                      </div>
-                     <div class="box-border p-3 flex-grow"><span class="label-sm block mb-2 border-b border-gray-300 pb-1">Historia del Personaje</span><textarea class="w-full h-full border-none resize-none lined-bg bg-transparent text-12"></textarea></div>
+                     <div class="box-border p-3 flex-grow"><span class="text-label block mb-2 border-b border-gray-300 pb-1">Historia del Personaje</span><textarea class="w-full h-full border-none resize-none lined-bg bg-transparent text-body"></textarea></div>
                  </div>
                 <div class="page-num">9</div>
             </div>
@@ -482,11 +442,11 @@
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
             <div class="page-a5">
-                <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Referencia de Combate</h2>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Referencia de Combate</h2>
                 <div class="flex flex-col h-full gap-2">
                     <div class="rules-box"><span class="rules-title">EL TURNO (1 DE CADA)</span><ul class="list-disc list-inside leading-snug"><li><strong>Acción:</strong> Atacar, Conjurar, Destrabarse, etc.</li><li><strong>Movimiento:</strong> Se puede dividir.</li><li><strong>Acción Bonus:</strong> Solo si tienes la habilidad.</li><li><strong>Interacción:</strong> Gratis (puerta, arma).</li></ul></div>
                     <div class="rules-box flex-grow"><span class="rules-title">ACCIONES PRINCIPALES</span><div class="action-item"><span class="action-name">Atacar</span><span>Melee / Rango</span></div><div class="action-item"><span class="action-name">Conjurar</span><span>Tiempo: 1 Acción</span></div><div class="action-item"><span class="action-name">Esquivar</span><span>Desv. enemigos / Vent. DES</span></div><div class="action-item"><span class="action-name">Ayudar</span><span>Ventaja a aliado</span></div><div class="action-item"><span class="action-name">Destrabarse</span><span>Sin Atq. Oportunidad</span></div><div class="action-item"><span class="action-name">Esprintar</span><span>Doble movimiento</span></div><div class="action-item"><span class="action-name">Esconderse</span><span>Sigilo vs Percepción Pasiva</span></div><div class="action-item"><span class="action-name">Preparar</span><span>Reacción con trigger</span></div><div class="action-item"><span class="action-name">Usar Objeto</span><span>Poción, palanca</span></div></div>
-                    <div class="rules-box flex-grow"><span class="rules-title">MECÁNICAS CLAVE</span><div class="grid grid-cols-2 gap-3 text-[12px] leading-tight"><div><p class="mb-1"><strong class="block text-black">Concentración</strong>Si recibes daño, haz <strong>Salvación CON</strong>. <br>CD = <strong>10</strong> o <strong>Mitad del daño</strong>.</p><p class="mb-1"><strong class="block text-black">Terreno Difícil</strong>Cuesta doble movimiento.</p></div><div><p class="mb-1"><strong class="block text-black">Descanso Corto (1h)</strong>Gasta Dados de Golpe.</p><p class="mb-1"><strong class="block text-black">Descanso Largo (8h)</strong>Recupera todo.</p></div></div></div>
+                    <div class="rules-box flex-grow"><span class="rules-title">MECÁNICAS CLAVE</span><div class="grid grid-cols-2 gap-3 text-body leading-tight"><div><p class="mb-1"><strong class="block text-black">Concentración</strong>Si recibes daño, haz <strong>Salvación CON</strong>. <br>CD = <strong>10</strong> o <strong>Mitad del daño</strong>.</p><p class="mb-1"><strong class="block text-black">Terreno Difícil</strong>Cuesta doble movimiento.</p></div><div><p class="mb-1"><strong class="block text-black">Descanso Corto (1h)</strong>Gasta Dados de Golpe.</p><p class="mb-1"><strong class="block text-black">Descanso Largo (8h)</strong>Recupera todo.</p></div></div></div>
                 </div>
                 <div class="page-num">8</div>
             </div>
@@ -499,33 +459,33 @@
                             document.write(`
                             <div class="spell-card flex-1 flex gap-2">
                                 <div class="w-10 flex flex-col items-center justify-start pt-1">
-                                    <label class="label-12 mb-1 block">NIVEL</label>
-                                    <div class="spell-level-diamond"><input class="spell-level-input title-20"></div>
+                                    <label class="text-label mb-1 block">NIVEL</label>
+                                    <div class="spell-level-diamond"><input class="spell-level-input"></div>
                                 </div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1">
-                                        <label class="label-12">NOMBRE</label>
-                                        <input class="border-b border-black flex-grow h-6 title-20">
+                                        <label class="text-label">NOMBRE</label>
+                                        <input class="border-b border-black flex-grow h-6 text-title">
                                     </div>
                                     <div class="flex gap-3 mb-1">
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-end gap-1"><label class="label-12">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
+                                            <div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                         </div>
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                             <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="label-12 mr-1">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                                <span class="text-label mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="relative mt-2">
-                                        <label class="label-12 absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
+                                        <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
                                         <div class="w-full lined-bg pt-2 desc-4-lines">
-                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-12 leading-[20px] p-0"></textarea>
+                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -536,7 +496,7 @@
                 </div>
                 <!-- CONTENIDO MARCIAL P5 -->
                 <div class="martial-content h-full flex flex-col gap-3">
-                    <h2 class="header-font font-bold text-center border-b-2 border-black mb-3 title-20">Talentos y Hazañas</h2>
+                    <h2 class="text-title text-center border-b-2 border-black mb-3">Talentos y Hazañas</h2>
                     <div class="h-full w-full lined-bg box-border p-3 bg-white/40"></div>
                 </div>
                 <div class="page-num">5</div>
@@ -558,33 +518,33 @@
                             document.write(`
                             <div class="spell-card flex-1 flex gap-2">
                                 <div class="w-10 flex flex-col items-center justify-start pt-1">
-                                    <label class="label-12 mb-1 block">NIVEL</label>
-                                    <div class="spell-level-diamond"><input class="spell-level-input title-20"></div>
+                                    <label class="text-label mb-1 block">NIVEL</label>
+                                    <div class="spell-level-diamond"><input class="spell-level-input"></div>
                                 </div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1">
-                                        <label class="label-12">NOMBRE</label>
-                                        <input class="border-b border-black flex-grow h-6 title-20">
+                                        <label class="text-label">NOMBRE</label>
+                                        <input class="border-b border-black flex-grow h-6 text-title">
                                     </div>
                                     <div class="flex gap-3 mb-1">
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-end gap-1"><label class="label-12">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
+                                            <div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                         </div>
                                         <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
+                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
                                             <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="label-12 mr-1">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                                <span class="text-label mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="relative mt-2">
-                                        <label class="label-12 absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
+                                        <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
                                         <div class="w-full lined-bg pt-2 desc-4-lines">
-                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-12 leading-[20px] p-0"></textarea>
+                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -595,17 +555,17 @@
                 </div>
                 <!-- CONTENIDO MARCIAL P6 -->
                 <div class="martial-content h-full">
-                     <h2 class="header-font font-bold text-center border-b-2 border-black mb-4 title-20">Botín y Notas de Batalla</h2>
+                     <h2 class="text-title text-center border-b-2 border-black mb-4">Botín y Notas de Batalla</h2>
                      <div class="h-full w-full lined-bg box-border p-4 bg-white/40"></div>
                 </div>
                 <div class="page-num">6</div>
             </div>
             <!-- PÁGINA 7 -->
             <div class="page-a5">
-                 <h2 class="header-font font-bold text-center border-b-2 border-black mb-4 title-20">Diario de Campaña</h2>
+                 <h2 class="text-title text-center border-b-2 border-black mb-4">Diario de Campaña</h2>
                  <div class="h-full flex flex-col gap-4">
-                     <div class="box-border p-3 flex-grow"><span class="label-sm block mb-1 border-b border-gray-300">CONTACTOS Y ORGANIZACIONES</span><textarea class="w-full h-full border-none resize-none lined-bg text-12"></textarea></div>
-                     <div class="box-border p-3 h-1/3"><span class="label-sm block mb-1 border-b border-gray-300">MISIÓN ACTUAL Y OBJETIVOS</span><textarea class="w-full h-full border-none resize-none lined-bg text-12"></textarea></div>
+                     <div class="box-border p-3 flex-grow"><span class="text-label block mb-1 border-b border-gray-300">CONTACTOS Y ORGANIZACIONES</span><textarea class="w-full h-full border-none resize-none lined-bg text-body"></textarea></div>
+                     <div class="box-border p-3 h-1/3"><span class="text-label block mb-1 border-b border-gray-300">MISIÓN ACTUAL Y OBJETIVOS</span><textarea class="w-full h-full border-none resize-none lined-bg text-body"></textarea></div>
                  </div>
                  <div class="page-num">7</div>
             </div>
