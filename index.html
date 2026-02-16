@@ -107,7 +107,7 @@
 
         @media print { 
             body { background: white; margin: 0; padding: 0; display: block; } 
-            .sheet-container { margin: 0; page-break-after: always; }
+            .sheet-wrapper { margin: 0; page-break-after: always; }
             .sheet-landscape { margin: 0; box-shadow: none; } 
             .no-print, .sheet-controls { display: none !important; } 
             .top-bar { display: none !important; }
@@ -118,7 +118,7 @@
 </head>
 <body>
 
-    <div class="top-bar no-print flex gap-2">
+    <div class="top-bar no-print flex gap-2 w-[297mm]">
          <button id="modeToggleBtn" onclick="toggleMode()" class="bg-purple-700 text-white px-4 py-2 rounded shadow font-bold hover:bg-purple-800 text-sm flex items-center gap-2 transition-colors border-2 border-white">🔮 MODO: MÁGICO</button>
          <div class="flex-grow"></div>
          <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)" style="display:none;">
@@ -129,13 +129,14 @@
 
     <!-- HOJA 1: P12 & P1 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 1 (Págs 12 - 1)</span><button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 1 (Págs 12 - 1)</span> <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet1" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 12 -->
             <div class="page-a5">
                 <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
-                <div class="h-full w-full border border-gray-400 dot-grid rounded" style="background-color: transparent;"></div>
+                <!-- CAMBIO: Se agregó la clase 'bg-white' y se quitó el style transparent para que tape el fondo -->
+                <div class="h-full w-full border border-gray-400 dot-grid rounded bg-white"></div>
                 <div class="page-num">12</div>
             </div>
             <!-- PÁGINA 1 -->
@@ -152,7 +153,7 @@
                 </div>
                 <div class="flex gap-2 h-full">
                     <div class="w-[58%] flex flex-col gap-1">
-                        <div class="bg-gray-50/50 p-1.5 rounded box-border-thin flex-grow flex flex-col">
+                        <div class="bg-gray-50/50 p-1.5 rounded box-border flex-grow flex flex-col">
                             <div class="flex justify-between items-center border-b border-gray-400 pb-1 mb-1"><span class="text-label">BONO DE COMPETENCIA</span><div class="border border-black rounded-full w-7 h-7 flex items-center justify-center bg-white"><input type="text" class="text-center text-stat w-full h-full p-0 bg-transparent no-line"></div></div>
                             <div class="flex-grow flex flex-col justify-around gap-0.5">
                                 <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>FUE</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Atletismo</div></div></div>
@@ -177,7 +178,19 @@
                         <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="text-label block">Vida Máxima</label><input type="text" class="text-center text-body p-0 no-line"></div><div class="w-1/2 text-center"><label class="text-label block">Temporales</label><input type="text" class="text-center text-body p-0 no-line"></div></div><textarea class="w-full text-center text-title h-14 p-0 resize-none no-line bg-transparent"></textarea><span class="text-label block text-center mt-1">PUNTOS DE GOLPE</span></div>
                         <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between items-center border-b border-black mb-1"><span class="text-label">DADOS GOLPE</span><span class="text-label text-gray-800">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="text-label block text-gray-500">TOTAL</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div><div class="w-1/2 text-center"><label class="text-label block text-gray-500">RESTANTES</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div></div></div>
                         <div class="box-border p-1.5 bg-white/60"><label class="text-label block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-label">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-label">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
-                        <div class="flex-grow"></div>
+                        
+                        <!-- NUEVO: IDIOMAS Y COMPETENCIAS -->
+                        <div class="box-border p-1.5 bg-white/60 h-24">
+                            <span class="text-label block border-b border-black mb-1">IDIOMAS Y COMPETENCIAS</span>
+                            <textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0"></textarea>
+                        </div>
+                        
+                        <!-- NUEVO: ESCUDO / SÍMBOLO -->
+                        <div class="box-border p-1.5 bg-white/60 flex-grow flex flex-col items-center justify-center relative group cursor-pointer border-dashed border-2 border-gray-400 hover:border-black transition-colors" onclick="document.getElementById('p1SymbolInput').click()">
+                            <input type="file" id="p1SymbolInput" class="hidden" accept="image/*" onchange="previewSymbol(this)">
+                            <img id="p1SymbolImg" class="absolute inset-0 w-full h-full object-contain p-1 hidden">
+                            <span class="text-label text-gray-400 group-hover:text-black text-center pointer-events-none">CLICK PARA SUBIR<br>SÍMBOLO / ESCUDO</span>
+                        </div>
                     </div>
                 </div>
                 <div class="page-num">1</div>
@@ -186,7 +199,7 @@
 
     <!-- HOJA 2 & 11 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet2" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 2 -->
@@ -251,7 +264,7 @@
 
     <!-- HOJA 3 & 10 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print"><span>Hoja 3 (Páginas 10 y 3)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 3 (Páginas 10 y 3)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <div class="page-a5">
@@ -297,8 +310,8 @@
     </div>
 
     <!-- HOJA 4 -->
-    <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+    <div class="sheet-wrapper">
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet4" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 4 -->
@@ -309,7 +322,7 @@
 
                  <!-- PANEL DE GESTIÓN MÁGICA -->
                  <div class="magic-content mb-2 border-2 border-black rounded-lg p-1 bg-white">
-                    <div class="flex gap-2 h-24">
+                    <div class="flex gap-2 h-28"> <!-- Aumentado a h-28 para evitar que se corten los trucos -->
                         <!-- Izquierda -->
                         <div class="w-20 flex flex-col gap-1 justify-between py-1">
                              <div class="flex flex-col items-center h-1/2">
@@ -336,7 +349,7 @@
                                 </div>
                                 <div class="px-1 flex flex-col justify-between py-1">
                                     <div class="flex items-center justify-between text-label"><span class="w-3">4</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
-                                    <div class="flex items-center justify-between text-label"><span class="w-3">5</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-label"><span class="w-3">5</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
                                     <div class="flex items-center justify-between text-label"><span class="w-3">6</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
                                 </div>
                                 <div class="px-1 flex flex-col justify-between py-1">
@@ -356,7 +369,7 @@
                                 </div>
                              </div>
                              <div class="flex flex-col items-center w-full h-full justify-end">
-                                <span class="text-label mb-0.5">Trucos Conocidos</span>
+                                <span class="text-label mb-0.5 text-center leading-none text-[8px]">TRUCOS<br>CONOCIDOS</span>
                                 <div class="border-2 border-black rounded-lg w-full h-8 bg-white relative">
                                     <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none">
                                 </div>
@@ -441,8 +454,8 @@
     </div>
 
     <!-- HOJA 5: P8 & P5 -->
-    <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 5 (Páginas 8 y 5)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+    <div class="sheet-wrapper">
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 5 (Páginas 8 y 5)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet5" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
@@ -544,8 +557,8 @@
     </div>
 
     <!-- HOJA 6: P6 & P7 -->
-    <div class="sheet-container">
-        <div class="sheet-controls no-print"><span>Hoja 6 (Páginas 6 y 7)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer">Descargar como Imagen</button></div>
+    <div class="sheet-wrapper">
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 6 (Páginas 6 y 7)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
         <div id="sheet6" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
@@ -620,6 +633,23 @@
                     pages.forEach(page => {
                         page.style.backgroundImage = `url('${e.target.result}')`;
                     });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // Función para previsualizar símbolo en P1
+        function previewSymbol(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('p1SymbolImg');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    // Ocultar texto
+                    input.parentElement.querySelector('span').style.display = 'none';
+                    // Quitar borde dashed para que se vea limpio
+                    input.parentElement.classList.remove('border-dashed', 'border-2', 'border-gray-400');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
