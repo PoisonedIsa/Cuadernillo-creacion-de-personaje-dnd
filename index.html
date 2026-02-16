@@ -76,11 +76,16 @@
         .comp-check { appearance: none; width: 11px; height: 11px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
         .comp-check:checked { background: black; }
         
-        .rules-box { background: rgba(247, 247, 247, 0.8); border: 1px solid #333; border-radius: 4px; padding: 6px; margin-bottom: 4px; font-size: var(--s-body); }
-        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #999; margin-bottom: 2px; display: block; font-size: var(--s-label); }
-        .action-item { display: flex; justify-content: space-between; margin-bottom: 1px; border-bottom: 1px dotted #ccc; padding-bottom: 0px; font-size: var(--s-label); }
-        .action-name { font-weight: 700; }
+        /* Reglas y Tablas Referencia */
+        .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .rules-box { background: rgba(247, 247, 247, 0.8); border: 1px solid #333; border-radius: 4px; padding: 4px; font-size: var(--s-body); display: flex; flex-direction: column; }
+        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 1.5px solid #000; margin-bottom: 3px; display: block; font-size: var(--s-label); color: black; }
         
+        .ref-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; margin-bottom: 2px; padding-bottom: 1px; align-items: baseline; }
+        .ref-row:last-child { border-bottom: none; }
+        .ref-key { font-weight: 700; font-size: var(--s-label); text-transform: uppercase; width: 32%; flex-shrink: 0; }
+        .ref-val { font-size: var(--s-label); text-align: right; color: #333; width: 68%; font-weight: 400; text-transform: none; line-height: 1.1; }
+
         /* Fondos */
         .lined-bg { background-image: linear-gradient(#ccc 1px, transparent 1px); background-size: 100% 20px; background-position: 0 19px; line-height: 20px !important; }
         .dot-grid { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiM5OTkiLz48L3N2Zz4='); background-repeat: repeat; }
@@ -442,11 +447,45 @@
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
             <div class="page-a5">
-                <h2 class="text-title text-center border-b-2 border-black mb-3">Referencia de Combate</h2>
-                <div class="flex flex-col h-full gap-2">
-                    <div class="rules-box"><span class="rules-title">EL TURNO (1 DE CADA)</span><ul class="list-disc list-inside leading-snug"><li><strong>Acción:</strong> Atacar, Conjurar, Destrabarse, etc.</li><li><strong>Movimiento:</strong> Se puede dividir.</li><li><strong>Acción Bonus:</strong> Solo si tienes la habilidad.</li><li><strong>Interacción:</strong> Gratis (puerta, arma).</li></ul></div>
-                    <div class="rules-box flex-grow"><span class="rules-title">ACCIONES PRINCIPALES</span><div class="action-item"><span class="action-name">Atacar</span><span>Melee / Rango</span></div><div class="action-item"><span class="action-name">Conjurar</span><span>Tiempo: 1 Acción</span></div><div class="action-item"><span class="action-name">Esquivar</span><span>Desv. enemigos / Vent. DES</span></div><div class="action-item"><span class="action-name">Ayudar</span><span>Ventaja a aliado</span></div><div class="action-item"><span class="action-name">Destrabarse</span><span>Sin Atq. Oportunidad</span></div><div class="action-item"><span class="action-name">Esprintar</span><span>Doble movimiento</span></div><div class="action-item"><span class="action-name">Esconderse</span><span>Sigilo vs Percepción Pasiva</span></div><div class="action-item"><span class="action-name">Preparar</span><span>Reacción con trigger</span></div><div class="action-item"><span class="action-name">Usar Objeto</span><span>Poción, palanca</span></div></div>
-                    <div class="rules-box flex-grow"><span class="rules-title">MECÁNICAS CLAVE</span><div class="grid grid-cols-2 gap-3 text-body leading-tight"><div><p class="mb-1"><strong class="block text-black">Concentración</strong>Si recibes daño, haz <strong>Salvación CON</strong>. <br>CD = <strong>10</strong> o <strong>Mitad del daño</strong>.</p><p class="mb-1"><strong class="block text-black">Terreno Difícil</strong>Cuesta doble movimiento.</p></div><div><p class="mb-1"><strong class="block text-black">Descanso Corto (1h)</strong>Gasta Dados de Golpe.</p><p class="mb-1"><strong class="block text-black">Descanso Largo (8h)</strong>Recupera todo.</p></div></div></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Ayuda de Reglas</h2>
+                <div class="flex flex-col h-full gap-3">
+                    
+                    <!-- ACCIONES -->
+                    <div class="rules-box">
+                        <span class="rules-title text-center">Acciones en Combate</span>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-1 px-1">
+                            <div class="ref-row"><span class="ref-key">Atacar</span><span class="ref-val">Realizar un ataque cuerpo a cuerpo o a distancia.</span></div>
+                            <div class="ref-row"><span class="ref-key">Lanzar Conjuro</span><span class="ref-val">Lanzar un hechizo según su tiempo de lanzamiento (generalmente 1 acción).</span></div>
+                            <div class="ref-row"><span class="ref-key">Esprintar</span><span class="ref-val">Ganas movimiento extra igual a tu velocidad actual.</span></div>
+                            <div class="ref-row"><span class="ref-key">Destrabarse</span><span class="ref-val">Tu movimiento no provoca ataques de oportunidad este turno.</span></div>
+                            <div class="ref-row"><span class="ref-key">Esquivar</span><span class="ref-val">Ataques contra ti tienen desventaja. Tienes ventaja en salvaciones de Destreza.</span></div>
+                            <div class="ref-row"><span class="ref-key">Ayudar</span><span class="ref-val">Otorga ventaja a un aliado en su próxima prueba de habilidad o ataque.</span></div>
+                            <div class="ref-row"><span class="ref-key">Buscar</span><span class="ref-val">Dedicar tu acción a percibir algo o investigar un área.</span></div>
+                            <div class="ref-row"><span class="ref-key">Usar Objeto</span><span class="ref-val">Interactuar con un objeto que requiera una acción (ej: poción, palanca).</span></div>
+                            <div class="ref-row"><span class="ref-key">Esconderse</span><span class="ref-val">Realizar prueba de Sigilo para ocultarte (requiere no ser visto).</span></div>
+                            <div class="ref-row"><span class="ref-key">Preparar</span><span class="ref-val">Retener una acción para usarla como reacción cuando ocurra un disparador.</span></div>
+                        </div>
+                    </div>
+
+                    <!-- CONDICIONES -->
+                    <div class="rules-box flex-grow">
+                        <span class="rules-title text-center">Estados y Condiciones</span>
+                        <div class="flex flex-col gap-1 px-1 leading-tight overflow-hidden h-full justify-between">
+                            <div class="ref-row"><span class="ref-key">Agarrado</span><span class="ref-val">Tu velocidad es 0. La condición termina si el agarrador queda incapacitado o te liberan.</span></div>
+                            <div class="ref-row"><span class="ref-key">Asustado</span><span class="ref-val">Desventaja en pruebas y ataques mientras veas la fuente de miedo. No puedes acercarte.</span></div>
+                            <div class="ref-row"><span class="ref-key">Aturdido</span><span class="ref-val">Estás incapacitado. Fallas automáticamente salvaciones de Fuerza y Destreza. Ataques contra ti tienen ventaja.</span></div>
+                            <div class="ref-row"><span class="ref-key">Cegado</span><span class="ref-val">Fallas automáticamente pruebas de visión. Ataques contra ti tienen ventaja. Tus ataques tienen desventaja.</span></div>
+                            <div class="ref-row"><span class="ref-key">Derribado</span><span class="ref-val">Solo puedes gatear. Tus ataques tienen desventaja. Ataques contra ti tienen ventaja (a 5 pies) o desventaja (lejos).</span></div>
+                            <div class="ref-row"><span class="ref-key">Envenenado</span><span class="ref-val">Tienes desventaja en tiradas de ataque y pruebas de habilidad.</span></div>
+                            <div class="ref-row"><span class="ref-key">Hechizado</span><span class="ref-val">No puedes atacar al encantador. El encantador tiene ventaja en pruebas sociales contra ti.</span></div>
+                            <div class="ref-row"><span class="ref-key">Incapacitado</span><span class="ref-val">No puedes tomar acciones, acciones adicionales ni reacciones.</span></div>
+                            <div class="ref-row"><span class="ref-key">Inconsciente</span><span class="ref-val">Estás incapacitado y derribado. Fallas salvaciones de Fuerza y Destreza. Ataques contra ti tienen ventaja y son críticos si golpean desde 5 pies.</span></div>
+                            <div class="ref-row"><span class="ref-key">Invisible</span><span class="ref-val">Eres imposible de ver sin magia. Ataques contra ti tienen desventaja. Tus ataques tienen ventaja.</span></div>
+                            <div class="ref-row"><span class="ref-key">Paralizado</span><span class="ref-val">Estás incapacitado y no puedes moverte ni hablar. Fallas salvaciones de FUE/DES. Ataques contra ti tienen ventaja y son críticos si golpean desde 5 pies.</span></div>
+                            <div class="ref-row"><span class="ref-key">Restringido</span><span class="ref-val">Velocidad 0. Ataques contra ti tienen ventaja. Tus ataques tienen desventaja. Desventaja en salvaciones de Destreza.</span></div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="page-num">8</div>
             </div>
