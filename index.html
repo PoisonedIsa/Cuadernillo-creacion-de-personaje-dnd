@@ -51,7 +51,7 @@
         
         /* TIPOGRAFÍA */
         .title-20 { font-size: 20px !important; line-height: 1.2; font-weight: 700; }
-        .text-12 { font-size: 12px !important; line-height: 1.5; } /* Mayor interlineado para lectura */
+        .text-12 { font-size: 12px !important; line-height: 1.5; } 
         .label-12 { font-size: 12px !important; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px; }
         
         /* Inputs y Textos */
@@ -100,7 +100,7 @@
         .action-item { display: flex; justify-content: space-between; margin-bottom: 1px; border-bottom: 1px dotted #ccc; padding-bottom: 0px; font-size: 12px; }
         .action-name { font-weight: 700; }
         
-        /* LINED BACKGROUND - Ajustado a 20px exactos */
+        /* LINED BACKGROUND */
         .lined-bg { 
             background-image: linear-gradient(#ccc 1px, transparent 1px); 
             background-size: 100% 20px; 
@@ -111,7 +111,7 @@
         .page-num { position: absolute; bottom: 5mm; width: 100%; left: 0; text-align: center; font-size: 12px; color: #000; font-weight: 700; font-family: 'Cinzel', serif; z-index: 50; }
         .force-border { border: 1px solid #000 !important; background: white; }
 
-        /* --- ESTILOS DE GRIMORIO NUEVO --- */
+        /* --- ESTILOS DE GRIMORIO --- */
         .spell-header-box { border: 2px solid black; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: white; }
         .spell-header-title { font-size: 8px; font-weight: 700; text-align: center; text-transform: uppercase; line-height: 1; margin-top: 2px; }
         
@@ -121,10 +121,9 @@
         .spell-level-diamond { width: 32px; height: 32px; border: 2px solid black; transform: rotate(45deg); display: flex; items-center; justify-content: center; background: white; margin: 4px auto 0 auto; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         .spell-level-input { width: 100%; height: 100%; transform: rotate(-45deg); text-align: center; font-weight: 900; font-size: 20px; border: none !important; background: transparent; padding: 0; }
         
-        .comp-check { appearance: none; width: 14px; height: 14px; border: 1.5px solid black; border-radius: 50%; display: grid; place-content: center; font-size: 10px; font-weight: bold; margin: 0; cursor: pointer; background: white; }
-        .comp-check::before { content: attr(data-label); color: black; }
+        /* Component Checkbox - Solo Círculo */
+        .comp-check { appearance: none; width: 12px; height: 12px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
         .comp-check:checked { background: black; }
-        .comp-check:checked::before { color: white; }
 
         /* Contenedor de descripción fijo a 4 líneas (80px) */
         .desc-4-lines { height: 80px; width: 100%; }
@@ -333,41 +332,72 @@
             <div class="divider"></div>
             <!-- PÁGINA 4 (MAGIC VS MARTIAL) -->
             <div class="page-a5">
-                 <!-- HEADER MÁGICO -->
-                 <div class="magic-content mb-2">
-                     <div class="flex gap-2 h-20 items-stretch mb-2">
-                         <div class="w-16 flex flex-col gap-1 justify-between">
-                             <div class="spell-header-box"><input type="text" class="text-center title-20 border-none w-full h-full"><span class="spell-header-title">PREPARADOS</span></div>
-                             <div class="spell-header-box"><input type="text" class="text-center title-20 border-none w-full h-full"><span class="spell-header-title">CONOCIDOS</span></div>
-                         </div>
-                         <div class="flex-grow border-2 border-black rounded-lg p-1 bg-white">
-                             <div class="text-[9px] font-bold text-center border-b border-black mb-1">ESPACIOS DE CONJURO</div>
-                             <div class="grid grid-cols-3 gap-x-2 text-[8px] h-full">
-                                 <div class="flex flex-col gap-0.5">
-                                     <div class="flex justify-between items-center"><span class="font-bold">1</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">2</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">3</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"></div></div>
-                                 </div>
-                                 <div class="flex flex-col gap-0.5 border-l border-gray-300 pl-1">
-                                     <div class="flex justify-between items-center"><span class="font-bold">4</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">5</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">6</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"></div></div>
-                                 </div>
-                                 <div class="flex flex-col gap-0.5 border-l border-gray-300 pl-1">
-                                     <div class="flex justify-between items-center"><span class="font-bold">7</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">8</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"></div></div>
-                                     <div class="flex justify-between items-center"><span class="font-bold">9</span><input type="text" class="w-4 text-center border-b border-black h-3"><div class="flex gap-0.5"><input type="checkbox" class="w-2 h-2"></div></div>
-                                 </div>
+                 
+                 <!-- HEADER UNIFICADO (Solo Mágico) -->
+                 <h2 class="header-font font-bold text-center border-b-2 border-black mb-2 title-20 magic-content">Libro de Hechizos</h2>
+
+                 <!-- NUEVO PANEL DE GESTIÓN MÁGICA -->
+                 <div class="magic-content mb-2 border-2 border-black rounded-lg p-1 bg-white">
+                    <div class="flex gap-2 h-24">
+                        
+                        <!-- Izquierda: Preparados/Conocidos -->
+                        <div class="w-20 flex flex-col gap-1 justify-between py-1">
+                             <div class="flex flex-col items-center h-1/2">
+                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Preparados</span>
+                                <div class="border-2 border-black rounded-xl w-full flex-grow bg-white relative">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-2xl font-bold bg-transparent border-none focus:ring-0">
+                                </div>
                              </div>
-                         </div>
-                         <div class="w-14 flex flex-col gap-1">
-                             <div class="spell-header-box"><input type="checkbox" class="w-5 h-5 rounded-full border-2 border-black"><span class="spell-header-title text-[7px]">CONCENTRACIÓN</span></div>
-                             <div class="flex gap-1 h-1/2">
-                                <div class="spell-header-box w-full"><input type="text" class="text-center font-bold w-full h-full border-none text-sm text-12"><span class="spell-header-title text-[6px]">CD SALV.</span></div>
-                                <div class="spell-header-box w-full"><input type="text" class="text-center font-bold w-full h-full border-none text-sm text-12"><span class="spell-header-title text-[6px]">ATAQUE</span></div>
+                             <div class="flex flex-col items-center h-1/2">
+                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Conocidos</span>
+                                <div class="border-2 border-black rounded-xl w-full flex-grow bg-white relative">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-2xl font-bold bg-transparent border-none focus:ring-0">
+                                </div>
                              </div>
-                         </div>
-                     </div>
+                        </div>
+
+                        <!-- Centro: Espacios de Conjuro (Tabla 3 Columnas) -->
+                        <div class="flex-grow flex flex-col">
+                            
+                            <div class="flex-grow grid grid-cols-3 divide-x divide-gray-300">
+                                <!-- Columna 1: Niveles 1-3 -->
+                                <div class="px-1 flex flex-col justify-between py-1">
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">1</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">2</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">3</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                </div>
+                                <!-- Columna 2: Niveles 4-6 -->
+                                <div class="px-1 flex flex-col justify-between py-1">
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">4</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">5</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">6</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                </div>
+                                <!-- Columna 3: Niveles 7-9 -->
+                                <div class="px-1 flex flex-col justify-between py-1">
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">7</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">8</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
+                                    <div class="flex items-center justify-between text-[10px]"><span class="font-bold w-3">9</span><input type="text" class="w-5 border-b border-black text-center h-3 bg-transparent"><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Derecha: Concentración/Trucos -->
+                        <div class="w-20 flex flex-col gap-1 justify-between py-1 items-center">
+                             <div class="flex flex-col items-center">
+                                <span class="text-[9px] font-bold uppercase text-center leading-none mb-1">Concentración</span>
+                                <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center bg-white relative shadow-sm">
+                                    <input type="checkbox" class="appearance-none w-8 h-8 rounded-full checked:bg-black border border-gray-300 cursor-pointer absolute m-auto inset-0">
+                                </div>
+                             </div>
+                             <div class="flex flex-col items-center w-full h-full justify-end">
+                                <span class="text-[8px] font-bold uppercase text-center leading-none mb-0.5">Trucos Conocidos</span>
+                                <div class="border-2 border-black rounded-lg w-full h-8 bg-white relative">
+                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-xl font-bold bg-transparent border-none">
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
                  </div>
 
                  <!-- CONTENIDO MÁGICO P4: 3 TARJETAS -->
@@ -392,11 +422,11 @@
                                         </div>
                                         <div class="w-1/2 space-y-1">
                                             <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-center gap-1 mt-0.5">
-                                                <span class="label-12">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-xs">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <span class="label-12 mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -484,11 +514,11 @@
                                         </div>
                                         <div class="w-1/2 space-y-1">
                                             <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-center gap-1 mt-0.5">
-                                                <span class="label-12">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-xs">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <span class="label-12 mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
@@ -543,11 +573,11 @@
                                         </div>
                                         <div class="w-1/2 space-y-1">
                                             <div class="flex items-end gap-1 mb-1"><label class="label-12">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-12"></div>
-                                            <div class="flex items-center gap-1 mt-0.5">
-                                                <span class="label-12">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-xs">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-xs">M<input type="checkbox" class="comp-check" data-label="M"></label>
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <span class="label-12 mr-1">COMPONENTES:</span>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">V<input type="checkbox" class="comp-check" data-label="V"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">S<input type="checkbox" class="comp-check" data-label="S"></label>
+                                                <label class="flex items-center gap-0.5 text-[10px] font-bold">M<input type="checkbox" class="comp-check" data-label="M"></label>
                                             </div>
                                         </div>
                                     </div>
