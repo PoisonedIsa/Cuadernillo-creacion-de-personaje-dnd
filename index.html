@@ -9,9 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --border-thick: 3px double #2c2c2c; /* CAMBIO: Borde doble elegante */
+            --border-thick: 3px double #2c2c2c; 
             --border-thin: 1px solid #444; 
-            --bg-paper: #fdfbf7; /* Color papel muy suave */
+            --bg-paper: #fdfbf7; 
             
             /* SISTEMA DE 4 TAMAÑOS HOMOGÉNEOS */
             --s-title: 20px;
@@ -29,7 +29,7 @@
         .text-label { font-size: var(--s-label) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; color: #444; }
         
         input[type="text"], textarea { 
-            background: transparent; border: none; border-bottom: 0.5px dotted #666; /* Punteado es más sutil */
+            background: transparent; border: none; border-bottom: 0.5px dotted #666; 
             font-family: 'Roboto Condensed', sans-serif; width: 100%; padding: 0 2px; margin: 0; 
             display: block; height: 100%; line-height: 1.3; box-sizing: border-box;
             font-size: var(--s-body);
@@ -61,7 +61,7 @@
             border: var(--border-thick); 
             border-radius: 4px; 
             background: white;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sombra sutil "flat" */
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.05); 
         }
         
         .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; border-radius: 8px; position: relative; background: white; z-index: 5; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
@@ -139,12 +139,36 @@
         <div id="sheetCover" class="sheet-landscape">
             <div class="divider"></div>
             
-            <!-- P16: CONTRAPORTADA (Notas Rápidas) -->
+            <!-- P16: CONTRAPORTADA (Registro de Misiones) -->
             <div class="page-a5">
-                <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">NOTAS DE SESIÓN</h2>
-                <div class="flex-grow w-full border-2 border-black rounded box-border p-4 bg-white dot-grid">
-                    <!-- Espacio libre para garabatos -->
+                <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">REGISTRO DE MISIONES</h2>
+                
+                <!-- Caja de Misiones Actuales -->
+                <div class="flex-grow flex flex-col gap-2">
+                    <div class="border-2 border-black box-border p-2 bg-white flex flex-col h-1/3">
+                        <span class="text-label border-b border-black mb-1">OBJETIVO PRINCIPAL</span>
+                        <textarea class="flex-grow lined-bg border-none resize-none text-body bg-transparent"></textarea>
+                    </div>
+                    
+                    <div class="border-2 border-black box-border p-2 bg-white flex flex-col flex-grow">
+                        <span class="text-label border-b border-black mb-1">MISIONES SECUNDARIAS / TAREAS PENDIENTES</span>
+                        <div class="flex flex-col gap-1 mt-1">
+                             <!-- Lineas con checkbox -->
+                             <script>
+                                for(let i=0; i<8; i++){
+                                    document.write(`
+                                    <div class="flex gap-2 items-center border-b border-dotted border-gray-400 pb-1">
+                                        <input type="checkbox" class="w-4 h-4 border-2 border-black rounded-sm cursor-pointer">
+                                        <input type="text" class="no-line text-body font-bold">
+                                    </div>
+                                    `);
+                                }
+                             </script>
+                        </div>
+                        <textarea class="flex-grow lined-bg border-none resize-none text-body bg-transparent mt-2"></textarea>
+                    </div>
                 </div>
+
                 <div class="mt-4 border-t-2 border-black pt-2 text-center text-label">
                     <span>REGISTRO DE MUERTES / ESTADO</span>
                     <div class="flex justify-center gap-4 mt-2">
@@ -156,13 +180,13 @@
             </div>
 
             <!-- P1: PORTADA PRINCIPAL -->
-            <div class="page-a5 flex flex-col items-center justify-between py-10">
-                <div class="w-full text-center">
-                    <h1 class="font-['Cinzel'] text-4xl font-black mb-1 uppercase tracking-widest">D&D 5E</h1>
-                    <span class="text-label tracking-[0.5em] text-gray-500 block">REGISTRO DE PERSONAJE</span>
+            <div class="page-a5 flex flex-col items-center py-10 relative">
+                <div class="w-full text-center mb-4">
+                    <h1 class="font-['Cinzel'] text-4xl font-black mb-1 uppercase tracking-widest">DIARIO DE PERSONAJE</h1>
+                    <span class="text-label tracking-[0.5em] text-gray-500 block">D&D 5E EDITION</span>
                 </div>
 
-                <div class="w-full flex-grow my-6 border-4 double border-black p-2 flex items-center justify-center bg-white shadow-lg relative">
+                <div class="w-full flex-grow border-4 double border-black p-2 flex items-center justify-center bg-white shadow-lg relative">
                     <div class="absolute inset-2 border border-black opacity-50 pointer-events-none"></div>
                     <span class="text-gray-300 font-['Cinzel'] text-2xl font-bold opacity-30 rotate-[-45deg] pointer-events-none">ARTE DEL PERSONAJE</span>
                     <!-- Área clickeable para subir portada -->
@@ -171,17 +195,13 @@
                     <button class="no-print absolute bottom-2 right-2 bg-gray-200 text-xs px-2 py-1 rounded opacity-50 hover:opacity-100" onclick="document.getElementById('coverArtInput').click()">Subir Imagen</button>
                 </div>
 
-                <div class="w-full box-border p-4 bg-white text-center">
-                    <input type="text" placeholder="NOMBRE DEL PERSONAJE" class="text-center font-['Cinzel'] text-3xl font-bold mb-2 border-b-2 border-black pb-1 placeholder-gray-300">
-                    <div class="flex gap-4 justify-center mt-2">
-                        <input type="text" placeholder="CLASE / NIVEL" class="text-center text-title w-1/2 border-b border-gray-400 placeholder-gray-300">
-                        <input type="text" placeholder="TRASFONDO" class="text-center text-title w-1/2 border-b border-gray-400 placeholder-gray-300">
-                    </div>
+                <div class="w-full text-center mt-6 mb-8">
+                    <label class="text-label block text-gray-500 mb-1">PERTENECE A</label>
+                    <input type="text" class="text-center font-bold text-lg border-b border-black w-1/2 mx-auto">
                 </div>
                 
-                <div class="w-full text-center mt-4">
-                    <label class="text-label block">CAMPAÑA</label>
-                    <input type="text" class="text-center font-bold text-lg border-b border-black w-3/4 mx-auto">
+                <div class="absolute bottom-2 w-full text-center">
+                    <span class="text-[8px] uppercase tracking-[2px] text-gray-400 font-['Cinzel']">Diseñado por Poisoned Isa</span>
                 </div>
             </div>
         </div>
@@ -196,28 +216,41 @@
             <!-- P2: EL GRUPO (Interior Portada) -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
-                <div class="flex flex-col gap-2 flex-grow">
-                    <!-- 6 Slots para compañeros -->
+                <div class="flex flex-col gap-3 flex-grow h-full">
+                    <!-- 5 Slots para compañeros (Más grandes) -->
                     <script>
-                        for(let i=1; i<=6; i++){
+                        for(let i=1; i<=5; i++){
                             document.write(`
-                            <div class="box-border p-2 bg-white flex gap-2 items-center">
-                                <div class="w-8 h-8 rounded-full border border-black bg-gray-100 flex items-center justify-center font-bold text-gray-400">${i}</div>
-                                <div class="flex-grow">
-                                    <div class="flex justify-between border-b border-gray-300 mb-1">
-                                        <input type="text" placeholder="Nombre Personaje" class="font-bold w-1/2">
-                                        <input type="text" placeholder="Clase / Rol" class="text-right w-1/2 text-xs">
+                            <div class="box-border p-2 bg-white flex gap-2 h-1/5 shadow-sm border border-gray-400">
+                                <div class="w-8 flex flex-col items-center justify-start pt-1">
+                                    <div class="w-6 h-6 rounded-full border border-black bg-gray-100 flex items-center justify-center font-bold text-gray-400 text-xs">${i}</div>
+                                </div>
+                                <div class="flex-grow flex flex-col gap-1">
+                                    <div class="flex justify-between gap-2">
+                                        <div class="w-2/3">
+                                            <label class="text-label text-[8px] text-gray-500 block">NOMBRE PERSONAJE</label>
+                                            <input type="text" class="font-bold w-full border-b border-gray-300 h-5">
+                                        </div>
+                                        <div class="w-1/3">
+                                            <label class="text-label text-[8px] text-gray-500 block text-right">CLASE / ROL</label>
+                                            <input type="text" class="text-right w-full border-b border-gray-300 h-5 text-xs">
+                                        </div>
                                     </div>
-                                    <input type="text" placeholder="Jugador / Notas" class="text-xs text-gray-500">
+                                    <div class="flex justify-between gap-2">
+                                        <div class="w-1/3">
+                                            <label class="text-label text-[8px] text-gray-500 block">JUGADOR</label>
+                                            <input type="text" class="w-full border-b border-gray-300 h-4 text-xs text-gray-600">
+                                        </div>
+                                        <div class="w-2/3 relative h-full">
+                                            <label class="text-label text-[8px] text-gray-500 block absolute top-0 left-0 bg-white pr-1">NOTAS</label>
+                                            <textarea class="w-full h-full resize-none border-none lined-bg text-body pt-3 bg-transparent"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             `);
                         }
                     </script>
-                    <div class="mt-4 box-border p-3 flex-grow bg-white">
-                        <h3 class="text-label border-b border-black mb-2">REGLAS DE LA CASA / SEGURIDAD</h3>
-                        <textarea class="w-full h-full resize-none border-none lined-bg text-body"></textarea>
-                    </div>
                 </div>
             </div>
 
@@ -225,7 +258,8 @@
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
                 <div class="box-border p-2 bg-white h-full flex flex-col">
-                    <div class="grid grid-cols-[30px_1fr_60px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
+                    <!-- Grid ajustado para mas espacio en fecha -->
+                    <div class="grid grid-cols-[30px_1fr_120px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
                         <div>NV</div>
                         <div class="text-left">RASGO OBTENIDO / MEJORA</div>
                         <div>FECHA</div>
@@ -235,10 +269,10 @@
                         <script>
                             for(let i=1; i<=20; i++){
                                 document.write(`
-                                <div class="grid grid-cols-[30px_1fr_60px] gap-2 items-center border-b border-gray-200 py-1">
+                                <div class="grid grid-cols-[30px_1fr_120px] gap-2 items-center border-b border-gray-200 py-1">
                                     <div class="font-bold text-center text-stat">${i}</div>
-                                    <input type="text" class="no-line text-body" placeholder="-">
-                                    <input type="text" class="no-line text-xs text-center" placeholder="../../..">
+                                    <input type="text" class="no-line text-body">
+                                    <input type="text" class="no-line text-xs text-center">
                                 </div>
                                 `);
                             }
