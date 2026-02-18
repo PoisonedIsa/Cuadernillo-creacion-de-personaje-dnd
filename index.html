@@ -293,11 +293,11 @@
             <!-- P15 -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
-                <div class="box-border p-2 bg-white h-full flex flex-col">
+                <div class="box-border p-2 bg-white h-full flex flex-col relative">
                     <div class="grid grid-cols-[30px_1fr_100px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
                         <div>NV</div><div class="text-left">RASGO OBTENIDO / MEJORA</div><div>FECHA</div>
                     </div>
-                    <div class="flex-grow flex flex-col gap-1 overflow-hidden">
+                    <div class="flex flex-col gap-1 overflow-hidden z-10">
                         <script>
                             for(let i=1; i<=20; i++){
                                 document.write(`
@@ -313,6 +313,11 @@
                                 `);
                             }
                         </script>
+                    </div>
+                    <!-- CONTENEDOR DE IMAGEN DEL SÍMBOLO -->
+                    <div class="flex-grow"></div>
+                    <div class="flex justify-center items-center p-2 h-32 opacity-80">
+                        <img id="levelHistorySymbolImg" class="h-full object-contain hidden" alt="Símbolo del Personaje">
                     </div>
                 </div>
             </div>
@@ -1026,7 +1031,6 @@
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
-                                               <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                            </div>
                                        </div>
                                    </div>
@@ -1272,11 +1276,24 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    // Update P3 Image
                     const img = document.getElementById('p1SymbolImg');
-                    img.src = e.target.result;
-                    img.classList.remove('hidden');
-                    input.parentElement.querySelector('span').style.display = 'none';
-                    input.parentElement.classList.remove('border-dashed', 'border-2', 'border-gray-400');
+                    if(img) {
+                        img.src = e.target.result;
+                        img.classList.remove('hidden');
+                        if(input.parentElement) {
+                            const span = input.parentElement.querySelector('span');
+                            if(span) span.style.display = 'none';
+                            input.parentElement.classList.remove('border-dashed', 'border-2', 'border-gray-400');
+                        }
+                    }
+
+                    // Update P15 Image (Level History)
+                    const histImg = document.getElementById('levelHistorySymbolImg');
+                    if(histImg) {
+                        histImg.src = e.target.result;
+                        histImg.classList.remove('hidden');
+                    }
                 }
                 reader.readAsDataURL(input.files[0]);
             }
