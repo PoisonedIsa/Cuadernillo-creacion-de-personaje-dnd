@@ -45,7 +45,17 @@
         body.theme-gothic .text-label { letter-spacing: 0px; font-size: 10px !important; } /* Un pelín más grande para leerse bien */
         body.theme-gothic input, body.theme-gothic textarea { color: #1a1a1a; }
 
-        body { font-family: var(--font-body); background-color: #222; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        /* BODY AJUSTADO PARA BARRA SUPERIOR */
+        body { 
+            font-family: var(--font-body); 
+            background-color: #222; 
+            margin: 0; 
+            padding: 0 0 40px 0; /* Sin padding arriba, solo abajo */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 30px; 
+        }
         
         /* CLASES DE TEXTO ACTUALIZADAS A VARIABLES */
         .text-title { font-size: var(--s-title) !important; line-height: 1.1; font-weight: 700; font-family: var(--font-title); text-transform: uppercase; color: #1a1a1a; }
@@ -77,6 +87,24 @@
             width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
             box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
             background: transparent; z-index: 0;
+        }
+
+        /* CAPA DE ENTRAMADO (Pattern Layer) */
+        .pattern-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0; /* Al fondo */
+            pointer-events: none; /* No interfiere con clics */
+            opacity: 0.12; /* Opacidad baja para no molestar la lectura */
+            background-repeat: repeat; /* Se repite como mosaico */
+            background-position: center;
+            background-size: 150px; /* Tamaño por defecto del patrón */
+        }
+
+        /* Aseguramos que el contenido esté por encima del patrón, PERO EXCLUYENDO LOS NÚMEROS DE PÁGINA */
+        .page-a5 > *:not(.pattern-layer):not(.page-num) {
+            position: relative;
+            z-index: 1;
         }
 
         .divider { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #bbb; transform: translateX(-50%); z-index: 10; }
@@ -152,23 +180,40 @@
 </head>
 <body class="mode-martial">
 
-    <div class="top-bar no-print flex gap-2 w-[297mm] items-center">
-         <button id="modeToggleBtn" onclick="toggleMode()" class="bg-red-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-red-900 text-sm flex items-center gap-2 transition-colors border-2 border-white">⚔️ MODO: MARCIAL</button>
-         
-         <!-- SELECTOR DE ESTILO VISUAL -->
-         <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600">
-             <span class="text-white text-xs font-bold px-1">ESTILO:</span>
-             <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
-                 <option value="classic">Clásico (Cinzel)</option>
-                 <option value="gothic">Gótico (Medieval)</option>
-             </select>
-         </div>
+    <!-- BARRA SUPERIOR STICKY (Flotante) -->
+    <div class="top-bar no-print sticky top-0 z-50 w-full bg-[#222] border-b border-gray-600 shadow-xl py-3 flex justify-center items-center backdrop-blur-md bg-opacity-95">
+         <div class="w-[297mm] flex gap-2 items-center px-4 md:px-0 overflow-x-auto"> <!-- Contenedor interno ancho fijo -->
+             
+             <!-- SELECTOR DE CLASE (Antes Modo) -->
+             <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 whitespace-nowrap">
+                 <span class="text-white text-xs font-bold px-1">CLASE:</span>
+                 <select id="classSelector" onchange="changeClassMode(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
+                     <option value="martial" selected>Marciales ⚔️</option>
+                     <option value="magic">Arcanos 🔮</option>
+                 </select>
+             </div>
+             
+             <!-- SELECTOR DE ESTILO VISUAL -->
+             <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 ml-2 whitespace-nowrap">
+                 <span class="text-white text-xs font-bold px-1">ESTILO:</span>
+                 <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
+                     <option value="classic">Clásico (Cinzel)</option>
+                     <option value="gothic">Gótico (Medieval)</option>
+                 </select>
+             </div>
 
-         <div class="flex-grow"></div>
-         <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)" style="display:none;">
-         <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-sm flex items-center gap-2 transition-colors">SUBIR FONDO</button>
-         <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR IMÁGENES</button>
-         <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors">IMPRIMIR PDF</button>
+             <div class="flex-grow"></div>
+             
+             <!-- INPUT PARA EL PATRÓN (TRAMA) -->
+             <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)" style="display:none;">
+             <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-4 py-2 rounded shadow font-bold hover:bg-purple-800 text-sm flex items-center gap-2 transition-colors whitespace-nowrap">SUBIR TRAMA</button>
+
+             <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)" style="display:none;">
+             <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-sm flex items-center gap-2 transition-colors whitespace-nowrap">SUBIR FONDO</button>
+             
+             <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors whitespace-nowrap">DESCARGAR IMÁGENES</button>
+             <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors whitespace-nowrap">IMPRIMIR PDF</button>
+         </div>
     </div>
 
     <!-- NUEVA HOJA 0: CUBIERTA EXTERIOR (Contraportada y Portada) -->
@@ -937,7 +982,32 @@
                 reader.onload = function(e) {
                     const pages = document.querySelectorAll('.page-a5');
                     pages.forEach(page => {
+                        // Aseguramos que el fondo se aplique
                         page.style.backgroundImage = `url('${e.target.result}')`;
+                        page.style.backgroundSize = "cover";
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // NUEVA FUNCIÓN PARA APLICAR TRAMA (ENTRAMADO)
+        function applyPattern(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const pages = document.querySelectorAll('.page-a5');
+                    pages.forEach(page => {
+                        // Verificamos si ya existe una capa de patrón, si no, la creamos
+                        let patternLayer = page.querySelector('.pattern-layer');
+                        if (!patternLayer) {
+                            patternLayer = document.createElement('div');
+                            patternLayer.className = 'pattern-layer';
+                            // Insertamos al principio para que quede detrás del contenido (z-index: 0 vs content z-index: 1)
+                            page.insertBefore(patternLayer, page.firstChild);
+                        }
+                        // Aplicamos la imagen de trama
+                        patternLayer.style.backgroundImage = `url('${e.target.result}')`;
                     });
                 }
                 reader.readAsDataURL(input.files[0]);
@@ -974,17 +1044,12 @@
             }
         }
 
-        let isMagicMode = false; // INICIA EN MODO MARCIAL
-        function toggleMode() {
-            isMagicMode = !isMagicMode;
-            document.body.classList.toggle('mode-martial');
-            const btn = document.getElementById('modeToggleBtn');
-            if (isMagicMode) {
-                btn.innerHTML = "🔮 MODO: MÁGICO";
-                btn.className = "bg-purple-700 text-white px-4 py-2 rounded shadow font-bold hover:bg-purple-800 text-sm flex items-center gap-2 transition-colors border-2 border-white";
+        // FUNCION PARA CAMBIAR CLASE (MARCIALES / ARCANOS)
+        function changeClassMode(mode) {
+            if (mode === 'martial') {
+                document.body.classList.add('mode-martial');
             } else {
-                btn.innerHTML = "⚔️ MODO: MARCIAL";
-                btn.className = "bg-red-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-red-900 text-sm flex items-center gap-2 transition-colors border-2 border-white";
+                document.body.classList.remove('mode-martial');
             }
         }
 
