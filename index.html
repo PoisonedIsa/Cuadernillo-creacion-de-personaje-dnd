@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Final Integration)</title>
+    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Fixed Layout)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- FUENTES ACTUALIZADAS -->
@@ -1023,16 +1023,11 @@
                                         <label class="text-label">NOMBRE</label>
                                         <input class="border-b border-black flex-grow h-6 text-title">
                                     </div>
-                                    <div class="flex gap-2 mb-1">
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">CAST:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">DUR:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-center gap-1 w-1/4 justify-end">
-                                            <span class="text-label mr-0.5">COMPS:</span>
-                                            <label class="flex items-center gap-0.5 text-label text-[9px]">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                            <label class="flex items-center gap-0.5 text-label text-[9px]">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                            <label class="flex items-center gap-0.5 text-label text-[9px]">M<input type="checkbox" class="comp-check" data-label="M"></label>
-                                        </div>
+                                    <div class="flex gap-1 mb-1 text-[10px]"> <!-- FIX APPLIED HERE -->
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">CAST:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">RNG:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-center gap-0.5 w-auto justify-end"><span class="text-label text-[9px] mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[8px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[8px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[8px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
                                     </div>
                                     <div class="relative mt-2">
                                         <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
@@ -1056,11 +1051,11 @@
                                 <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
-                                    <div class="flex gap-2 mb-1">
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">CAST:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">DUR:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-center gap-1 w-1/4 justify-end"><span class="text-label mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[9px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[9px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[9px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
+                                    <div class="flex gap-1 mb-1 text-[10px]"> <!-- FIX APPLIED HERE -->
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">CAST:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">RNG:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-center gap-0.5 w-auto justify-end"><span class="text-label text-[9px] mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[8px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[8px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[8px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
                                     </div>
                                     <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 desc-4-lines"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
                                 </div>
@@ -1212,11 +1207,11 @@
                                 <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
-                                    <div class="flex gap-2 mb-1">
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">CAST:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">DUR:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-center gap-1 w-1/4 justify-end"><span class="text-label mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[9px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[9px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[9px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
+                                    <div class="flex gap-1 mb-1 text-[10px]"> <!-- FIX APPLIED HERE -->
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">CAST:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">RNG:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-center gap-0.5 w-auto justify-end"><span class="text-label text-[9px] mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[8px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[8px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[8px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
                                     </div>
                                     <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 desc-4-lines"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
                                 </div>
@@ -1329,11 +1324,11 @@
                                 <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
                                 <div class="flex-grow flex flex-col gap-1">
                                     <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
-                                    <div class="flex gap-2 mb-1">
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">CAST:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">DUR:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-end gap-1 w-1/4"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body text-center"></div>
-                                        <div class="flex items-center gap-1 w-1/4 justify-end"><span class="text-label mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[9px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[9px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[9px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
+                                    <div class="flex gap-1 mb-1 text-[10px]"> <!-- FIX APPLIED HERE -->
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">CAST:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">RNG:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-center gap-0.5 w-auto justify-end"><span class="text-label text-[9px] mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[8px]">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label text-[8px]">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label text-[8px]">M<input type="checkbox" class="comp-check" data-label="M"></label></div>
                                     </div>
                                     <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 desc-4-lines"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
                                 </div>
