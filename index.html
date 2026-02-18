@@ -6,10 +6,11 @@
     <title>D&D Booklet (16 Páginas) - Edición Deluxe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <!-- AÑADIDA FUENTE DOODLE: Patrick Hand -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&family=MedievalSharp&family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
         :root { 
-            /* VARIABLES DE TEMA */
+            /* VARIABLES DE TEMA (CLÁSICO POR DEFECTO) */
             --border-thick: 3px double #2c2c2c; 
             --border-thin: 1px solid #444; 
             --border-radius: 4px;
@@ -18,11 +19,11 @@
             --font-body: 'Roboto Condensed', sans-serif;
             --border-stat-circle: 1.5px solid black;
             
-            /* AUMENTO DE TAMAÑOS PARA LEGIBILIDAD */
-            --s-title: 22px; /* Antes 20px */
-            --s-stat: 18px;  /* Antes 16px */
-            --s-body: 13px;  /* Antes 12px */
-            --s-label: 11px; /* Antes 9px - Mucho más legible */
+            /* TAMAÑOS BASE */
+            --s-title: 22px; 
+            --s-stat: 18px;  
+            --s-body: 13px;  
+            --s-label: 11px; 
         }
 
         /* TEMA GÓTICO */
@@ -35,20 +36,28 @@
             --font-body: 'MedievalSharp', cursive;
             --border-stat-circle: 2px solid #000;
         }
-        
-        /* CORRECCIÓN DE LEGIBILIDAD GÓTICA */
-        /* MedievalSharp no tiene negrita real, forzarla la emborrona. Aquí la desactivamos. */
-        body.theme-gothic .font-bold, 
-        body.theme-gothic strong, 
-        body.theme-gothic .text-label,
-        body.theme-gothic .text-title { 
-            font-weight: 400 !important; 
-        }
-        
-        /* Ajuste de espaciado para la fuente gótica */
+        body.theme-gothic .font-bold, body.theme-gothic strong, body.theme-gothic .text-label, body.theme-gothic .text-title { font-weight: 400 !important; }
         body.theme-gothic .text-title { letter-spacing: 1px; } 
         body.theme-gothic .text-label { font-size: 11px !important; letter-spacing: 0.5px; } 
         body.theme-gothic input, body.theme-gothic textarea { color: #000; }
+
+        /* TEMA DOODLE (NUEVO) */
+        body.theme-doodle {
+            --border-thick: 2px dashed #444; /* Bordes punteados estilo rotulador */
+            --border-thin: 1px dashed #888;
+            --border-radius: 15px; /* Bordes muy redondos */
+            --bg-paper: #fff; /* Papel blanco limpio */
+            
+            --font-title: 'Patrick Hand', cursive; 
+            --font-body: 'Patrick Hand', cursive;
+            
+            --border-stat-circle: 2px dashed #444;
+        }
+        /* Ajustes específicos para Doodle */
+        body.theme-doodle .text-title { font-weight: 400 !important; letter-spacing: 1px; font-size: 24px !important; }
+        body.theme-doodle input, body.theme-doodle textarea { border-bottom: 1.5px dashed #ccc !important; } /* Líneas de escritura punteadas */
+        body.theme-doodle .box-border { box-shadow: none; border-width: 2px; } /* Flat look */
+        body.theme-doodle .stat-box { border: 2px dashed #000; } /* Cajas de stats punteadas */
 
         body { 
             font-family: var(--font-body); 
@@ -184,6 +193,7 @@
                  <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
                      <option value="classic">Clásico (Cinzel)</option>
                      <option value="gothic">Gótico (Medieval)</option>
+                     <option value="doodle">Doodle (Tierno)</option>
                  </select>
              </div>
 
@@ -1118,10 +1128,12 @@
         }
 
         function changeTheme(theme) {
-            if (theme === 'gothic') {
-                document.body.classList.add('theme-gothic');
-            } else {
-                document.body.classList.remove('theme-gothic');
+            // Limpia clases anteriores
+            document.body.classList.remove('theme-gothic', 'theme-doodle');
+            
+            // Aplica nuevo tema si no es clásico
+            if (theme !== 'classic') {
+                document.body.classList.add(`theme-${theme}`);
             }
         }
 
