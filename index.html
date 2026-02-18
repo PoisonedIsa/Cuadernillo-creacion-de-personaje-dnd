@@ -3,113 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D Booklet (12 Páginas) - Grimoire 4 Lines</title>
+    <title>D&D Booklet (16 Páginas) - Edición Deluxe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --border-thick: 1.5px solid #000; 
-            --border-thin: 0.75px solid #444; 
+            --border-thick: 3px double #2c2c2c; /* CAMBIO: Borde doble elegante */
+            --border-thin: 1px solid #444; 
+            --bg-paper: #fdfbf7; /* Color papel muy suave */
             
             /* SISTEMA DE 4 TAMAÑOS HOMOGÉNEOS */
-            --s-title: 20px;  /* T1: Títulos */
-            --s-stat: 16px;   /* T2: Números Grandes/Destacados */
-            --s-body: 12px;   /* T3: Texto Standard, Inputs, Skills */
-            --s-label: 9px;   /* T4: Etiquetas, Detalles pequeños */
+            --s-title: 20px;
+            --s-stat: 16px; 
+            --s-body: 12px;
+            --s-label: 9px;
         }
 
-        body { font-family: 'Roboto Condensed', sans-serif; background-color: #333; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+        body { font-family: 'Roboto Condensed', sans-serif; background-color: #222; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
         
-        /* CLASES DE TEXTO UNIFICADAS */
-        .text-title { font-size: var(--s-title) !important; line-height: 1.1; font-weight: 700; font-family: 'Cinzel', serif; text-transform: uppercase; }
-        .text-stat { font-size: var(--s-stat) !important; font-weight: 700; line-height: 1; }
+        /* CLASES DE TEXTO */
+        .text-title { font-size: var(--s-title) !important; line-height: 1.1; font-weight: 700; font-family: 'Cinzel', serif; text-transform: uppercase; color: #1a1a1a; }
+        .text-stat { font-size: var(--s-stat) !important; font-weight: 700; line-height: 1; font-family: 'Cinzel', serif; }
         .text-body { font-size: var(--s-body) !important; line-height: 1.3; font-weight: 400; }
-        .text-label { font-size: var(--s-label) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; }
+        .text-label { font-size: var(--s-label) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; color: #444; }
         
-        /* Reset de inputs para heredar tamaño body por defecto */
         input[type="text"], textarea { 
-            background: transparent; border: none; border-bottom: 0.5px solid #888; 
+            background: transparent; border: none; border-bottom: 0.5px dotted #666; /* Punteado es más sutil */
             font-family: 'Roboto Condensed', sans-serif; width: 100%; padding: 0 2px; margin: 0; 
             display: block; height: 100%; line-height: 1.3; box-sizing: border-box;
-            font-size: var(--s-body); /* Por defecto T3 */
+            font-size: var(--s-body);
+            transition: border-color 0.3s, background 0.3s;
         }
-        input:focus, textarea:focus { outline: none; border-bottom: 1px solid #000; background: rgba(255,255,255,0.5); }
+        input:focus, textarea:focus { outline: none; border-bottom: 1px solid #000; background: rgba(0,0,0,0.05); }
         .no-line { border-bottom: none !important; }
 
-        /* CONTENEDOR DE HOJA */
+        /* HOJAS */
         .sheet-wrapper { position: relative; width: 297mm; display: flex; flex-direction: column; gap: 5px; }
         
-        /* HOJA PRINCIPAL */
         .sheet-landscape { 
-            background: white; width: 297mm; height: 210mm; padding: 0; display: flex; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; 
-            overflow: hidden; page-break-after: always; 
+            background-color: var(--bg-paper); 
+            width: 297mm; height: 210mm; padding: 0; display: flex; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; 
+            overflow: hidden; page-break-after: always; border-radius: 2px;
         }
         
-        /* PÁGINA A5 */
         .page-a5 { 
             width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
             box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
-            background-color: white; background-size: cover; background-position: center; 
-            background-repeat: no-repeat; z-index: 0;
+            background: transparent; z-index: 0;
         }
 
-        .divider { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #ccc; transform: translateX(-50%); z-index: 10; }
+        .divider { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #bbb; transform: translateX(-50%); z-index: 10; }
         
-        /* Componentes UI */
-        .box-border { border: var(--border-thick); border-radius: 5px; }
-        .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: var(--border-thick); border-radius: 6px; position: relative; background: rgba(255,255,255,0.8); z-index: 5;}
-        .stat-box span { font-weight: 900; font-size: var(--s-body); } 
-        .stat-score-bubble { border: 1.5px solid black; border-radius: 50%; background: white; position: absolute; bottom: -8px; display: flex; align-items: center; justify-content: center; z-index: 10; width: 22px; height: 18px;}
-        .shield-shape { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>') no-repeat center center; background-size: contain; }
+        /* UI VISUALES MEJORADOS */
+        .box-border { 
+            border: var(--border-thick); 
+            border-radius: 4px; 
+            background: white;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sombra sutil "flat" */
+        }
         
-        /* Skills y Listas */
+        .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; border-radius: 8px; position: relative; background: white; z-index: 5; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
+        .stat-box span { font-weight: 900; font-size: var(--s-body); font-family: 'Cinzel', serif; margin-top: 2px; } 
+        .stat-score-bubble { border: 1.5px solid black; border-radius: 50%; background: white; position: absolute; bottom: -8px; display: flex; align-items: center; justify-content: center; z-index: 10; width: 24px; height: 20px; font-weight: bold;}
+        
+        .shield-shape { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>') no-repeat center center; background-size: contain; filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1)); }
+        
         .skill-row { font-size: var(--s-body); display: flex; align-items: center; gap: 3px; line-height: 1.3; white-space: nowrap; font-weight: 400; margin-bottom: 0px; }
         .skill-mod-input { width: 20px !important; border-bottom: 1px solid #000 !important; text-align: center; margin-right: 3px; font-size: var(--s-body); height: 14px; font-weight: 400; padding: 0; display: inline-block; vertical-align: middle; }
         
-        /* Checkboxes */
-        .checkbox-round { width: 10px; height: 10px; border: 1px solid black; border-radius: 50%; appearance: none; cursor: pointer; flex-shrink: 0; margin-right: 2px; background: rgba(255,255,255,0.5); }
-        .checkbox-round:checked { background-color: black; }
-        .hex-check { width: 12px; height: 12px; border: 1px solid #000; transform: rotate(45deg); display: inline-block; margin: 2px; cursor: pointer; background: rgba(255,255,255,0.5); }
-        .hex-check:checked { background: black; }
+        /* Checkboxes Personalizados */
+        .checkbox-round { width: 11px; height: 11px; border: 1.5px solid #333; border-radius: 50%; appearance: none; cursor: pointer; flex-shrink: 0; margin-right: 2px; background: white; }
+        .checkbox-round:checked { background-color: #333; border-color: #000; }
+        
+        .hex-check { width: 12px; height: 12px; border: 1px solid #000; transform: rotate(45deg); display: inline-block; margin: 2px; cursor: pointer; background: white; }
+        .hex-check:checked { background: #000; }
+
         .comp-check { appearance: none; width: 11px; height: 11px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
         .comp-check:checked { background: black; }
         
-        /* Reglas y Tablas Referencia */
+        /* Reglas */
         .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .rules-box { background: rgba(247, 247, 247, 0.8); border: 1px solid #333; border-radius: 4px; padding: 4px; font-size: var(--s-body); display: flex; flex-direction: column; }
-        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 1.5px solid #000; margin-bottom: 3px; display: block; font-size: var(--s-label); color: black; }
+        .rules-box { background: #fff; border: 2px solid #000; border-radius: 2px; padding: 4px; font-size: var(--s-body); display: flex; flex-direction: column; box-shadow: 2px 2px 0 rgba(0,0,0,0.05); }
+        .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 2px solid #000; margin-bottom: 3px; display: block; font-size: var(--s-label); color: black; font-family: 'Cinzel', serif; letter-spacing: 1px; }
         
         .ref-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; margin-bottom: 2px; padding-bottom: 1px; align-items: baseline; }
         .ref-row:last-child { border-bottom: none; }
-        .ref-key { font-weight: 700; font-size: var(--s-label); text-transform: uppercase; width: 32%; flex-shrink: 0; }
-        .ref-val { font-size: var(--s-label); text-align: right; color: #333; width: 68%; font-weight: 400; text-transform: none; line-height: 1.1; }
+        .ref-key { font-weight: 700; font-size: var(--s-label); text-transform: uppercase; width: 32%; flex-shrink: 0; color: #222; }
+        .ref-val { font-size: var(--s-label); text-align: right; color: #444; width: 68%; font-weight: 400; text-transform: none; line-height: 1.1; }
 
-        /* Fondos */
+        /* Utility */
         .lined-bg { background-image: linear-gradient(#ccc 1px, transparent 1px); background-size: 100% 20px; background-position: 0 19px; line-height: 20px !important; }
-        .dot-grid { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiM5OTkiLz48L3N2Zz4='); background-repeat: repeat; }
+        .dot-grid { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNjY2MiLz48L3N2Zz4='); background-repeat: repeat; }
         .page-num { position: absolute; bottom: 5mm; width: 100%; left: 0; text-align: center; font-size: var(--s-body); color: #000; font-weight: 700; font-family: 'Cinzel', serif; z-index: 50; }
         .force-border { border: 1px solid #000 !important; background: white; }
 
-        /* Grimorio */
-        .spell-header-box { border: 2px solid black; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: white; }
-        .spell-card { position: relative; border-bottom: 1.5px dashed #666; padding-bottom: 8px; margin-bottom: 8px; display: flex; gap: 8px; }
-        .spell-level-diamond { width: 32px; height: 32px; border: 2px solid black; transform: rotate(45deg); display: flex; items-center; justify-content: center; background: white; margin: 4px auto 0 auto; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        /* Headers Magic/Martial */
+        .spell-header-box { border: 3px double black; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: white; }
+        .spell-card { position: relative; border-bottom: 1.5px dashed #888; padding-bottom: 8px; margin-bottom: 8px; display: flex; gap: 8px; }
+        .spell-level-diamond { width: 32px; height: 32px; border: 2px solid black; transform: rotate(45deg); display: flex; items-center; justify-content: center; background: white; margin: 4px auto 0 auto; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
         .spell-level-input { width: 100%; height: 100%; transform: rotate(-45deg); text-align: center; font-weight: 900; font-size: var(--s-stat); border: none !important; background: transparent; padding: 0; }
         .desc-4-lines { height: 80px; width: 100%; }
 
-        /* Modos */
         .martial-content { display: none !important; }
         .magic-content { display: block !important; }
-        /* Ajuste: por defecto modo marcial si la clase existe */
         body.mode-martial .martial-content { display: block !important; }
         body.mode-martial .magic-content { display: none !important; }
 
         @media print { 
             body { background: white; margin: 0; padding: 0; display: block; } 
             .sheet-wrapper { margin: 0; page-break-after: always; }
-            .sheet-landscape { margin: 0; box-shadow: none; } 
+            .sheet-landscape { margin: 0; box-shadow: none; border: none; } 
             .no-print, .sheet-controls { display: none !important; } 
             .top-bar { display: none !important; }
             .page-a5 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -124,27 +129,144 @@
          <div class="flex-grow"></div>
          <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)" style="display:none;">
          <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-sm flex items-center gap-2 transition-colors">SUBIR FONDO</button>
-         <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR (IMG)</button>
-         <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors">IMPRIMIR</button>
+         <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-green-700 text-sm flex items-center gap-2 transition-colors">DESCARGAR IMÁGENES</button>
+         <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded shadow font-bold hover:bg-gray-700 text-sm flex items-center gap-2 transition-colors">IMPRIMIR PDF</button>
     </div>
 
-    <!-- HOJA 1: P12 & P1 -->
+    <!-- NUEVA HOJA 0: CUBIERTA EXTERIOR (Contraportada y Portada) -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 1 (Págs 12 - 1)</span> <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Cubierta Exterior (P16 Contraportada - P1 Portada)</span> <button onclick="downloadSheet('sheetCover')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        <div id="sheetCover" class="sheet-landscape">
+            <div class="divider"></div>
+            
+            <!-- P16: CONTRAPORTADA (Notas Rápidas) -->
+            <div class="page-a5">
+                <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">NOTAS DE SESIÓN</h2>
+                <div class="flex-grow w-full border-2 border-black rounded box-border p-4 bg-white dot-grid">
+                    <!-- Espacio libre para garabatos -->
+                </div>
+                <div class="mt-4 border-t-2 border-black pt-2 text-center text-label">
+                    <span>REGISTRO DE MUERTES / ESTADO</span>
+                    <div class="flex justify-center gap-4 mt-2">
+                        <div class="flex flex-col items-center"><div class="w-8 h-8 border border-black rounded-full"></div><span>KO #1</span></div>
+                        <div class="flex flex-col items-center"><div class="w-8 h-8 border border-black rounded-full"></div><span>KO #2</span></div>
+                        <div class="flex flex-col items-center"><div class="w-8 h-8 border border-black rounded-full"></div><span>KO #3</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- P1: PORTADA PRINCIPAL -->
+            <div class="page-a5 flex flex-col items-center justify-between py-10">
+                <div class="w-full text-center">
+                    <h1 class="font-['Cinzel'] text-4xl font-black mb-1 uppercase tracking-widest">D&D 5E</h1>
+                    <span class="text-label tracking-[0.5em] text-gray-500 block">REGISTRO DE PERSONAJE</span>
+                </div>
+
+                <div class="w-full flex-grow my-6 border-4 double border-black p-2 flex items-center justify-center bg-white shadow-lg relative">
+                    <div class="absolute inset-2 border border-black opacity-50 pointer-events-none"></div>
+                    <span class="text-gray-300 font-['Cinzel'] text-2xl font-bold opacity-30 rotate-[-45deg] pointer-events-none">ARTE DEL PERSONAJE</span>
+                    <!-- Área clickeable para subir portada -->
+                    <input type="file" id="coverArtInput" class="hidden" accept="image/*" onchange="loadCoverArt(this)">
+                    <img id="coverArtImg" class="absolute inset-0 w-full h-full object-cover hidden" onclick="document.getElementById('coverArtInput').click()">
+                    <button class="no-print absolute bottom-2 right-2 bg-gray-200 text-xs px-2 py-1 rounded opacity-50 hover:opacity-100" onclick="document.getElementById('coverArtInput').click()">Subir Imagen</button>
+                </div>
+
+                <div class="w-full box-border p-4 bg-white text-center">
+                    <input type="text" placeholder="NOMBRE DEL PERSONAJE" class="text-center font-['Cinzel'] text-3xl font-bold mb-2 border-b-2 border-black pb-1 placeholder-gray-300">
+                    <div class="flex gap-4 justify-center mt-2">
+                        <input type="text" placeholder="CLASE / NIVEL" class="text-center text-title w-1/2 border-b border-gray-400 placeholder-gray-300">
+                        <input type="text" placeholder="TRASFONDO" class="text-center text-title w-1/2 border-b border-gray-400 placeholder-gray-300">
+                    </div>
+                </div>
+                
+                <div class="w-full text-center mt-4">
+                    <label class="text-label block">CAMPAÑA</label>
+                    <input type="text" class="text-center font-bold text-lg border-b border-black w-3/4 mx-auto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUEVA HOJA 00: CUBIERTA INTERIOR -->
+    <div class="sheet-wrapper">
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Cubierta Interior (P2 Grupo - P15 Log)</span> <button onclick="downloadSheet('sheetInner')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        <div id="sheetInner" class="sheet-landscape">
+            <div class="divider"></div>
+            
+            <!-- P2: EL GRUPO (Interior Portada) -->
+            <div class="page-a5">
+                <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
+                <div class="flex flex-col gap-2 flex-grow">
+                    <!-- 6 Slots para compañeros -->
+                    <script>
+                        for(let i=1; i<=6; i++){
+                            document.write(`
+                            <div class="box-border p-2 bg-white flex gap-2 items-center">
+                                <div class="w-8 h-8 rounded-full border border-black bg-gray-100 flex items-center justify-center font-bold text-gray-400">${i}</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between border-b border-gray-300 mb-1">
+                                        <input type="text" placeholder="Nombre Personaje" class="font-bold w-1/2">
+                                        <input type="text" placeholder="Clase / Rol" class="text-right w-1/2 text-xs">
+                                    </div>
+                                    <input type="text" placeholder="Jugador / Notas" class="text-xs text-gray-500">
+                                </div>
+                            </div>
+                            `);
+                        }
+                    </script>
+                    <div class="mt-4 box-border p-3 flex-grow bg-white">
+                        <h3 class="text-label border-b border-black mb-2">REGLAS DE LA CASA / SEGURIDAD</h3>
+                        <textarea class="w-full h-full resize-none border-none lined-bg text-body"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- P15: LOG DE NIVELES (Interior Contraportada) -->
+            <div class="page-a5">
+                <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
+                <div class="box-border p-2 bg-white h-full flex flex-col">
+                    <div class="grid grid-cols-[30px_1fr_60px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
+                        <div>NV</div>
+                        <div class="text-left">RASGO OBTENIDO / MEJORA</div>
+                        <div>FECHA</div>
+                    </div>
+                    <!-- Filas para 20 niveles -->
+                    <div class="flex-grow flex flex-col gap-1 overflow-hidden">
+                        <script>
+                            for(let i=1; i<=20; i++){
+                                document.write(`
+                                <div class="grid grid-cols-[30px_1fr_60px] gap-2 items-center border-b border-gray-200 py-1">
+                                    <div class="font-bold text-center text-stat">${i}</div>
+                                    <input type="text" class="no-line text-body" placeholder="-">
+                                    <input type="text" class="no-line text-xs text-center" placeholder="../../..">
+                                </div>
+                                `);
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TUS HOJAS EXISTENTES (AHORA EN EL CENTRO) -->
+    
+    <!-- HOJA 1 (Antigua Hoja 1) -->
+    <div class="sheet-wrapper">
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 1 (Mapas y Stats)</span> <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet1" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 12 -->
+            <!-- PÁGINA MAPA -->
             <div class="page-a5">
                 <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
-                <!-- CAMBIO: Se agregó la clase 'bg-white' y se quitó el style transparent para que tape el fondo -->
-                <div class="h-full w-full border border-gray-400 dot-grid rounded bg-white"></div>
-                <div class="page-num">12</div>
+                <div class="h-full w-full border-2 border-gray-400 dot-grid rounded bg-white box-border"></div>
+                <div class="page-num">14</div> <!-- Re-numerado mentalmente, pero etiqueta visual queda -->
             </div>
-            <!-- PÁGINA 1 -->
+            <!-- PÁGINA STATS -->
             <div class="page-a5">
                 <div class="grid grid-cols-12 gap-2 mb-2 border-b border-black pb-1 items-end">
-                    <div class="col-span-10"><input type="text" class="text-title h-7 border-b-2 border-black w-full"><label class="text-label">Nombre del Personaje</label></div>
-                    <div class="col-span-2 flex flex-col items-center"><div class="border border-black w-8 h-8 flex items-center justify-center rounded bg-white"><input type="text" class="text-center text-stat w-full h-full p-0 no-line"></div><label class="text-label mt-0.5">NIVEL</label></div>
+                    <div class="col-span-10"><input type="text" class="text-title h-7 border-b-2 border-black w-full" value=""><label class="text-label">Nombre (Resumen)</label></div>
+                    <div class="col-span-2 flex flex-col items-center"><div class="border-2 border-black w-9 h-9 flex items-center justify-center rounded bg-white shadow-sm"><input type="text" class="text-center text-stat w-full h-full p-0 no-line"></div><label class="text-label mt-0.5">NIVEL</label></div>
                     <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Clase</label></div>
                     <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Subclase</label></div>
                     <div class="col-span-4"><input type="text" class="h-4 w-full border-b border-gray-400"><label class="text-label">Raza</label></div>
@@ -154,7 +276,7 @@
                 </div>
                 <div class="flex gap-2 h-full">
                     <div class="w-[58%] flex flex-col gap-1">
-                        <div class="bg-gray-50/50 p-1.5 rounded box-border flex-grow flex flex-col">
+                        <div class="bg-white p-1.5 rounded box-border flex-grow flex flex-col border-2 border-gray-800">
                             <div class="flex justify-between items-center border-b border-gray-400 pb-1 mb-1"><span class="text-label">BONO DE COMPETENCIA</span><div class="border border-black rounded-full w-7 h-7 flex items-center justify-center bg-white"><input type="text" class="text-center text-stat w-full h-full p-0 bg-transparent no-line"></div></div>
                             <div class="flex-grow flex flex-col justify-around gap-0.5">
                                 <div class="flex items-center gap-1 border-b border-gray-200 pb-0.5"><div class="stat-box w-12 h-12 flex-shrink-0"><span>FUE</span><input type="text" class="text-center text-stat p-0 h-5 no-line"><div class="stat-score-bubble"><input type="text" class="text-center text-label w-full p-0 bg-transparent no-line"></div></div><div class="flex-1 pl-1"><div class="flex items-center justify-between border-b border-gray-300 mb-0.5 pb-0.5"><span class="text-body">Salvación</span><div class="flex items-center"><input type="checkbox" class="checkbox-round mr-1"><input type="text" class="skill-mod-input no-line"></div></div><div class="skill-row"><input type="checkbox" class="checkbox-round"><input type="text" class="skill-mod-input no-line"> Atletismo</div></div></div>
@@ -166,47 +288,49 @@
                             </div>
                             <div class="flex justify-between gap-2 mt-1">
                                 <div class="border border-black p-0.5 text-center flex-[2] bg-white rounded"><span class="text-label block">PERCEPCION PASIVA</span><input type="text" class="text-center text-stat p-0 no-line bg-transparent"></div>
-                                <div class="border border-black p-0.5 text-center flex-1 bg-white rounded"><span class="text-label block">INSPIRACION</span><input type="checkbox" class="mx-auto mt-1 w-4 h-4"></div>
+                                <div class="border border-black p-0.5 text-center flex-1 bg-white rounded"><span class="text-label block">INSPIRACION</span><input type="checkbox" class="mx-auto mt-1 w-4 h-4 checkbox-round"></div>
                             </div>
                         </div>
                     </div>
                     <div class="w-[42%] flex flex-col gap-2">
-                        <div class="flex items-center justify-between bg-gray-50/50 rounded p-1.5 border border-gray-300">
+                        <div class="flex items-center justify-between bg-white rounded p-1.5 border border-gray-300 shadow-sm">
                             <div class="text-center w-12"><div class="shield-shape w-10 h-12 mx-auto flex items-center justify-center"><input type="text" class="text-center w-8 text-stat bg-transparent no-line"></div><span class="text-label block mt-0.5">CA</span></div>
                             <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center text-stat w-full p-0 no-line"><span class="text-label block mt-[-2px]">INIC.</span></div>
                             <div class="text-center border box-border w-12 h-12 flex flex-col items-center justify-center bg-white rounded"><input type="text" class="text-center text-stat w-full p-0 no-line"><span class="text-label block mt-[-2px]">VEL.</span></div>
                         </div>
-                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="text-label block">Vida Máxima</label><input type="text" class="text-center text-body p-0 no-line"></div><div class="w-1/2 text-center"><label class="text-label block">Temporales</label><input type="text" class="text-center text-body p-0 no-line"></div></div><textarea class="w-full text-center text-title h-14 p-0 resize-none no-line bg-transparent"></textarea><span class="text-label block text-center mt-1">PUNTOS DE GOLPE</span></div>
-                        <div class="box-border p-1.5 bg-white/60"><div class="flex justify-between items-center border-b border-black mb-1"><span class="text-label">DADOS GOLPE</span><span class="text-label text-gray-800">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="text-label block text-gray-500">TOTAL</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div><div class="w-1/2 text-center"><label class="text-label block text-gray-500">RESTANTES</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div></div></div>
-                        <div class="box-border p-1.5 bg-white/60"><label class="text-label block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-label">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-label">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
+                        <div class="box-border p-1.5 bg-white"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="text-label block">Vida Máxima</label><input type="text" class="text-center text-body p-0 no-line"></div><div class="w-1/2 text-center"><label class="text-label block">Temporales</label><input type="text" class="text-center text-body p-0 no-line"></div></div><textarea class="w-full text-center text-title h-14 p-0 resize-none no-line bg-transparent"></textarea><span class="text-label block text-center mt-1">PUNTOS DE GOLPE</span></div>
+                        <div class="box-border p-1.5 bg-white"><div class="flex justify-between items-center border-b border-black mb-1"><span class="text-label">DADOS GOLPE</span><span class="text-label text-gray-800">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="text-label block text-gray-500">TOTAL</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div><div class="w-1/2 text-center"><label class="text-label block text-gray-500">RESTANTES</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div></div></div>
+                        <div class="box-border p-1.5 bg-white"><label class="text-label block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-label">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-label">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
                         
                         <!-- NUEVO: IDIOMAS Y COMPETENCIAS -->
-                        <div class="box-border p-1.5 bg-white/60 h-24">
+                        <div class="box-border p-1.5 bg-white h-24">
                             <span class="text-label block border-b border-black mb-1">IDIOMAS Y COMPETENCIAS</span>
                             <textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0"></textarea>
                         </div>
                         
                         <!-- NUEVO: ESCUDO / SÍMBOLO -->
-                        <div class="box-border p-1.5 bg-white/60 flex-grow flex flex-col items-center justify-center relative group cursor-pointer border-dashed border-2 border-gray-400 hover:border-black transition-colors" onclick="document.getElementById('p1SymbolInput').click()">
+                        <div class="box-border p-1.5 bg-white flex-grow flex flex-col items-center justify-center relative group cursor-pointer border-dashed border-2 border-gray-400 hover:border-black transition-colors" onclick="document.getElementById('p1SymbolInput').click()">
                             <input type="file" id="p1SymbolInput" class="hidden" accept="image/*" onchange="previewSymbol(this)">
                             <img id="p1SymbolImg" class="absolute inset-0 w-full h-full object-contain p-1 hidden">
                             <span class="text-label text-gray-400 group-hover:text-black text-center pointer-events-none">CLICK PARA SUBIR<br>SÍMBOLO / ESCUDO</span>
                         </div>
                     </div>
                 </div>
-                <div class="page-num">1</div>
+                <div class="page-num">3</div>
             </div>
+        </div>
     </div>
 
+    <!-- El resto de las hojas siguen igual en estructura, pero heredan el nuevo estilo visual -->
     <!-- HOJA 2 & 11 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 2 (Páginas 2 y 11)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 2 (Combate y Compañeros)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet2" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 2 -->
+            <!-- PÁGINA 2 (Ahora 4) -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Combate y Habilidades</h2>
-                <div class="box-border p-2 mb-3 bg-white/40">
+                <div class="box-border p-2 mb-3 bg-white">
                     <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-6 mb-1 px-2 items-center text-label text-center"><div class="px-2">ARMA / CONJURO</div><div>BONO</div><div class="px-2">DAÑO / TIPO</div></div>
                     <div class="flex flex-col gap-2">
                         <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
@@ -215,7 +339,7 @@
                         <div class="grid grid-cols-[1fr_2.5rem_1fr] gap-2 h-9 px-2"><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-stat text-body"></div><div class="h-full border border-gray-300 rounded flex items-center justify-center"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div><div class="h-full border border-gray-300 rounded px-2 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body"></div></div>
                     </div>
                 </div>
-                <div class="flex-grow box-border p-3 flex flex-col bg-white/40">
+                <div class="flex-grow box-border p-3 flex flex-col bg-white">
                     <span class="text-label text-center border-b-2 border-black mb-2 block">RASGOS DE CLASE Y TALENTOS</span>
                     <div class="flex flex-col gap-2 mb-2">
                         <div class="flex justify-between items-center border-b border-gray-300 pb-1"><input type="text" class="w-2/3 font-bold bg-transparent no-line text-body"><div class="flex"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
@@ -225,13 +349,13 @@
                     </div>
                     <textarea class="w-full flex-grow border-none resize-none p-0 lined-bg bg-transparent text-body"></textarea>
                 </div>
-                <div class="page-num">2</div>
+                <div class="page-num">4</div>
             </div>
-            <!-- PÁGINA 11 -->
+            <!-- PÁGINA 11 (Ahora 13) -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">Compañeros y Monturas</h2>
                 <div class="flex flex-col gap-4 h-full">
-                    <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
+                    <div class="box-border p-3 h-1/2 flex flex-col bg-white rounded">
                         <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="text-label block">Nombre</label><input type="text" class="font-bold text-stat p-0 w-full bg-transparent no-line"></div><div class="w-1/3"><label class="text-label block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-body"></div></div>
                         <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">CA</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">HP</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">VEL</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div></div>
                         <div class="flex justify-between text-center mb-2 px-2">
@@ -244,7 +368,7 @@
                         </div>
                         <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-body"></textarea>
                     </div>
-                    <div class="box-border p-3 h-1/2 flex flex-col bg-white/50 rounded">
+                    <div class="box-border p-3 h-1/2 flex flex-col bg-white rounded">
                         <div class="flex justify-between border-b border-black mb-2 pb-1"><div class="w-1/2"><label class="text-label block">Nombre</label><input type="text" class="font-bold text-stat p-0 w-full bg-transparent no-line"></div><div class="w-1/3"><label class="text-label block text-right">Raza</label><input type="text" class="text-right text-xs p-0 w-full bg-transparent no-line text-body"></div></div>
                         <div class="flex gap-4 mb-2 justify-around"><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">CA</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">HP</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div><div class="border border-gray-400 p-1 text-center w-14 bg-white rounded"><span class="text-label block">VEL</span><input type="text" class="text-center w-full text-stat border-none no-line bg-transparent"></div></div>
                         <div class="flex justify-between text-center mb-2 px-2">
@@ -258,25 +382,25 @@
                         <textarea class="flex-grow w-full border-none p-1 resize-none bg-transparent lined-bg text-body"></textarea>
                     </div>
                 </div>
-                <div class="page-num">11</div>
+                <div class="page-num">13</div>
             </div>
         </div>
     </div>
 
     <!-- HOJA 3 & 10 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 3 (Páginas 10 y 3)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 3 (Inventario y Notas)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <div class="page-a5">
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Notas Adicionales</h2>
-                 <div class="h-full w-full lined-bg box-border p-4 bg-white/40"></div>
-                 <div class="page-num">10</div>
+                 <div class="h-full w-full lined-bg box-border p-4 bg-white"></div>
+                 <div class="page-num">12</div>
             </div>
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">Inventario y Personalidad</h2>
                 <div class="w-full box-border p-3 flex flex-col h-full">
-                     <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 gap-2 bg-white/30 p-1">
+                     <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 gap-2 bg-white p-1 shadow-sm">
                         <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PC</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
                         <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PP</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
                         <div class="flex-1 text-center bg-yellow-50 rounded p-1 border border-yellow-200"><span class="text-label block">PO</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
@@ -285,37 +409,37 @@
                     </div>
                     <textarea class="w-full flex-grow border-none resize-none p-0 leading-tight lined-bg bg-transparent mb-2 text-body"></textarea>
                     <div class="mt-2 border-t border-black pt-2 flex gap-2 h-16">
-                        <div class="w-12 border border-gray-400 rounded bg-white/50 flex flex-col items-center justify-center">
+                        <div class="w-12 border border-gray-400 rounded bg-white flex flex-col items-center justify-center">
                             <span class="text-label block">CANT.</span>
                             <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-body">
                         </div>
-                        <div class="flex-grow border border-gray-400 rounded bg-white/50 p-1 relative">
+                        <div class="flex-grow border border-gray-400 rounded bg-white p-1 relative">
                              <span class="text-label block absolute top-1 left-1 bg-white/80 px-1">MUNICIÓN / TIPO</span>
                              <textarea class="w-full h-full border-none resize-none bg-transparent pt-4 text-body"></textarea>
                         </div>
                     </div>
                     <div class="mt-2 border-t border-black pt-2 flex gap-2 h-16">
-                        <div class="w-12 border border-gray-400 rounded bg-white/50 flex flex-col items-center justify-center">
+                        <div class="w-12 border border-gray-400 rounded bg-white flex flex-col items-center justify-center">
                             <span class="text-label block">CANT.</span>
                             <input type="text" class="text-center font-bold text-xl no-line bg-transparent w-full h-full p-0 text-body">
                         </div>
-                        <div class="flex-grow border border-gray-400 rounded bg-white/50 p-1 relative">
+                        <div class="flex-grow border border-gray-400 rounded bg-white p-1 relative">
                             <span class="text-label block absolute top-1 left-1 bg-white/80 px-1">POCIONES Y CURACIÓN</span>
                             <textarea class="w-full h-full border-none resize-none bg-transparent pt-4 text-body"></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="page-num">3</div>
+                <div class="page-num">5</div>
             </div>
         </div>
     </div>
 
     <!-- HOJA 4 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 4 (Páginas 4 y 9)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 4 (Magia/Técnicas y Bio)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet4" class="sheet-landscape">
             <div class="divider"></div>
-            <!-- PÁGINA 4 -->
+            <!-- PÁGINA 6 -->
             <div class="page-a5">
                  
                  <!-- HEADER UNIFICADO (Solo Mágico) -->
@@ -430,7 +554,7 @@
                             // AUMENTADO A 6 ÍTEMS PARA RELLENAR
                             for(let i=0; i<6; i++) {
                                 document.write(`
-                                <div class="bg-white/40 p-1 border-b border-gray-400">
+                                <div class="bg-white p-1 border-b border-gray-400">
                                    <div class="flex justify-between items-end mb-1">
                                        <div class="w-2/3">
                                            <span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre de Habilidad / Maniobra</span>
@@ -443,7 +567,6 @@
                                            </div>
                                        </div>
                                    </div>
-                                   <!-- AUMENTADO A 60px PARA 3 LÍNEAS -->
                                    <div class="w-full h-[60px] lined-bg">
                                         <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                    </div>
@@ -453,10 +576,10 @@
                          </script>
                      </div>
                 </div>
-                <div class="page-num">4</div>
+                <div class="page-num">6</div>
             </div>
             
-            <!-- PÁGINA 9 -->
+            <!-- PÁGINA 11 -->
             <div class="page-a5">
                  <h2 class="text-title text-center border-b-2 border-black mb-3">Biografía y Apariencia</h2>
                  <div class="flex flex-col gap-3 h-full">
@@ -471,14 +594,14 @@
                      </div>
                      <div class="box-border p-3 flex-grow"><span class="text-label block mb-2 border-b border-gray-300 pb-1">Historia del Personaje</span><textarea class="w-full h-full border-none resize-none lined-bg bg-transparent text-body"></textarea></div>
                  </div>
-                <div class="page-num">9</div>
+                <div class="page-num">11</div>
             </div>
         </div>
     </div>
 
     <!-- HOJA 5: P8 & P5 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 5 (Páginas 8 y 5)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 5 (Reglas y Talentos)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet5" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
@@ -523,7 +646,7 @@
                     </div>
 
                 </div>
-                <div class="page-num">8</div>
+                <div class="page-num">10</div>
             </div>
             <!-- PÁGINA 5 -->
             <div class="page-a5">
@@ -577,7 +700,7 @@
                             // AUMENTADO A 6 ÍTEMS PARA RELLENAR Y QUITAR PLACEHOLDERS
                             for(let i=0; i<6; i++) {
                                 document.write(`
-                                <div class="bg-white/40 p-1 border-b border-gray-400">
+                                <div class="bg-white p-1 border-b border-gray-400">
                                    <div class="flex justify-between items-end mb-1">
                                        <div class="w-2/3">
                                             <span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre del Talento / Hazaña</span>
@@ -600,14 +723,14 @@
                          </script>
                      </div>
                 </div>
-                <div class="page-num">5</div>
+                <div class="page-num">7</div>
             </div>
         </div>
     </div>
 
     <!-- HOJA 6: P6 & P7 -->
     <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja 6 (Páginas 6 y 7)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar Individual</button></div>
+        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 6 (Combate Avanzado y Diario)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet6" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
@@ -657,7 +780,7 @@
                 <!-- CONTENIDO MARCIAL P6: INICIATIVA Y NOTAS -->
                 <div class="martial-content h-full flex flex-col gap-4">
                      <!-- MITAD SUPERIOR: RASTREADOR DE COMBATE -->
-                     <div class="h-1/2 flex flex-col box-border p-2 bg-white/40">
+                     <div class="h-1/2 flex flex-col box-border p-2 bg-white">
                         <h2 class="text-title text-center border-b-2 border-black mb-2">Rastreador de Combate</h2>
                         <div class="grid grid-cols-[1.5rem_1fr_2rem_2rem_1fr] gap-1 text-center text-label font-bold border-b border-black pb-1 mb-1">
                             <div>INI</div>
@@ -683,12 +806,12 @@
                         </div>
                      </div>
                      <!-- MITAD INFERIOR: NOTAS -->
-                     <div class="h-1/2 flex flex-col box-border p-3 bg-white/40">
+                     <div class="h-1/2 flex flex-col box-border p-3 bg-white">
                         <h2 class="text-title text-center border-b-2 border-black mb-2">Notas de Batalla</h2>
                         <div class="h-full w-full lined-bg"></div>
                      </div>
                 </div>
-                <div class="page-num">6</div>
+                <div class="page-num">8</div>
             </div>
             <!-- PÁGINA 7 -->
             <div class="page-a5">
@@ -697,7 +820,7 @@
                      <div class="box-border p-3 flex-grow"><span class="text-label block mb-1 border-b border-gray-300">CONTACTOS Y ORGANIZACIONES</span><textarea class="w-full h-full border-none resize-none lined-bg text-body"></textarea></div>
                      <div class="box-border p-3 h-1/3"><span class="text-label block mb-1 border-b border-gray-300">MISIÓN ACTUAL Y OBJETIVOS</span><textarea class="w-full h-full border-none resize-none lined-bg text-body"></textarea></div>
                  </div>
-                 <div class="page-num">7</div>
+                 <div class="page-num">9</div>
             </div>
         </div>
     </div>
@@ -716,7 +839,22 @@
             }
         }
         
-        // Función para previsualizar símbolo en P1
+        function loadCoverArt(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('coverArtImg');
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    // Ocultar texto
+                    input.parentElement.querySelector('span').style.display = 'none';
+                    // Quitar borde doble para que se vea limpio
+                    // input.parentElement.classList.remove('border-double', 'border-4');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
         function previewSymbol(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -724,9 +862,7 @@
                     const img = document.getElementById('p1SymbolImg');
                     img.src = e.target.result;
                     img.classList.remove('hidden');
-                    // Ocultar texto
                     input.parentElement.querySelector('span').style.display = 'none';
-                    // Quitar borde dashed para que se vea limpio
                     input.parentElement.classList.remove('border-dashed', 'border-2', 'border-gray-400');
                 }
                 reader.readAsDataURL(input.files[0]);
@@ -749,7 +885,7 @@
 
         function downloadSheet(id) {
             const element = document.getElementById(id);
-            html2canvas(element, { scale: 3, useCORS: true, backgroundColor: "#ffffff", onclone: (clonedDoc) => {
+            html2canvas(element, { scale: 3, useCORS: true, backgroundColor: "#fdfbf7", onclone: (clonedDoc) => {
                 const inputs = clonedDoc.querySelectorAll('input[type="text"]');
                 inputs.forEach(input => { input.style.marginTop = '-3px'; });
                 const textareas = clonedDoc.querySelectorAll('textarea');
@@ -766,7 +902,7 @@
             const sheets = document.querySelectorAll('.sheet-landscape');
             for (let i = 0; i < sheets.length; i++) {
                 const sheet = sheets[i];
-                const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: "#ffffff", onclone: (clonedDoc) => {
+                const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: "#fdfbf7", onclone: (clonedDoc) => {
                     const inputs = clonedDoc.querySelectorAll('input[type="text"]');
                     inputs.forEach(input => input.style.marginTop = '-3px');
                     const textareas = clonedDoc.querySelectorAll('textarea');
