@@ -216,17 +216,18 @@
             <!-- P2: EL GRUPO (Interior Portada) -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
-                <div class="flex flex-col gap-3 flex-grow h-full">
-                    <!-- 5 Slots para compañeros (Más grandes) -->
+                <div class="flex flex-col gap-4 flex-grow h-full py-2">
+                    <!-- 5 Slots para compañeros (Mejorados para evitar cruces) -->
                     <script>
                         for(let i=1; i<=5; i++){
                             document.write(`
-                            <div class="box-border p-2 bg-white flex gap-2 h-1/5 shadow-sm border border-gray-400">
-                                <div class="w-8 flex flex-col items-center justify-start pt-1">
+                            <div class="box-border p-2 bg-white flex gap-2 h-1/5 shadow-sm border border-gray-400 items-start">
+                                <div class="w-8 flex flex-col items-center justify-start pt-1 flex-shrink-0">
                                     <div class="w-6 h-6 rounded-full border border-black bg-gray-100 flex items-center justify-center font-bold text-gray-400 text-xs">${i}</div>
                                 </div>
-                                <div class="flex-grow flex flex-col gap-1">
-                                    <div class="flex justify-between gap-2">
+                                <div class="flex-grow flex flex-col justify-between h-full w-full">
+                                    <!-- Fila Superior -->
+                                    <div class="flex gap-2 w-full">
                                         <div class="w-2/3">
                                             <label class="text-label text-[8px] text-gray-500 block">NOMBRE PERSONAJE</label>
                                             <input type="text" class="font-bold w-full border-b border-gray-300 h-5">
@@ -236,14 +237,16 @@
                                             <input type="text" class="text-right w-full border-b border-gray-300 h-5 text-xs">
                                         </div>
                                     </div>
-                                    <div class="flex justify-between gap-2">
+                                    <!-- Fila Inferior con más espacio -->
+                                    <div class="flex gap-2 w-full flex-grow items-end pb-1">
                                         <div class="w-1/3">
                                             <label class="text-label text-[8px] text-gray-500 block">JUGADOR</label>
                                             <input type="text" class="w-full border-b border-gray-300 h-4 text-xs text-gray-600">
                                         </div>
-                                        <div class="w-2/3 relative h-full">
-                                            <label class="text-label text-[8px] text-gray-500 block absolute top-0 left-0 bg-white pr-1">NOTAS</label>
-                                            <textarea class="w-full h-full resize-none border-none lined-bg text-body pt-3 bg-transparent"></textarea>
+                                        <div class="w-2/3 relative h-full flex flex-col justify-end">
+                                            <label class="text-label text-[8px] text-gray-500 block bg-white pr-1 w-full text-left">NOTAS</label>
+                                            <!-- Eliminado lined-bg para evitar cruces visuales, usando borde simple inferior -->
+                                            <textarea class="w-full h-8 resize-none border-b border-gray-300 text-body bg-transparent p-0 align-bottom"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -259,7 +262,7 @@
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
                 <div class="box-border p-2 bg-white h-full flex flex-col">
                     <!-- Grid ajustado para mas espacio en fecha -->
-                    <div class="grid grid-cols-[30px_1fr_120px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
+                    <div class="grid grid-cols-[30px_1fr_100px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
                         <div>NV</div>
                         <div class="text-left">RASGO OBTENIDO / MEJORA</div>
                         <div>FECHA</div>
@@ -269,10 +272,17 @@
                         <script>
                             for(let i=1; i<=20; i++){
                                 document.write(`
-                                <div class="grid grid-cols-[30px_1fr_120px] gap-2 items-center border-b border-gray-200 py-1">
+                                <div class="grid grid-cols-[30px_1fr_100px] gap-2 items-center border-b border-gray-200 py-1">
                                     <div class="font-bold text-center text-stat">${i}</div>
                                     <input type="text" class="no-line text-body">
-                                    <input type="text" class="no-line text-xs text-center">
+                                    <!-- Fecha Estilizada -->
+                                    <div class="flex items-end justify-between gap-1 h-full px-1">
+                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]" placeholder="D">
+                                        <span class="text-gray-400 text-[10px]">/</span>
+                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]" placeholder="M">
+                                        <span class="text-gray-400 text-[10px]">/</span>
+                                        <input type="text" class="w-8 text-center border-b border-gray-400 p-0 text-[10px]" placeholder="A">
+                                    </div>
                                 </div>
                                 `);
                             }
