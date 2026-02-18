@@ -6,11 +6,10 @@
     <title>D&D Booklet (16 Páginas) - Edición Deluxe</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- CAMBIO DE FUENTE: Quitamos Unifraktur, añadimos MedievalSharp -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
         :root { 
-            /* VARIABLES DE TEMA (CLÁSICO POR DEFECTO) */
+            /* VARIABLES DE TEMA */
             --border-thick: 3px double #2c2c2c; 
             --border-thin: 1px solid #444; 
             --border-radius: 4px;
@@ -19,45 +18,38 @@
             --font-body: 'Roboto Condensed', sans-serif;
             --border-stat-circle: 1.5px solid black;
             
-            /* SISTEMA DE 4 TAMAÑOS HOMOGÉNEOS */
             --s-title: 20px;
             --s-stat: 16px; 
             --s-body: 12px;
             --s-label: 9px;
         }
 
-        /* TEMA GÓTICO (Se activa añadiendo clase .theme-gothic al body) */
+        /* TEMA GÓTICO */
         body.theme-gothic {
-            --border-thick: 2px solid #1a1a1a; /* Borde sólido y oscuro */
+            --border-thick: 2px solid #1a1a1a; 
             --border-thin: 1px solid #000;
-            --border-radius: 0px; /* Esquinas rectas */
-            --bg-paper: #f0eee6; /* Un tono pergamino más envejecido */
-            
-            /* AHORA LA FUENTE MEDIEVAL SE APLICA A TODO */
+            --border-radius: 0px; 
+            --bg-paper: #f0eee6; 
             --font-title: 'MedievalSharp', cursive; 
             --font-body: 'MedievalSharp', cursive;
-            
             --border-stat-circle: 2px solid #000;
         }
-
-        /* Ajustes finos para el tema gótico para mantener legibilidad */
-        body.theme-gothic .text-title { font-weight: normal; letter-spacing: 0.5px; } /* MedievalSharp ya es gruesa */
-        body.theme-gothic .text-label { letter-spacing: 0px; font-size: 10px !important; } /* Un pelín más grande para leerse bien */
+        body.theme-gothic .text-title { font-weight: normal; letter-spacing: 0.5px; } 
+        body.theme-gothic .text-label { letter-spacing: 0px; font-size: 10px !important; } 
         body.theme-gothic input, body.theme-gothic textarea { color: #1a1a1a; }
 
-        /* BODY AJUSTADO PARA BARRA SUPERIOR */
         body { 
             font-family: var(--font-body); 
             background-color: #222; 
             margin: 0; 
-            padding: 0 0 40px 0; /* Sin padding arriba, solo abajo */
+            padding: 0 0 40px 0; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             gap: 30px; 
         }
         
-        /* CLASES DE TEXTO ACTUALIZADAS A VARIABLES */
+        /* CLASES DE TEXTO */
         .text-title { font-size: var(--s-title) !important; line-height: 1.1; font-weight: 700; font-family: var(--font-title); text-transform: uppercase; color: #1a1a1a; }
         .text-stat { font-size: var(--s-stat) !important; font-weight: 700; line-height: 1; font-family: var(--font-title); }
         .text-body { font-size: var(--s-body) !important; line-height: 1.3; font-weight: 400; font-family: var(--font-body); }
@@ -75,97 +67,75 @@
 
         /* HOJAS */
         .sheet-wrapper { position: relative; width: 297mm; display: flex; flex-direction: column; gap: 5px; }
-        
         .sheet-landscape { 
             background-color: var(--bg-paper); 
             width: 297mm; height: 210mm; padding: 0; display: flex; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; 
             overflow: hidden; page-break-after: always; border-radius: 2px;
         }
-        
         .page-a5 { 
             width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
             box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
             background: transparent; z-index: 0;
         }
 
-        /* CAPA DE ENTRAMADO (Pattern Layer) */
+        /* CAPA DE ENTRAMADO */
         .pattern-layer {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 0; /* Al fondo */
-            pointer-events: none; /* No interfiere con clics */
-            opacity: 0.12; /* Opacidad baja para no molestar la lectura */
-            background-repeat: repeat; /* Se repite como mosaico */
-            background-position: center;
-            background-size: 150px; /* Tamaño por defecto del patrón */
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0; pointer-events: none; opacity: 0.12; 
+            background-repeat: repeat; background-position: center; background-size: 150px; 
         }
-
-        /* Aseguramos que el contenido esté por encima del patrón, PERO EXCLUYENDO LOS NÚMEROS DE PÁGINA */
-        .page-a5 > *:not(.pattern-layer):not(.page-num) {
-            position: relative;
-            z-index: 1;
-        }
+        .page-a5 > *:not(.pattern-layer):not(.page-num) { position: relative; z-index: 1; }
 
         .divider { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed #bbb; transform: translateX(-50%); z-index: 10; }
-        
-        /* UI VISUALES MEJORADOS */
-        .box-border { 
-            border: var(--border-thick); 
-            border-radius: var(--border-radius); 
-            background: white;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.05); 
-        }
-        
+        .box-border { border: var(--border-thick); border-radius: var(--border-radius); background: white; box-shadow: 2px 2px 0px rgba(0,0,0,0.05); }
         .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; border-radius: 8px; position: relative; background: white; z-index: 5; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
         .stat-box span { font-weight: 900; font-size: var(--s-body); font-family: var(--font-title); margin-top: 2px; } 
-        /* En modo gótico los stats boxes también deberían ser menos redondos si se desea, pero 8px está bien. El bubble sí cambia */
         body.theme-gothic .stat-box { border-radius: 2px; border: 2px solid #000; }
-
         .stat-score-bubble { border: var(--border-stat-circle); border-radius: 50%; background: white; position: absolute; bottom: -8px; display: flex; align-items: center; justify-content: center; z-index: 10; width: 24px; height: 20px; font-weight: bold;}
-        
         .shield-shape { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>') no-repeat center center; background-size: contain; filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1)); }
-        
         .skill-row { font-size: var(--s-body); display: flex; align-items: center; gap: 3px; line-height: 1.3; white-space: nowrap; font-weight: 400; margin-bottom: 0px; }
         .skill-mod-input { width: 20px !important; border-bottom: 1px solid #000 !important; text-align: center; margin-right: 3px; font-size: var(--s-body); height: 14px; font-weight: 400; padding: 0; display: inline-block; vertical-align: middle; }
-        
-        /* Checkboxes Personalizados */
         .checkbox-round { width: 11px; height: 11px; border: 1.5px solid #333; border-radius: 50%; appearance: none; cursor: pointer; flex-shrink: 0; margin-right: 2px; background: white; }
         .checkbox-round:checked { background-color: #333; border-color: #000; }
-        
         .hex-check { width: 12px; height: 12px; border: 1px solid #000; transform: rotate(45deg); display: inline-block; margin: 2px; cursor: pointer; background: white; }
         .hex-check:checked { background: #000; }
-
         .comp-check { appearance: none; width: 11px; height: 11px; border: 1.5px solid black; border-radius: 50%; margin: 0; cursor: pointer; background: white; display: inline-block; vertical-align: middle; }
         .comp-check:checked { background: black; }
         
-        /* Reglas */
         .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
         .rules-box { background: #fff; border: 2px solid #000; border-radius: var(--border-radius); padding: 4px; font-size: var(--s-body); display: flex; flex-direction: column; box-shadow: 2px 2px 0 rgba(0,0,0,0.05); }
         .rules-title { font-weight: 800; text-transform: uppercase; border-bottom: 2px solid #000; margin-bottom: 3px; display: block; font-size: var(--s-label); color: black; font-family: var(--font-title); letter-spacing: 1px; }
-        
         .ref-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; margin-bottom: 2px; padding-bottom: 1px; align-items: baseline; }
         .ref-row:last-child { border-bottom: none; }
         .ref-key { font-weight: 700; font-size: var(--s-label); text-transform: uppercase; width: 32%; flex-shrink: 0; color: #222; }
         .ref-val { font-size: var(--s-label); text-align: right; color: #444; width: 68%; font-weight: 400; text-transform: none; line-height: 1.1; }
 
-        /* Utility */
         .lined-bg { background-image: linear-gradient(#ccc 1px, transparent 1px); background-size: 100% 20px; background-position: 0 19px; line-height: 20px !important; }
         .dot-grid { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNjY2MiLz48L3N2Zz4='); background-repeat: repeat; }
         .page-num { position: absolute; bottom: 5mm; width: 100%; left: 0; text-align: center; font-size: var(--s-body); color: #000; font-weight: 700; font-family: var(--font-title); z-index: 50; }
         .force-border { border: 1px solid #000 !important; background: white; }
 
-        /* Headers Magic/Martial */
         .spell-header-box { border: 3px double black; border-radius: var(--border-radius); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: white; }
         .spell-card { position: relative; border-bottom: 1.5px dashed #888; padding-bottom: 8px; margin-bottom: 8px; display: flex; gap: 8px; }
         .spell-level-diamond { width: 32px; height: 32px; border: 2px solid black; transform: rotate(45deg); display: flex; items-center; justify-content: center; background: white; margin: 4px auto 0 auto; box-shadow: 2px 2px 0px rgba(0,0,0,0.1); }
         .spell-level-input { width: 100%; height: 100%; transform: rotate(-45deg); text-align: center; font-weight: 900; font-size: var(--s-stat); border: none !important; background: transparent; padding: 0; }
         .desc-4-lines { height: 80px; width: 100%; }
 
-        .martial-content { display: none !important; }
-        .magic-content { display: block !important; }
+        /* GESTIÓN DE VISIBILIDAD POR CLASE */
+        .martial-content, .magic-content, .expert-content, .sacred-content { display: none !important; }
+
         body.mode-martial .martial-content { display: block !important; }
-        body.mode-martial .magic-content { display: none !important; }
+        /* Para flex containers, usamos flex */
+        body.mode-martial .martial-content.flex { display: flex !important; }
+
+        body.mode-magic .magic-content { display: block !important; }
+        body.mode-magic .magic-content.flex { display: flex !important; }
+
+        body.mode-expert .expert-content { display: block !important; }
+        body.mode-expert .expert-content.flex { display: flex !important; }
+
+        body.mode-sacred .sacred-content { display: block !important; }
 
         @media print { 
             body { background: white; margin: 0; padding: 0; display: block; } 
@@ -182,14 +152,16 @@
 
     <!-- BARRA SUPERIOR STICKY (Flotante) -->
     <div class="top-bar no-print sticky top-0 z-50 w-full bg-[#222] border-b border-gray-600 shadow-xl py-3 flex justify-center items-center backdrop-blur-md bg-opacity-95">
-         <div class="w-[297mm] flex gap-2 items-center px-4 md:px-0 overflow-x-auto"> <!-- Contenedor interno ancho fijo -->
+         <div class="w-[297mm] flex gap-2 items-center px-4 md:px-0 overflow-x-auto">
              
-             <!-- SELECTOR DE CLASE (Antes Modo) -->
+             <!-- SELECTOR DE CLASE -->
              <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 whitespace-nowrap">
                  <span class="text-white text-xs font-bold px-1">CLASE:</span>
                  <select id="classSelector" onchange="changeClassMode(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
-                     <option value="martial" selected>Marciales ⚔️</option>
-                     <option value="magic">Arcanos 🔮</option>
+                     <option value="martial" selected>Marciales (Guerrero, Bárbaro, Monje)</option>
+                     <option value="magic">Arcanos (Mago, Hechicero, Brujo)</option>
+                     <option value="expert">Expertos (Pícaro, Bardo, Artífice, Explorador)</option>
+                     <option value="sacred">Sacros (Clérigo, Paladín, Druida)</option>
                  </select>
              </div>
              
@@ -204,7 +176,6 @@
 
              <div class="flex-grow"></div>
              
-             <!-- INPUT PARA EL PATRÓN (TRAMA) -->
              <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)" style="display:none;">
              <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-4 py-2 rounded shadow font-bold hover:bg-purple-800 text-sm flex items-center gap-2 transition-colors whitespace-nowrap">SUBIR TRAMA</button>
 
@@ -216,27 +187,22 @@
          </div>
     </div>
 
-    <!-- NUEVA HOJA 0: CUBIERTA EXTERIOR (Contraportada y Portada) -->
+    <!-- CUBIERTA EXTERIOR -->
     <div class="sheet-wrapper">
         <div class="sheet-controls no-print text-white mb-1"><span>Hoja Cubierta Exterior (P16 Contraportada - P1 Portada)</span> <button onclick="downloadSheet('sheetCover')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheetCover" class="sheet-landscape">
             <div class="divider"></div>
-            
-            <!-- P16: CONTRAPORTADA (Registro de Misiones) -->
+            <!-- P16 -->
             <div class="page-a5">
                 <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">REGISTRO DE MISIONES</h2>
-                
-                <!-- Caja de Misiones Actuales -->
                 <div class="flex-grow flex flex-col gap-2">
                     <div class="box-border p-2 bg-white flex flex-col h-1/3">
                         <span class="text-label border-b border-black mb-1">OBJETIVO PRINCIPAL</span>
                         <textarea class="flex-grow lined-bg border-none resize-none text-body bg-transparent"></textarea>
                     </div>
-                    
                     <div class="box-border p-2 bg-white flex flex-col flex-grow">
                         <span class="text-label border-b border-black mb-1">MISIONES SECUNDARIAS / TAREAS PENDIENTES</span>
                         <div class="flex flex-col gap-1 mt-1">
-                             <!-- Lineas con checkbox -->
                              <script>
                                 for(let i=0; i<8; i++){
                                     document.write(`
@@ -251,7 +217,6 @@
                         <textarea class="flex-grow lined-bg border-none resize-none text-body bg-transparent mt-2"></textarea>
                     </div>
                 </div>
-
                 <div class="mt-4 border-t-2 border-black pt-2 text-center text-label">
                     <span>REGISTRO DE MUERTES / ESTADO</span>
                     <div class="flex justify-center gap-4 mt-2">
@@ -261,46 +226,37 @@
                     </div>
                 </div>
             </div>
-
-            <!-- P1: PORTADA PRINCIPAL -->
+            <!-- P1 -->
             <div class="page-a5 flex flex-col items-center py-10 relative">
                 <div class="w-full text-center mb-4">
                     <h1 class="text-title text-4xl font-black mb-1 uppercase tracking-widest">DIARIO DE PERSONAJE</h1>
                     <span class="text-label tracking-[0.5em] text-gray-500 block">D&D 5E EDITION</span>
                 </div>
-
                 <div class="w-full flex-grow border-4 double border-black p-2 flex items-center justify-center bg-white shadow-lg relative">
                     <div class="absolute inset-2 border border-black opacity-50 pointer-events-none"></div>
                     <span class="text-gray-300 font-['Cinzel'] text-2xl font-bold opacity-30 rotate-[-45deg] pointer-events-none">ARTE DEL PERSONAJE</span>
-                    <!-- Área clickeable para subir portada -->
                     <input type="file" id="coverArtInput" class="hidden" accept="image/*" onchange="loadCoverArt(this)">
                     <img id="coverArtImg" class="absolute inset-0 w-full h-full object-cover hidden" onclick="document.getElementById('coverArtInput').click()">
                     <button class="no-print absolute bottom-2 right-2 bg-gray-200 text-xs px-2 py-1 rounded opacity-50 hover:opacity-100" onclick="document.getElementById('coverArtInput').click()">Subir Imagen</button>
                 </div>
-
                 <div class="w-full text-center mt-6 mb-8">
                     <label class="text-label block text-gray-500 mb-1">PERTENECE A</label>
                     <input type="text" class="text-center font-bold text-lg border-b border-black w-1/2 mx-auto">
                 </div>
-                
-                <div class="absolute bottom-2 w-full text-center">
-                    <span class="text-[8px] uppercase tracking-[2px] text-gray-400 font-['Cinzel']">Diseñado por Poisoned Isa</span>
-                </div>
+                <div class="absolute bottom-2 w-full text-center"><span class="text-[8px] uppercase tracking-[2px] text-gray-400 font-['Cinzel']">Diseñado por Poisoned Isa</span></div>
             </div>
         </div>
     </div>
 
-    <!-- NUEVA HOJA 00: CUBIERTA INTERIOR -->
+    <!-- CUBIERTA INTERIOR -->
     <div class="sheet-wrapper">
         <div class="sheet-controls no-print text-white mb-1"><span>Hoja Cubierta Interior (P2 Grupo - P15 Log)</span> <button onclick="downloadSheet('sheetInner')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheetInner" class="sheet-landscape">
             <div class="divider"></div>
-            
-            <!-- P2: EL GRUPO (Interior Portada) -->
+            <!-- P2 -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
                 <div class="flex flex-col gap-4 flex-grow h-full py-2">
-                    <!-- 5 Slots para compañeros (Mejorados para evitar cruces) -->
                     <script>
                         for(let i=1; i<=5; i++){
                             document.write(`
@@ -309,28 +265,13 @@
                                     <div class="w-6 h-6 rounded-full border border-black bg-gray-100 flex items-center justify-center font-bold text-gray-400 text-xs">${i}</div>
                                 </div>
                                 <div class="flex-grow flex flex-col justify-between h-full w-full">
-                                    <!-- Fila Superior -->
                                     <div class="flex gap-2 w-full">
-                                        <div class="w-2/3">
-                                            <label class="text-label text-[8px] text-gray-500 block">NOMBRE PERSONAJE</label>
-                                            <input type="text" class="font-bold w-full border-b border-gray-300 h-5">
-                                        </div>
-                                        <div class="w-1/3">
-                                            <label class="text-label text-[8px] text-gray-500 block text-right">CLASE / ROL</label>
-                                            <input type="text" class="text-right w-full border-b border-gray-300 h-5 text-xs">
-                                        </div>
+                                        <div class="w-2/3"><label class="text-label text-[8px] text-gray-500 block">NOMBRE PERSONAJE</label><input type="text" class="font-bold w-full border-b border-gray-300 h-5"></div>
+                                        <div class="w-1/3"><label class="text-label text-[8px] text-gray-500 block text-right">CLASE / ROL</label><input type="text" class="text-right w-full border-b border-gray-300 h-5 text-xs"></div>
                                     </div>
-                                    <!-- Fila Inferior con más espacio -->
                                     <div class="flex gap-2 w-full flex-grow items-end pb-1">
-                                        <div class="w-1/3">
-                                            <label class="text-label text-[8px] text-gray-500 block">JUGADOR</label>
-                                            <input type="text" class="w-full border-b border-gray-300 h-4 text-xs text-gray-600">
-                                        </div>
-                                        <div class="w-2/3 relative h-full flex flex-col justify-end">
-                                            <label class="text-label text-[8px] text-gray-500 block bg-white pr-1 w-full text-left">NOTAS</label>
-                                            <!-- Eliminado lined-bg para evitar cruces visuales, usando borde simple inferior -->
-                                            <textarea class="w-full h-8 resize-none border-b border-gray-300 text-body bg-transparent p-0 align-bottom"></textarea>
-                                        </div>
+                                        <div class="w-1/3"><label class="text-label text-[8px] text-gray-500 block">JUGADOR</label><input type="text" class="w-full border-b border-gray-300 h-4 text-xs text-gray-600"></div>
+                                        <div class="w-2/3 relative h-full flex flex-col justify-end"><label class="text-label text-[8px] text-gray-500 block bg-white pr-1 w-full text-left">NOTAS</label><textarea class="w-full h-8 resize-none border-b border-gray-300 text-body bg-transparent p-0 align-bottom"></textarea></div>
                                     </div>
                                 </div>
                             </div>
@@ -339,18 +280,13 @@
                     </script>
                 </div>
             </div>
-
-            <!-- P15: LOG DE NIVELES (Interior Contraportada) -->
+            <!-- P15 -->
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
                 <div class="box-border p-2 bg-white h-full flex flex-col">
-                    <!-- Grid ajustado para mas espacio en fecha -->
                     <div class="grid grid-cols-[30px_1fr_100px] gap-2 border-b-2 border-black mb-2 pb-1 text-label font-bold text-center">
-                        <div>NV</div>
-                        <div class="text-left">RASGO OBTENIDO / MEJORA</div>
-                        <div>FECHA</div>
+                        <div>NV</div><div class="text-left">RASGO OBTENIDO / MEJORA</div><div>FECHA</div>
                     </div>
-                    <!-- Filas para 20 niveles -->
                     <div class="flex-grow flex flex-col gap-1 overflow-hidden">
                         <script>
                             for(let i=1; i<=20; i++){
@@ -358,12 +294,9 @@
                                 <div class="grid grid-cols-[30px_1fr_100px] gap-2 items-center border-b border-gray-200 py-1">
                                     <div class="font-bold text-center text-stat">${i}</div>
                                     <input type="text" class="no-line text-body">
-                                    <!-- Fecha Estilizada -->
                                     <div class="flex items-end justify-between gap-1 h-full px-1">
-                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]">
-                                        <span class="text-gray-400 text-[10px]">/</span>
-                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]">
-                                        <span class="text-gray-400 text-[10px]">/</span>
+                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]"><span class="text-gray-400 text-[10px]">/</span>
+                                        <input type="text" class="w-5 text-center border-b border-gray-400 p-0 text-[10px]"><span class="text-gray-400 text-[10px]">/</span>
                                         <input type="text" class="w-8 text-center border-b border-gray-400 p-0 text-[10px]">
                                     </div>
                                 </div>
@@ -376,9 +309,7 @@
         </div>
     </div>
 
-    <!-- TUS HOJAS EXISTENTES (AHORA EN EL CENTRO) -->
-    
-    <!-- HOJA 1 (Antigua Hoja 1) -->
+    <!-- HOJA 1 (Mapas/Stats) - SIN CAMBIOS -->
     <div class="sheet-wrapper">
         <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 1 (Mapas y Stats)</span> <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet1" class="sheet-landscape">
@@ -387,10 +318,11 @@
             <div class="page-a5">
                 <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
                 <div class="h-full w-full border-2 border-gray-400 dot-grid rounded bg-white box-border"></div>
-                <div class="page-num">14</div> <!-- Re-numerado mentalmente, pero etiqueta visual queda -->
+                <div class="page-num">14</div>
             </div>
             <!-- PÁGINA STATS -->
             <div class="page-a5">
+                <!-- CONTENIDO IDÉNTICO AL ANTERIOR -->
                 <div class="grid grid-cols-12 gap-2 mb-2 border-b border-black pb-1 items-end">
                     <div class="col-span-10"><input type="text" class="text-title h-7 border-b-2 border-black w-full" value=""><label class="text-label">Nombre (Resumen)</label></div>
                     <div class="col-span-2 flex flex-col items-center"><div class="border-2 border-black w-9 h-9 flex items-center justify-center rounded bg-white shadow-sm"><input type="text" class="text-center text-stat w-full h-full p-0 no-line"></div><label class="text-label mt-0.5">NIVEL</label></div>
@@ -428,14 +360,7 @@
                         <div class="box-border p-1.5 bg-white"><div class="flex justify-between border-b border-gray-300 pb-1 mb-1"><div class="w-1/2 text-center border-r"><label class="text-label block">Vida Máxima</label><input type="text" class="text-center text-body p-0 no-line"></div><div class="w-1/2 text-center"><label class="text-label block">Temporales</label><input type="text" class="text-center text-body p-0 no-line"></div></div><textarea class="w-full text-center text-title h-14 p-0 resize-none no-line bg-transparent"></textarea><span class="text-label block text-center mt-1">PUNTOS DE GOLPE</span></div>
                         <div class="box-border p-1.5 bg-white"><div class="flex justify-between items-center border-b border-black mb-1"><span class="text-label">DADOS GOLPE</span><span class="text-label text-gray-800">(1d____)</span></div><div class="flex gap-2"><div class="w-1/2 text-center border-r border-gray-300"><label class="text-label block text-gray-500">TOTAL</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div><div class="w-1/2 text-center"><label class="text-label block text-gray-500">RESTANTES</label><input type="text" class="text-center text-stat w-full p-0 no-line bg-transparent"></div></div></div>
                         <div class="box-border p-1.5 bg-white"><label class="text-label block text-center mb-1">SALVACIÓN DE MUERTE</label><div class="flex justify-between items-center mb-1 px-2"><span class="text-label">Éxito</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div><div class="flex justify-between items-center px-2"><span class="text-label">Fallo</span><div class="flex gap-2"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div></div>
-                        
-                        <!-- NUEVO: IDIOMAS Y COMPETENCIAS -->
-                        <div class="box-border p-1.5 bg-white h-24">
-                            <span class="text-label block border-b border-black mb-1">IDIOMAS Y COMPETENCIAS</span>
-                            <textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0"></textarea>
-                        </div>
-                        
-                        <!-- NUEVO: ESCUDO / SÍMBOLO -->
+                        <div class="box-border p-1.5 bg-white h-24"><span class="text-label block border-b border-black mb-1">IDIOMAS Y COMPETENCIAS</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0"></textarea></div>
                         <div class="box-border p-1.5 bg-white flex-grow flex flex-col items-center justify-center relative group cursor-pointer border-dashed border-2 border-gray-400 hover:border-black transition-colors" onclick="document.getElementById('p1SymbolInput').click()">
                             <input type="file" id="p1SymbolInput" class="hidden" accept="image/*" onchange="previewSymbol(this)">
                             <img id="p1SymbolImg" class="absolute inset-0 w-full h-full object-contain p-1 hidden">
@@ -448,8 +373,7 @@
         </div>
     </div>
 
-    <!-- El resto de las hojas siguen igual en estructura, pero heredan el nuevo estilo visual -->
-    <!-- HOJA 2 & 11 -->
+    <!-- HOJA 2 (Combate/Compañeros) - SIN CAMBIOS -->
     <div class="sheet-wrapper">
         <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 2 (Combate y Compañeros)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet2" class="sheet-landscape">
@@ -514,7 +438,7 @@
         </div>
     </div>
 
-    <!-- HOJA 3 & 10 -->
+    <!-- HOJA 3 & 10 (Inventario/Notas) - SIN CAMBIOS -->
     <div class="sheet-wrapper">
         <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 3 (Inventario y Notas)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
         <div id="sheet3" class="sheet-landscape">
@@ -525,7 +449,6 @@
                  <div class="page-num">12</div>
             </div>
             <div class="page-a5">
-                <h2 class="text-title text-center border-b-2 border-black mb-4">Inventario y Personalidad</h2>
                 <div class="w-full box-border p-3 flex flex-col h-full">
                      <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 gap-2 bg-white p-1 shadow-sm">
                         <div class="flex-1 text-center bg-gray-100 rounded p-1"><span class="text-label block">PC</span><input type="text" class="text-center font-bold no-line bg-transparent text-body"></div>
@@ -577,20 +500,9 @@
                     <div class="flex gap-2 h-28"> <!-- Aumentado a h-28 para evitar que se corten los trucos -->
                         <!-- Izquierda -->
                         <div class="w-20 flex flex-col gap-1 justify-between py-1">
-                             <div class="flex flex-col items-center h-1/2">
-                                <span class="text-label mb-1">Preparados</span>
-                                <div class="box-border w-full flex-grow bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0">
-                                </div>
-                             </div>
-                             <div class="flex flex-col items-center h-1/2">
-                                <span class="text-label mb-1">Conocidos</span>
-                                <div class="box-border w-full flex-grow bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0">
-                                </div>
-                             </div>
+                             <div class="flex flex-col items-center h-1/2"><span class="text-label mb-1">Preparados</span><div class="box-border w-full flex-grow bg-white relative"><input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0"></div></div>
+                             <div class="flex flex-col items-center h-1/2"><span class="text-label mb-1">Conocidos</span><div class="box-border w-full flex-grow bg-white relative"><input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none focus:ring-0"></div></div>
                         </div>
-
                         <!-- Centro: Espacios de Conjuro -->
                         <div class="flex-grow flex flex-col">
                             <div class="flex-grow grid grid-cols-3 divide-x divide-gray-300">
@@ -611,21 +523,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Derecha -->
                         <div class="w-20 flex flex-col gap-1 justify-between py-1 items-center">
-                             <div class="flex flex-col items-center">
-                                <span class="text-label mb-1">Concentración</span>
-                                <div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center bg-white relative shadow-sm">
-                                    <input type="checkbox" class="appearance-none w-8 h-8 rounded-full checked:bg-black border border-gray-300 cursor-pointer absolute m-auto inset-0">
-                                </div>
-                             </div>
-                             <div class="flex flex-col items-center w-full h-full justify-end">
-                                <span class="text-label mb-0.5 text-center leading-none text-[8px]">TRUCOS<br>CONOCIDOS</span>
-                                <div class="box-border w-full h-8 bg-white relative">
-                                    <input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none">
-                                </div>
-                             </div>
+                             <div class="flex flex-col items-center"><span class="text-label mb-1">Concentración</span><div class="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center bg-white relative shadow-sm"><input type="checkbox" class="appearance-none w-8 h-8 rounded-full checked:bg-black border border-gray-300 cursor-pointer absolute m-auto inset-0"></div></div>
+                             <div class="flex flex-col items-center w-full h-full justify-end"><span class="text-label mb-0.5 text-center leading-none text-[8px]">TRUCOS<br>CONOCIDOS</span><div class="box-border w-full h-8 bg-white relative"><input type="text" class="absolute inset-0 w-full h-full text-center text-stat bg-transparent border-none"></div></div>
                         </div>
                     </div>
                  </div>
@@ -673,37 +574,46 @@
                      </script>
                  </div>
 
-                <!-- CONTENIDO MARCIAL P4: HABILIDADES Y MANIOBRAS -->
-                <!-- Cambio: Usamos flex-grow y mb-6 para dejar espacio al número de página -->
+                <!-- CONTENIDO MARCIAL P4 -->
                 <div class="martial-content flex-grow flex flex-col gap-2 mb-6">
                      <h2 class="text-title text-center border-b-2 border-black mb-2">Técnicas y Maniobras</h2>
                      <div class="flex-grow flex flex-col gap-1 h-full">
                          <script>
-                            // MANTENEMOS 6 ÍTEMS: Llenan bien la hoja con el nuevo margen
                             for(let i=0; i<6; i++) {
                                 document.write(`
                                 <div class="bg-white p-1 border-b border-gray-400 flex-1 flex flex-col">
                                    <div class="flex justify-between items-end mb-1 flex-shrink-0">
-                                       <div class="w-2/3">
-                                           <span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre de Habilidad / Maniobra</span>
-                                           <input type="text" class="font-bold w-full text-body no-line border-b border-black p-0">
-                                       </div>
-                                       <div class="flex flex-col items-end">
-                                           <span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span>
-                                           <div class="flex gap-1">
-                                               <input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check">
-                                           </div>
-                                       </div>
+                                       <div class="w-2/3"><span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre de Habilidad / Maniobra</span><input type="text" class="font-bold w-full text-body no-line border-b border-black p-0"></div>
+                                       <div class="flex flex-col items-end"><span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span><div class="flex gap-1"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
                                    </div>
-                                   <div class="w-full flex-grow lined-bg relative">
-                                        <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea>
-                                   </div>
+                                   <div class="w-full flex-grow lined-bg relative"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea></div>
                                 </div>
                                 `);
                             }
                          </script>
                      </div>
                 </div>
+
+                <!-- CONTENIDO EXPERTOS (NUEVO) P4: RECURSOS -->
+                <div class="expert-content flex-grow flex flex-col gap-2 mb-6">
+                     <h2 class="text-title text-center border-b-2 border-black mb-2">Trucos de Oficio y Herramientas</h2>
+                     <div class="flex-grow flex flex-col gap-1 h-full">
+                         <script>
+                            for(let i=0; i<6; i++) {
+                                document.write(`
+                                <div class="bg-white p-1 border-b border-gray-400 flex-1 flex flex-col">
+                                   <div class="flex justify-between items-end mb-1 flex-shrink-0">
+                                       <div class="w-2/3"><span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Herramienta / Habilidad Especial</span><input type="text" class="font-bold w-full text-body no-line border-b border-black p-0"></div>
+                                       <div class="flex flex-col items-end"><span class="text-[8px] uppercase font-bold text-gray-600">Dados de Experto / Usos</span><div class="flex gap-1"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div>
+                                   </div>
+                                   <div class="w-full flex-grow lined-bg relative"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea></div>
+                                </div>
+                                `);
+                            }
+                         </script>
+                     </div>
+                </div>
+
                 <div class="page-num">6</div>
             </div>
             
@@ -736,7 +646,6 @@
             <div class="page-a5">
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Ayuda de Reglas</h2>
                 <div class="flex flex-col h-full gap-3">
-                    
                     <!-- ACCIONES -->
                     <div class="rules-box">
                         <span class="rules-title text-center">Acciones en Combate</span>
@@ -753,7 +662,6 @@
                             <div class="ref-row"><span class="ref-key">Preparar</span><span class="ref-val">Retener una acción para usarla como reacción cuando ocurra un disparador.</span></div>
                         </div>
                     </div>
-
                     <!-- CONDICIONES -->
                     <div class="rules-box flex-grow">
                         <span class="rules-title text-center">Estados y Condiciones</span>
@@ -772,85 +680,71 @@
                             <div class="ref-row"><span class="ref-key">Restringido</span><span class="ref-val">Velocidad 0. Ataques contra ti tienen ventaja. Tus ataques tienen desventaja. Desventaja en salvaciones de Destreza.</span></div>
                         </div>
                     </div>
-
                 </div>
                 <div class="page-num">10</div>
             </div>
             <!-- PÁGINA 5 -->
             <div class="page-a5">
-                <!-- CONTENIDO MÁGICO P5: 4 TARJETAS -->
+                <!-- CONTENIDO MÁGICO P5 -->
                 <div class="magic-content flex flex-col h-full gap-1">
                     <script>
                         for(let i=0; i<4; i++) {
                             document.write(`
                             <div class="spell-card flex-1 flex gap-2">
-                                <div class="w-10 flex flex-col items-center justify-start pt-1">
-                                    <label class="text-label mb-1 block">NIVEL</label>
-                                    <div class="spell-level-diamond"><input class="spell-level-input"></div>
-                                </div>
+                                <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
                                 <div class="flex-grow flex flex-col gap-1">
-                                    <div class="flex items-end gap-1 mb-1">
-                                        <label class="text-label">NOMBRE</label>
-                                        <input class="border-b border-black flex-grow h-6 text-title">
-                                    </div>
+                                    <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
                                     <div class="flex gap-3 mb-1">
-                                        <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                            <div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                        </div>
-                                        <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                            <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="text-label mr-1">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label>
-                                            </div>
-                                        </div>
+                                        <div class="w-1/2 space-y-1"><div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div><div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div></div>
+                                        <div class="w-1/2 space-y-1"><div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div><div class="flex items-center gap-2 mt-0.5"><span class="text-label mr-1">COMPONENTES:</span><label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label></div></div>
                                     </div>
-                                    <div class="relative mt-2">
-                                        <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
-                                        <div class="w-full lined-bg pt-2 desc-4-lines">
-                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
-                                        </div>
-                                    </div>
+                                    <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 desc-4-lines"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
                                 </div>
                             </div>
                             `);
                         }
                     </script>
                 </div>
-                <!-- CONTENIDO MARCIAL P5: TALENTOS SUPERIORES -->
-                <!-- Cambio: Usamos flex-grow y mb-6 para proteger el número de página -->
+                <!-- CONTENIDO MARCIAL P5 -->
                 <div class="martial-content flex-grow flex flex-col gap-2 mb-6">
                     <h2 class="text-title text-center border-b-2 border-black mb-2">Talentos Superiores</h2>
                     <div class="flex-grow flex flex-col gap-1 h-full"> 
                          <script>
-                            // 6 Ítems aquí también
                             for(let i=0; i<6; i++) {
                                 document.write(`
                                 <div class="bg-white p-1 border-b border-gray-400 flex-1 flex flex-col">
                                    <div class="flex justify-between items-end mb-1 flex-shrink-0">
-                                       <div class="w-2/3">
-                                            <span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre del Talento / Hazaña</span>
-                                            <input type="text" class="font-bold w-full text-body no-line border-b border-black p-0">
-                                       </div>
-                                       <div class="flex flex-col items-end">
-                                           <span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span>
-                                           <div class="flex gap-1">
-                                               <input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check">
-                                           </div>
-                                       </div>
+                                       <div class="w-2/3"><span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Nombre del Talento / Hazaña</span><input type="text" class="font-bold w-full text-body no-line border-b border-black p-0"></div>
+                                       <div class="flex flex-col items-end"><span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span><div class="flex gap-1"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div>
                                    </div>
-                                   <div class="w-full flex-grow lined-bg relative">
-                                        <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea>
-                                   </div>
+                                   <div class="w-full flex-grow lined-bg relative"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea></div>
                                 </div>
                                 `);
                             }
                          </script>
                      </div>
                 </div>
+
+                <!-- CONTENIDO EXPERTOS (NUEVO) P5: HAZAÑAS DE ASTUCIA -->
+                <div class="expert-content flex-grow flex flex-col gap-2 mb-6">
+                    <h2 class="text-title text-center border-b-2 border-black mb-2">Hazañas de Astucia</h2>
+                    <div class="flex-grow flex flex-col gap-1 h-full"> 
+                         <script>
+                            for(let i=0; i<6; i++) {
+                                document.write(`
+                                <div class="bg-white p-1 border-b border-gray-400 flex-1 flex flex-col">
+                                   <div class="flex justify-between items-end mb-1 flex-shrink-0">
+                                       <div class="w-2/3"><span class="text-[8px] uppercase font-bold text-gray-500 block mb-0 leading-none">Talento / Trampa / Habilidad</span><input type="text" class="font-bold w-full text-body no-line border-b border-black p-0"></div>
+                                       <div class="flex flex-col items-end"><span class="text-[8px] uppercase font-bold text-gray-600">Usos / Cargas</span><div class="flex gap-1"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"><input type="checkbox" class="checkbox-round"></div></div>
+                                   </div>
+                                   <div class="w-full flex-grow lined-bg relative"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea></div>
+                                </div>
+                                `);
+                            }
+                         </script>
+                     </div>
+                </div>
+
                 <div class="page-num">7</div>
             </div>
         </div>
@@ -863,59 +757,32 @@
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
             <div class="page-a5">
-                <!-- CONTENIDO MÁGICO P6: 4 TARJETAS -->
+                <!-- CONTENIDO MÁGICO P6 -->
                 <div class="magic-content flex flex-col h-full gap-4">
                     <script>
                         for(let i=0; i<4; i++) {
                             document.write(`
                             <div class="spell-card flex-1 flex gap-2">
-                                <div class="w-10 flex flex-col items-center justify-start pt-1">
-                                    <label class="text-label mb-1 block">NIVEL</label>
-                                    <div class="spell-level-diamond"><input class="spell-level-input"></div>
-                                </div>
+                                <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
                                 <div class="flex-grow flex flex-col gap-1">
-                                    <div class="flex items-end gap-1 mb-1">
-                                        <label class="text-label">NOMBRE</label>
-                                        <input class="border-b border-black flex-grow h-6 text-title">
-                                    </div>
+                                    <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
                                     <div class="flex gap-3 mb-1">
-                                        <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                            <div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                        </div>
-                                        <div class="w-1/2 space-y-1">
-                                            <div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div>
-                                            <div class="flex items-center gap-2 mt-0.5">
-                                                <span class="text-label mr-1">COMPONENTES:</span>
-                                                <label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label>
-                                                <label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label>
-                                                <label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label>
-                                            </div>
-                                        </div>
+                                        <div class="w-1/2 space-y-1"><div class="flex items-end gap-1 mb-1"><label class="text-label">TIEMPO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div><div class="flex items-end gap-1"><label class="text-label">DURACIÓN:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div></div>
+                                        <div class="w-1/2 space-y-1"><div class="flex items-end gap-1 mb-1"><label class="text-label">RANGO:</label><input class="border-b border-gray-400 flex-grow h-4 text-body"></div><div class="flex items-center gap-2 mt-0.5"><span class="text-label mr-1">COMPONENTES:</span><label class="flex items-center gap-0.5 text-label">V<input type="checkbox" class="comp-check" data-label="V"></label><label class="flex items-center gap-0.5 text-label">S<input type="checkbox" class="comp-check" data-label="S"></label><label class="flex items-center gap-0.5 text-label">M<input type="checkbox" class="comp-check" data-label="M"></label></div></div>
                                     </div>
-                                    <div class="relative mt-2">
-                                        <label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label>
-                                        <div class="w-full lined-bg pt-2 desc-4-lines">
-                                            <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
-                                        </div>
-                                    </div>
+                                    <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 desc-4-lines"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
                                 </div>
                             </div>
                             `);
                         }
                     </script>
                 </div>
-                <!-- CONTENIDO MARCIAL P6: INICIATIVA Y NOTAS -->
+                <!-- CONTENIDO MARCIAL P6 -->
                 <div class="martial-content h-full flex flex-col gap-4">
-                     <!-- MITAD SUPERIOR: RASTREADOR DE COMBATE -->
                      <div class="h-1/2 flex flex-col box-border p-2 bg-white">
                         <h2 class="text-title text-center border-b-2 border-black mb-2">Rastreador de Combate</h2>
                         <div class="grid grid-cols-[1.5rem_1fr_2rem_2rem_1fr] gap-1 text-center text-label font-bold border-b border-black pb-1 mb-1">
-                            <div>INI</div>
-                            <div class="text-left pl-1">NOMBRE</div>
-                            <div>CA</div>
-                            <div>PV</div>
-                            <div>ESTADO</div>
+                            <div>INI</div><div class="text-left pl-1">NOMBRE</div><div>CA</div><div>PV</div><div>ESTADO</div>
                         </div>
                         <div class="flex-grow flex flex-col gap-1 overflow-hidden">
                             <script>
@@ -933,38 +800,57 @@
                             </script>
                         </div>
                      </div>
-                     <!-- MITAD INFERIOR: NOTAS -->
-                     <div class="h-1/2 flex flex-col box-border p-3 bg-white">
-                        <h2 class="text-title text-center border-b-2 border-black mb-2">Notas de Batalla</h2>
-                        <div class="h-full w-full lined-bg"></div>
-                     </div>
+                     <div class="h-1/2 flex flex-col box-border p-3 bg-white"><h2 class="text-title text-center border-b-2 border-black mb-2">Notas de Batalla</h2><div class="h-full w-full lined-bg"></div></div>
                 </div>
+
+                <!-- CONTENIDO EXPERTOS (NUEVO) P6: RASTREADOR AVANZADO (STEALTH) -->
+                <div class="expert-content h-full flex flex-col gap-4">
+                     <div class="h-1/2 flex flex-col box-border p-2 bg-white">
+                        <h2 class="text-title text-center border-b-2 border-black mb-2">Rastreador de Sigilo y Combate</h2>
+                        <!-- Grid modificado: INI, NOMBRE, CA, PV, OJO, ESTADO -->
+                        <div class="grid grid-cols-[1.5rem_1fr_2rem_2rem_1.5rem_1fr] gap-1 text-center text-label font-bold border-b border-black pb-1 mb-1">
+                            <div>INI</div><div class="text-left pl-1">NOMBRE</div><div>CA</div><div>PV</div>
+                            <!-- Nuevo icono SVG de ojo -->
+                            <div class="flex items-center justify-center">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </div>
+                            <div>ESTADO</div>
+                        </div>
+                        <div class="flex-grow flex flex-col gap-1 overflow-hidden">
+                            <script>
+                                for(let i=0; i<12; i++){
+                                    document.write(`
+                                    <div class="grid grid-cols-[1.5rem_1fr_2rem_2rem_1.5rem_1fr] gap-1 h-5 items-center">
+                                        <div class="border border-gray-400 rounded h-full"><input type="text" class="text-center w-full h-full p-0 no-line"></div>
+                                        <div class="border-b border-gray-300 h-full"><input type="text" class="w-full h-full p-0 no-line text-body pl-1"></div>
+                                        <div class="border border-gray-400 rounded h-full"><input type="text" class="text-center w-full h-full p-0 no-line"></div>
+                                        <div class="border border-gray-400 rounded h-full"><input type="text" class="text-center w-full h-full p-0 no-line"></div>
+                                        <div class="h-full flex items-center justify-center border-b border-gray-300"><input type="checkbox" class="w-3 h-3 border border-black cursor-pointer"></div>
+                                        <div class="border-b border-gray-300 h-full"><input type="text" class="w-full h-full p-0 no-line text-xs"></div>
+                                    </div>
+                                    `);
+                                }
+                            </script>
+                        </div>
+                     </div>
+                     <div class="h-1/2 flex flex-col box-border p-3 bg-white"><h2 class="text-title text-center border-b-2 border-black mb-2">Notas de Misión y Sigilo</h2><div class="h-full w-full lined-bg"></div></div>
+                </div>
+
                 <div class="page-num">8</div>
             </div>
-            <!-- PÁGINA 7 (Que es la Página 9 en el orden del cuadernillo) -->
+            <!-- PÁGINA 7 (NPCs) - SIN CAMBIOS -->
             <div class="page-a5">
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Registro de NPCs y Contactos</h2>
-                 <!-- GRID DE 2 COLUMNAS PARA NPCs -->
                  <div class="grid grid-cols-2 gap-3 h-full">
                      <script>
-                        // Generamos 8 espacios para NPCs (4 filas x 2 columnas)
                         for(let i=0; i<8; i++){
                             document.write(`
                             <div class="box-border p-2 bg-white flex flex-col gap-1 shadow-sm border border-gray-400">
                                 <div class="flex justify-between items-end border-b border-black pb-1">
-                                    <div class="w-2/3">
-                                        <span class="text-[8px] uppercase font-bold text-gray-500 block leading-none mb-0.5">Nombre del NPC / Rol</span>
-                                        <input type="text" class="font-bold text-body w-full no-line p-0 bg-transparent">
-                                    </div>
-                                    <div class="flex items-center gap-1 border-l border-gray-300 pl-2 ml-1 pb-0.5">
-                                        <span class="text-[8px] uppercase font-bold text-gray-500">Misión</span>
-                                        <input type="checkbox" class="w-3 h-3 border border-black rounded-sm cursor-pointer">
-                                    </div>
+                                    <div class="w-2/3"><span class="text-[8px] uppercase font-bold text-gray-500 block leading-none mb-0.5">Nombre del NPC / Rol</span><input type="text" class="font-bold text-body w-full no-line p-0 bg-transparent"></div>
+                                    <div class="flex items-center gap-1 border-l border-gray-300 pl-2 ml-1 pb-0.5"><span class="text-[8px] uppercase font-bold text-gray-500">Misión</span><input type="checkbox" class="w-3 h-3 border border-black rounded-sm cursor-pointer"></div>
                                 </div>
-                                <div class="flex-grow relative min-h-[30px]">
-                                    <span class="text-[8px] uppercase font-bold text-gray-400 absolute top-0 left-0 bg-white/80 pr-1">Historia / Notas</span>
-                                    <textarea class="w-full h-full resize-none border-none bg-transparent text-body lined-bg p-0 leading-snug pt-3"></textarea>
-                                </div>
+                                <div class="flex-grow relative min-h-[30px]"><span class="text-[8px] uppercase font-bold text-gray-400 absolute top-0 left-0 bg-white/80 pr-1">Historia / Notas</span><textarea class="w-full h-full resize-none border-none bg-transparent text-body lined-bg p-0 leading-snug pt-3"></textarea></div>
                             </div>
                             `);
                         }
@@ -982,7 +868,6 @@
                 reader.onload = function(e) {
                     const pages = document.querySelectorAll('.page-a5');
                     pages.forEach(page => {
-                        // Aseguramos que el fondo se aplique
                         page.style.backgroundImage = `url('${e.target.result}')`;
                         page.style.backgroundSize = "cover";
                     });
@@ -991,22 +876,18 @@
             }
         }
 
-        // NUEVA FUNCIÓN PARA APLICAR TRAMA (ENTRAMADO)
         function applyPattern(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const pages = document.querySelectorAll('.page-a5');
                     pages.forEach(page => {
-                        // Verificamos si ya existe una capa de patrón, si no, la creamos
                         let patternLayer = page.querySelector('.pattern-layer');
                         if (!patternLayer) {
                             patternLayer = document.createElement('div');
                             patternLayer.className = 'pattern-layer';
-                            // Insertamos al principio para que quede detrás del contenido (z-index: 0 vs content z-index: 1)
                             page.insertBefore(patternLayer, page.firstChild);
                         }
-                        // Aplicamos la imagen de trama
                         patternLayer.style.backgroundImage = `url('${e.target.result}')`;
                     });
                 }
@@ -1021,10 +902,7 @@
                     const img = document.getElementById('coverArtImg');
                     img.src = e.target.result;
                     img.classList.remove('hidden');
-                    // Ocultar texto
                     input.parentElement.querySelector('span').style.display = 'none';
-                    // Quitar borde doble para que se vea limpio
-                    // input.parentElement.classList.remove('border-double', 'border-4');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -1044,16 +922,14 @@
             }
         }
 
-        // FUNCION PARA CAMBIAR CLASE (MARCIALES / ARCANOS)
+        // NUEVA FUNCIÓN PARA CAMBIAR CLASE
         function changeClassMode(mode) {
-            if (mode === 'martial') {
-                document.body.classList.add('mode-martial');
-            } else {
-                document.body.classList.remove('mode-martial');
-            }
+            // Quitamos todas las clases de modo
+            document.body.classList.remove('mode-martial', 'mode-magic', 'mode-expert', 'mode-sacred');
+            // Añadimos la seleccionada
+            document.body.classList.add(`mode-${mode}`);
         }
 
-        // FUNCION PARA CAMBIAR TEMA
         function changeTheme(theme) {
             if (theme === 'gothic') {
                 document.body.classList.add('theme-gothic');
