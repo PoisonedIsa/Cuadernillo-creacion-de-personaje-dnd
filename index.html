@@ -427,11 +427,12 @@
                      <h2 class="text-title text-center border-b-2 border-black mb-2">Técnicas y Maniobras</h2>
                      <div class="flex-grow flex flex-col gap-1">
                          <script>
-                            for(let i=0; i<5; i++) {
+                            // AUMENTADO A 6 ÍTEMS PARA RELLENAR
+                            for(let i=0; i<6; i++) {
                                 document.write(`
                                 <div class="bg-white/40 p-1 border-b border-gray-400">
                                    <div class="flex justify-between items-end mb-1">
-                                       <input type="text" class="font-bold w-2/3 text-body no-line border-b border-black" placeholder="Nombre Habilidad / Maniobra">
+                                       <input type="text" class="font-bold w-2/3 text-body no-line border-b border-black">
                                        <div class="flex flex-col items-end">
                                            <span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span>
                                            <div class="flex gap-1">
@@ -439,7 +440,8 @@
                                            </div>
                                        </div>
                                    </div>
-                                   <div class="w-full h-10 lined-bg">
+                                   <!-- AUMENTADO A 60px PARA 3 LÍNEAS -->
+                                   <div class="w-full h-[60px] lined-bg">
                                         <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                    </div>
                                 </div>
@@ -569,11 +571,12 @@
                     <h2 class="text-title text-center border-b-2 border-black mb-2">Talentos Superiores</h2>
                     <div class="flex-grow flex flex-col gap-1">
                          <script>
+                            // AUMENTADO A 6 ÍTEMS PARA RELLENAR Y QUITAR PLACEHOLDERS
                             for(let i=0; i<6; i++) {
                                 document.write(`
                                 <div class="bg-white/40 p-1 border-b border-gray-400">
                                    <div class="flex justify-between items-end mb-1">
-                                       <input type="text" class="font-bold w-2/3 text-body no-line border-b border-black" placeholder="Nombre Talento">
+                                       <input type="text" class="font-bold w-2/3 text-body no-line border-b border-black">
                                        <div class="flex flex-col items-end">
                                            <span class="text-[8px] uppercase font-bold text-gray-600">Usos por día</span>
                                            <div class="flex gap-1">
@@ -581,7 +584,8 @@
                                            </div>
                                        </div>
                                    </div>
-                                   <div class="w-full h-10 lined-bg">
+                                   <!-- AUMENTADO A 60px PARA 3 LÍNEAS -->
+                                   <div class="w-full h-[60px] lined-bg">
                                         <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea>
                                    </div>
                                 </div>
