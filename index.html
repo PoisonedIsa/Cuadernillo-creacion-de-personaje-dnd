@@ -24,6 +24,13 @@
             --s-stat: 18px;  
             --s-body: 12.5px; 
             --s-label: 10px; 
+
+            /* VARIABLES DE TRAMA (Pattern) */
+            --pat-opacity: 1;
+            --pat-size: 150px;
+            --pat-contrast: 1;
+            --pat-rotation: 0deg;
+            --pat-blend: multiply;
         }
         
         /* --- ESTILOS DE PORTADA (COVER STYLES) --- */
@@ -209,25 +216,42 @@
         /* HOJAS */
         .sheet-wrapper { position: relative; width: 297mm; display: flex; flex-direction: column; gap: 5px; }
         .sheet-landscape { 
-            background-color: transparent; /* Changed from var(--bg-paper) to handle per-page color */
+            background-color: transparent; 
             width: 297mm; height: 210mm; padding: 0; display: flex; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; box-sizing: border-box; 
             overflow: hidden; page-break-after: always; border-radius: 2px;
         }
+        
         .page-a5 { 
             width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
             box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
             background-color: var(--bg-paper); /* Default Background */
             z-index: 0;
+            overflow: hidden; /* CRITICAL for rotated pattern */
             transition: background-color 0.3s ease;
         }
 
+        /* --- TRAMA MEJORADA --- */
         .pattern-layer {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 0; pointer-events: none; opacity: 0.12; 
-            background-repeat: repeat; background-position: center; background-size: 150px; 
-            mix-blend-mode: multiply; /* Better blending with colors */
+            position: absolute; 
+            /* Se hace más grande y se centra para permitir rotación sin bordes vacíos */
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            z-index: 0; 
+            pointer-events: none; 
+            
+            /* CSS Variables controladas por JS */
+            opacity: var(--pat-opacity); 
+            background-size: var(--pat-size); 
+            transform: rotate(var(--pat-rotation)); 
+            filter: contrast(var(--pat-contrast));
+            mix-blend-mode: var(--pat-blend);
+
+            background-repeat: repeat; 
+            background-position: center; 
+            /* Default fallback image removed, controlled by JS/Input */
+            background-image: none;
         }
+        
         .page-a5 > *:not(.pattern-layer):not(.page-num):not(.cover-element):not(.page-settings) { position: relative; z-index: 1; }
 
         /* --- CONTROLES DE PÁGINA (COLOR Y TRAMA) --- */
@@ -261,17 +285,11 @@
             width: 1px; /* Ancho de la guía */
             transform: translateX(-50%); 
             z-index: 10;
-            
-            /* TÉCNICA DE GUÍAS DE COSTURA */
-            /* Crea una linea negra de 1.5px de alto, luego transparente */
             background-image: linear-gradient(to bottom, #000 1.5px, transparent 1.5px);
-            /* Se repite cada 10mm (1cm) de alto */
             background-size: 100% 10mm; 
-            /* Empieza desplazado 10mm (1cm) desde arriba */
             background-position: 0 10mm;
-            
             background-repeat: repeat-y;
-            border: none; /* Quitamos el borde dashed antiguo */
+            border: none; 
         }
 
         /* --- CLASES DE CONTENEDORES (MODIFICADAS PARA TRANSPARENCIA) --- */
@@ -367,11 +385,22 @@
         body.mode-magic .svg-star { display: block; }
         body.mode-sacred .svg-cross { display: block; }
 
+        /* CONTROL PANEL */
+        #patternControls {
+            display: none;
+            position: fixed; top: 60px; right: 20px; width: 280px;
+            background: #222; border: 1px solid #444; border-radius: 8px;
+            padding: 12px; z-index: 9999; color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        #patternControls label { font-size: 11px; text-transform: uppercase; color: #aaa; display: block; margin-bottom: 2px; }
+        #patternControls input[type="range"] { width: 100%; margin-bottom: 8px; accent-color: #8b5cf6; cursor: pointer; }
+
         @media print { 
             body { background: white; margin: 0; padding: 0; display: block; } 
             .sheet-wrapper { margin: 0; page-break-after: always; }
             .sheet-landscape { margin: 0; box-shadow: none; border: none; } 
-            .no-print, .sheet-controls, .page-settings { display: none !important; } 
+            .no-print, .sheet-controls, .page-settings, #patternControls { display: none !important; } 
             .top-bar { display: none !important; }
             .page-a5 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             * { border-color: #000 !important; }
@@ -379,6 +408,36 @@
     </style>
 </head>
 <body class="mode-martial">
+
+    <!-- PANEL DE CONTROL DE TRAMA -->
+    <div id="patternControls" class="no-print">
+        <h3 class="text-white font-bold text-sm mb-3 border-b border-gray-600 pb-1 flex justify-between">
+            CONFIGURAR TRAMA
+            <button onclick="document.getElementById('patternControls').style.display='none'" class="text-gray-400 hover:text-white">✕</button>
+        </h3>
+        
+        <label>Opacidad Total</label>
+        <input type="range" min="0" max="1" step="0.05" value="1" oninput="updatePatternVar('--pat-opacity', this.value)">
+
+        <label>Tamaño / Escala</label>
+        <input type="range" min="20" max="800" step="10" value="150" oninput="updatePatternVar('--pat-size', this.value + 'px')">
+
+        <label>Variabilidad (Contraste)</label>
+        <div class="flex justify-between text-[9px] text-gray-500 mb-1"><span>Suave</span><span>Trama Dura</span></div>
+        <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updatePatternVar('--pat-contrast', this.value)">
+        
+        <label>Aleatoriedad (Rotación)</label>
+        <div class="flex justify-between text-[9px] text-gray-500 mb-1"><span>Recto</span><span>Caos</span></div>
+        <input type="range" min="0" max="90" step="1" value="0" oninput="updatePatternVar('--pat-rotation', this.value + 'deg')">
+
+        <label class="mt-2">Modo de Mezcla</label>
+        <select onchange="updatePatternVar('--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+            <option value="multiply" selected>Multiplicar (Tinta)</option>
+            <option value="normal">Normal (Opaco)</option>
+            <option value="overlay">Superponer (Sutil)</option>
+            <option value="screen">Pantalla (Claro)</option>
+        </select>
+    </div>
 
     <!-- BARRA SUPERIOR -->
     <div class="top-bar no-print sticky top-0 z-50 w-full bg-[#222] border-b border-gray-600 shadow-xl py-3 flex justify-center items-center backdrop-blur-md bg-opacity-95">
@@ -409,11 +468,17 @@
              </div>
 
              <div class="flex-grow"></div>
-             <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)">
-             <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-3 py-2 rounded shadow font-bold hover:bg-purple-800 text-xs transition-colors">TRAMA GLOBAL</button>
+             
+             <!-- CONTROLES TRAMA -->
+             <div class="flex items-center gap-1">
+                 <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)">
+                 <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-3 py-2 rounded-l shadow font-bold hover:bg-purple-800 text-xs transition-colors border-r border-purple-800">TRAMA GLOBAL</button>
+                 <button onclick="togglePatternControls()" class="bg-purple-900 text-white px-2 py-2 rounded-r shadow hover:bg-purple-950 text-xs transition-colors" title="Ajustes de Trama">⚙️</button>
+             </div>
+
              <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)">
-             <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-blue-700 text-xs transition-colors">SUBIR FONDO</button>
-             <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-green-700 text-xs transition-colors">DESCARGAR</button>
+             <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-blue-700 text-xs transition-colors ml-2">SUBIR FONDO</button>
+             <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-green-700 text-xs transition-colors ml-2">DESCARGAR</button>
              <button onclick="window.print()" class="bg-gray-800 text-white px-3 py-2 rounded shadow font-bold hover:bg-gray-700 text-xs transition-colors">IMPRIMIR</button>
          </div>
     </div>
@@ -471,7 +536,7 @@
                 </div>
             </div>
             
-            <!-- P1: PORTADA PRINCIPAL (NUEVA ESTRUCTURA INTEGRADA) -->
+            <!-- P1: PORTADA PRINCIPAL -->
             <div class="page-a5 cover-container">
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
@@ -486,7 +551,7 @@
                 <!-- Marco Decorativo Principal -->
                 <div class="main-frame cover-element"></div>
 
-                <!-- Esquinas Decorativas (Cambian por clase) -->
+                <!-- Esquinas Decorativas -->
                 <div class="corner-decoration corner-tl cover-element">
                     <!-- DIAMANTES (Experto) -->
                     <svg class="svg-diamond w-full h-full" viewBox="0 0 100 100" fill="none" stroke="black" stroke-width="2">
@@ -1692,8 +1757,6 @@
             const pages = document.querySelectorAll('.page-a5');
             pages.forEach(page => {
                 page.style.backgroundColor = color;
-                
-                // Also update the individual picker value inside the page to match global
                 const localPicker = page.querySelector('.page-settings input[type="color"]');
                 if(localPicker) localPicker.value = color;
             });
@@ -1713,10 +1776,28 @@
             }
         }
 
+        // --- NEW PATTERN LOGIC ---
+
+        function togglePatternControls() {
+            const panel = document.getElementById('patternControls');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function updatePatternVar(variable, value) {
+            document.documentElement.style.setProperty(variable, value);
+        }
+
         function applyPattern(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    // Reset pattern settings to visible defaults when loading new
+                    document.documentElement.style.setProperty('--pat-opacity', '1');
+                    document.documentElement.style.setProperty('--pat-contrast', '1');
+                    
+                    // Show control panel
+                    document.getElementById('patternControls').style.display = 'block';
+
                     const pages = document.querySelectorAll('.page-a5');
                     pages.forEach(page => {
                         let patternLayer = page.querySelector('.pattern-layer');
@@ -1732,7 +1813,6 @@
             }
         }
 
-        // --- NEW FUNCTION FOR INDIVIDUAL PAGE PATTERN ---
         function applyLocalPattern(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -1742,7 +1822,6 @@
                     if (!patternLayer) {
                         patternLayer = document.createElement('div');
                         patternLayer.className = 'pattern-layer';
-                        // Ensure it is inserted at the beginning so it is behind content but above bg color
                         page.insertBefore(patternLayer, page.firstChild);
                     }
                     patternLayer.style.backgroundImage = `url('${e.target.result}')`;
@@ -1769,7 +1848,6 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Update P3 Image
                     const img = document.getElementById('p1SymbolImg');
                     if(img) {
                         img.src = e.target.result;
@@ -1780,8 +1858,6 @@
                             input.parentElement.classList.remove('border-dashed', 'border-2', 'border-gray-400');
                         }
                     }
-
-                    // Update P15 Image (Level History)
                     const histImg = document.getElementById('levelHistorySymbolImg');
                     if(histImg) {
                         histImg.src = e.target.result;
@@ -1823,7 +1899,6 @@
             const sheets = document.querySelectorAll('.sheet-landscape');
             for (let i = 0; i < sheets.length; i++) {
                 const sheet = sheets[i];
-                // Background color null makes sure it captures the dynamic background set via style
                 const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: null, onclone: (clonedDoc) => {
                     const inputs = clonedDoc.querySelectorAll('input[type="text"]');
                     inputs.forEach(input => input.style.marginTop = '-3px');
