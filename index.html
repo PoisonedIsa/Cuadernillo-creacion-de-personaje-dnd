@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Custom Color)</title>
+    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Custom Pattern)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- FUENTES ACTUALIZADAS -->
@@ -228,16 +228,27 @@
         }
         .page-a5 > *:not(.pattern-layer):not(.page-num):not(.cover-element):not(.page-settings) { position: relative; z-index: 1; }
 
-        /* --- CONTROLES DE COLOR DE PÁGINA --- */
+        /* --- CONTROLES DE PÁGINA (COLOR Y TRAMA) --- */
         .page-settings {
             position: absolute; top: 0; right: 0; z-index: 100; padding: 4px;
-            opacity: 0; transition: opacity 0.2s; cursor: pointer;
+            opacity: 0; transition: opacity 0.2s; 
+            display: flex; gap: 4px; align-items: flex-start;
         }
         .page-a5:hover .page-settings { opacity: 1; }
-        .page-settings input[type="color"] {
-            width: 24px; height: 24px; padding: 0; border: 1px solid #fff; cursor: pointer; 
-            border-radius: 4px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        
+        .setting-btn {
+            width: 24px; height: 24px; 
+            background: white; border: 1px solid #999; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; overflow: hidden; position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.1s, background-color 0.2s;
         }
+        .setting-btn:hover { background: #f0f0f0; transform: scale(1.05); }
+        .setting-btn input { 
+            position: absolute; opacity: 0; width: 100%; height: 100%; top:0; left:0; cursor: pointer; 
+        }
+        .setting-btn svg { width: 14px; height: 14px; stroke: #333; }
 
         /* --- DIVISOR CON GUÍAS DE ENCUADERNACIÓN --- */
         .divider { 
@@ -364,7 +375,7 @@
 
              <div class="flex-grow"></div>
              <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)">
-             <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-3 py-2 rounded shadow font-bold hover:bg-purple-800 text-xs transition-colors">SUBIR TRAMA</button>
+             <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-3 py-2 rounded shadow font-bold hover:bg-purple-800 text-xs transition-colors">TRAMA GLOBAL</button>
              <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)">
              <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-blue-700 text-xs transition-colors">SUBIR FONDO</button>
              <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-green-700 text-xs transition-colors">DESCARGAR</button>
@@ -382,9 +393,15 @@
             <div class="divider"></div>
             <!-- P16: CONTRA PORTADA -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">REGISTRO DE MISIONES</h2>
                 <div class="flex-grow flex flex-col gap-2">
@@ -421,9 +438,15 @@
             
             <!-- P1: PORTADA PRINCIPAL (NUEVA ESTRUCTURA INTEGRADA) -->
             <div class="page-a5 cover-container">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <!-- Marco Decorativo Principal -->
                 <div class="main-frame cover-element"></div>
@@ -536,9 +559,15 @@
             <div class="divider"></div>
             <!-- P2 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
                 <div class="flex flex-col gap-3 flex-grow h-full py-2">
@@ -567,9 +596,15 @@
             </div>
             <!-- P15 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
                 <div class="box-border p-2 bg-white h-full flex flex-col relative">
@@ -610,9 +645,15 @@
             <div class="divider"></div>
             <!-- PÁGINA MAPA -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
                 <div class="h-full w-full border-2 border-gray-400 dot-grid rounded bg-white box-border"></div>
@@ -620,9 +661,15 @@
             </div>
             <!-- PÁGINA STATS -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <div class="grid grid-cols-12 gap-2 mb-2 border-b border-black pb-1 items-end">
                     <div class="col-span-10"><input type="text" class="text-title h-7 border-b-2 border-black w-full" value=""><label class="text-label">Nombre (Resumen)</label></div>
@@ -809,9 +856,15 @@
             <div class="divider"></div>
             <!-- PÁGINA 2 (Ahora 4) -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Combate y Habilidades</h2>
                 <div class="box-border p-2 mb-3 bg-white">
@@ -837,9 +890,15 @@
             </div>
             <!-- PÁGINA 11 (Ahora 13) -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">Compañeros y Monturas</h2>
                 <div class="flex flex-col gap-4 h-full">
@@ -881,18 +940,30 @@
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Notas Adicionales</h2>
                  <div class="h-full w-full lined-bg box-border p-4 bg-white"></div>
                  <div class="page-num">12</div>
             </div>
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <div class="w-full box-border p-3 flex flex-col h-full">
                      <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 gap-2 bg-white p-1 shadow-sm">
@@ -956,9 +1027,15 @@
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
             <div class="page-a5">
-                 <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                 <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                  <!-- HEADER UNIFICADO (Solo Mágico) -->
                  <h2 class="text-title text-center border-b-2 border-black mb-2 magic-content">Libro de Hechizos</h2>
@@ -1179,7 +1256,6 @@
                                        <div class="w-2/3"><span class="text-[10px] uppercase font-bold text-gray-500 block mb-0 leading-none">Herramienta / Habilidad Especial</span><input type="text" class="font-bold w-full text-body no-line border-b border-black p-0"></div>
                                        <div class="flex flex-col items-end"><span class="text-[10px] uppercase font-bold text-gray-600">Dados de Experto / Usos</span>
                                            <div class="flex gap-1">
-                                               <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59-.24-1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
                                                <div class="relative w-4 h-4"><input type="checkbox" class="icon-checkbox"><svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" /></svg></div>
@@ -1200,9 +1276,15 @@
             
             <!-- PÁGINA 11 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-3">Biografía y Apariencia</h2>
                  <div class="flex flex-col gap-3 h-full">
@@ -1229,9 +1311,15 @@
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Ayuda de Reglas</h2>
                 <div class="flex flex-col h-full gap-3">
@@ -1274,9 +1362,15 @@
             </div>
             <!-- PÁGINA 5 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <!-- CONTENIDO MÁGICO P5 -->
                 <div class="magic-content flex flex-col h-full gap-1">
@@ -1395,9 +1489,15 @@
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                 <!-- CONTENIDO MÁGICO P6 -->
                 <div class="magic-content flex flex-col h-full gap-4">
@@ -1512,9 +1612,15 @@
             </div>
             <!-- PÁGINA 7 (NPCs) -->
             <div class="page-a5">
-                <div class="page-settings" title="Color de esta página">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="mb-1 bg-white rounded-full p-0.5"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
-                     <input type="color" onchange="this.parentElement.parentElement.style.backgroundColor = this.value">
+                <div class="page-settings">
+                     <div class="setting-btn" title="Color de Fondo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
+                        <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
+                     </div>
+                     <div class="setting-btn" title="Trama/Patrón Individual">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
+                     </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Registro de NPCs y Contactos</h2>
                  <div class="grid grid-cols-2 gap-3 h-full">
@@ -1587,6 +1693,25 @@
                         }
                         patternLayer.style.backgroundImage = `url('${e.target.result}')`;
                     });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- NEW FUNCTION FOR INDIVIDUAL PAGE PATTERN ---
+        function applyLocalPattern(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const page = input.closest('.page-a5');
+                    let patternLayer = page.querySelector('.pattern-layer');
+                    if (!patternLayer) {
+                        patternLayer = document.createElement('div');
+                        patternLayer.className = 'pattern-layer';
+                        // Ensure it is inserted at the beginning so it is behind content but above bg color
+                        page.insertBefore(patternLayer, page.firstChild);
+                    }
+                    patternLayer.style.backgroundImage = `url('${e.target.result}')`;
                 }
                 reader.readAsDataURL(input.files[0]);
             }
