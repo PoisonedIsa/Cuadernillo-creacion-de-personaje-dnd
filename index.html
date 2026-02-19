@@ -25,12 +25,16 @@
             --s-body: 12.5px; 
             --s-label: 10px; 
 
-            /* VARIABLES DE TRAMA (Pattern) */
+            /* VARIABLES DE TRAMA (Pattern) GLOBALES */
             --pat-opacity: 1;
             --pat-size: 150px;
             --pat-contrast: 1;
             --pat-rotation: 0deg;
             --pat-blend: multiply;
+            
+            /* VARIABLES DE DESPLAZAMIENTO (NUEVO) */
+            --pat-offset-a: 0px; /* Desplazamiento Lineas Impares */
+            --pat-offset-b: 0px; /* Desplazamiento Lineas Pares */
         }
         
         /* --- ESTILOS DE PORTADA (COVER STYLES) --- */
@@ -231,30 +235,49 @@
             transition: background-color 0.3s ease;
         }
 
-        /* --- TRAMA MEJORADA --- */
+        /* --- TRAMA MEJORADA (SPLIT PATTERN) --- */
         .pattern-layer {
             position: absolute; 
-            /* Se hace más grande y se centra para permitir rotación sin bordes vacíos */
             top: -50%; left: -50%; width: 200%; height: 200%;
             z-index: 0; 
             pointer-events: none; 
             
-            /* CSS Variables controladas por JS */
+            /* Global Vars Apply to Container */
             opacity: var(--pat-opacity); 
-            background-size: var(--pat-size); 
             transform: rotate(var(--pat-rotation)); 
             filter: contrast(var(--pat-contrast));
             mix-blend-mode: var(--pat-blend);
+            
+            display: block; /* Wrapper Logic */
+        }
+        
+        /* Capas internas para el efecto entrelazado */
+        .pat-split {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-repeat: repeat;
+            background-position: center;
+            background-size: var(--pat-size);
+            /* Image is set dynamically via JS */
+        }
 
-            background-repeat: repeat; 
-            background-position: center; 
-            /* Default fallback image removed, controlled by JS/Input */
-            background-image: none;
+        .pat-odd {
+            /* Muestra filas impares (1, 3, 5...) */
+            -webkit-mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2));
+            mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2));
+            transform: translateX(var(--pat-offset-a)); /* Desplazamiento Linea 1 */
+        }
+
+        .pat-even {
+            /* Muestra filas pares (2, 4, 6...) */
+            -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2));
+            mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2));
+            transform: translateX(var(--pat-offset-b)); /* Desplazamiento Linea 2 */
         }
         
         .page-a5 > *:not(.pattern-layer):not(.page-num):not(.cover-element):not(.page-settings) { position: relative; z-index: 1; }
 
-        /* --- CONTROLES DE PÁGINA (COLOR Y TRAMA) --- */
+        /* --- CONTROLES DE PÁGINA INDIVIDUAL --- */
         .page-settings {
             position: absolute; top: 0; right: 0; z-index: 100; padding: 4px;
             opacity: 0; transition: opacity 0.2s; 
@@ -292,7 +315,7 @@
             border: none; 
         }
 
-        /* --- CLASES DE CONTENEDORES (MODIFICADAS PARA TRANSPARENCIA) --- */
+        /* --- CLASES DE CONTENEDORES --- */
         .box-border { 
             border: var(--border-thick); 
             border-radius: var(--border-radius); 
@@ -385,16 +408,22 @@
         body.mode-magic .svg-star { display: block; }
         body.mode-sacred .svg-cross { display: block; }
 
-        /* CONTROL PANEL */
-        #patternControls {
+        /* CONTROL PANELS */
+        #patternControls, .local-pattern-panel {
             display: none;
-            position: fixed; top: 60px; right: 20px; width: 280px;
             background: #222; border: 1px solid #444; border-radius: 8px;
-            padding: 12px; z-index: 9999; color: white;
+            padding: 12px; color: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        #patternControls label { font-size: 11px; text-transform: uppercase; color: #aaa; display: block; margin-bottom: 2px; }
-        #patternControls input[type="range"] { width: 100%; margin-bottom: 8px; accent-color: #8b5cf6; cursor: pointer; }
+        
+        #patternControls { position: fixed; top: 60px; right: 20px; width: 280px; z-index: 9999; }
+        
+        .local-pattern-panel {
+            position: absolute; top: 30px; right: 0; width: 260px; z-index: 500;
+        }
+
+        .ctrl-group label { font-size: 11px; text-transform: uppercase; color: #aaa; display: block; margin-bottom: 2px; }
+        .ctrl-group input[type="range"] { width: 100%; margin-bottom: 8px; accent-color: #8b5cf6; cursor: pointer; }
 
         @media print { 
             body { background: white; margin: 0; padding: 0; display: block; } 
@@ -407,12 +436,12 @@
         }
     </style>
 </head>
-<body class="mode-martial">
+<body class="mode-martial" onload="initPatterns()">
 
-    <!-- PANEL DE CONTROL DE TRAMA -->
-    <div id="patternControls" class="no-print">
+    <!-- PANEL DE CONTROL DE TRAMA GLOBAL -->
+    <div id="patternControls" class="no-print ctrl-group">
         <h3 class="text-white font-bold text-sm mb-3 border-b border-gray-600 pb-1 flex justify-between">
-            CONFIGURAR TRAMA
+            CONFIGURAR TRAMA GLOBAL
             <button onclick="document.getElementById('patternControls').style.display='none'" class="text-gray-400 hover:text-white">✕</button>
         </h3>
         
@@ -421,13 +450,17 @@
 
         <label>Tamaño / Escala</label>
         <input type="range" min="20" max="800" step="10" value="150" oninput="updatePatternVar('--pat-size', this.value + 'px')">
+        
+        <label>Desplazar Línea A (Impares)</label>
+        <input type="range" min="0" max="200" step="1" value="0" oninput="updatePatternVar('--pat-offset-a', this.value + 'px')">
+        
+        <label>Desplazar Línea B (Pares)</label>
+        <input type="range" min="0" max="200" step="1" value="0" oninput="updatePatternVar('--pat-offset-b', this.value + 'px')">
 
         <label>Variabilidad (Contraste)</label>
-        <div class="flex justify-between text-[9px] text-gray-500 mb-1"><span>Suave</span><span>Trama Dura</span></div>
         <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updatePatternVar('--pat-contrast', this.value)">
         
-        <label>Aleatoriedad (Rotación)</label>
-        <div class="flex justify-between text-[9px] text-gray-500 mb-1"><span>Recto</span><span>Caos</span></div>
+        <label>Rotación Global</label>
         <input type="range" min="0" max="90" step="1" value="0" oninput="updatePatternVar('--pat-rotation', this.value + 'deg')">
 
         <label class="mt-2">Modo de Mezcla</label>
@@ -473,7 +506,7 @@
              <div class="flex items-center gap-1">
                  <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)">
                  <button onclick="document.getElementById('patternInput').click()" class="bg-purple-700 text-white px-3 py-2 rounded-l shadow font-bold hover:bg-purple-800 text-xs transition-colors border-r border-purple-800">TRAMA GLOBAL</button>
-                 <button onclick="togglePatternControls()" class="bg-purple-900 text-white px-2 py-2 rounded-r shadow hover:bg-purple-950 text-xs transition-colors" title="Ajustes de Trama">⚙️</button>
+                 <button onclick="togglePatternControls()" class="bg-purple-900 text-white px-2 py-2 rounded-r shadow hover:bg-purple-950 text-xs transition-colors" title="Ajustes Globales de Trama">⚙️</button>
              </div>
 
              <input type="file" id="bgInput" accept="image/*" class="hidden" onchange="applyBackground(this)">
@@ -484,23 +517,40 @@
     </div>
 
     <!-- CUBIERTA EXTERIOR -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1 flex justify-between">
-            <span>Cubierta Exterior (P16 Contraportada - P1 Portada)</span> 
-            <button onclick="downloadSheet('sheetCover')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Cubierta Exterior (P16 Contraportada - P1 Portada)</span> 
+                <button onclick="downloadSheet('sheetCover')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <!-- Botón Ajustes Local -->
+            <button onclick="toggleLocalControls('sheetCover')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            
+            <!-- PANEL LOCAL POPUP -->
+            <div id="local-sheetCover" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: CUBIERTA <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label>
+                <input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetCover', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label>
+                <input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetCover', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label>
+                <input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetCover', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label>
+                <input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheetCover', '--pat-rotation', this.value + 'deg')">
+            </div>
         </div>
+        
         <div id="sheetCover" class="sheet-landscape">
             <div class="divider"></div>
             <!-- P16: CONTRA PORTADA -->
             <div class="page-a5">
+                <div class="pattern-layer"></div> <!-- Trama Inyectada por JS -->
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center mb-4 border-b-2 border-black pb-2">REGISTRO DE MISIONES</h2>
@@ -538,14 +588,11 @@
             
             <!-- P1: PORTADA PRINCIPAL -->
             <div class="page-a5 cover-container">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <!-- Marco Decorativo Principal -->
@@ -653,20 +700,33 @@
     </div>
 
     <!-- CUBIERTA INTERIOR -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Cubierta Interior (P2 Grupo - P15 Log)</span> <button onclick="downloadSheet('sheetInner')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Cubierta Interior (P2 Grupo - P15 Log)</span> 
+                <button onclick="downloadSheet('sheetInner')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheetInner')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheetInner" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: INTERIOR <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetInner', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetInner', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetInner', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheetInner', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
+        
         <div id="sheetInner" class="sheet-landscape">
             <div class="divider"></div>
             <!-- P2 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">EL GRUPO DE AVENTURA</h2>
@@ -696,14 +756,11 @@
             </div>
             <!-- P15 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">HISTORIAL DE NIVELES</h2>
@@ -739,20 +796,32 @@
     </div>
 
     <!-- HOJA 1 (Mapas/Stats) -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 1 (Mapas y Stats)</span> <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 1 (Mapas y Stats)</span> 
+                <button onclick="downloadSheet('sheet1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet1')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet1" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 1 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet1', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet1', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet1', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet1', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet1" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA MAPA -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title border-b-2 border-black mb-3 text-center">Mapa / Bocetos</h2>
@@ -761,14 +830,11 @@
             </div>
             <!-- PÁGINA STATS -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <div class="grid grid-cols-12 gap-2 mb-2 border-b border-black pb-1 items-end">
@@ -950,20 +1016,32 @@
     </div>
 
     <!-- HOJA 2 (Combate/Compañeros) -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 2 (Combate y Compañeros)</span><button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 2 (Combate y Compañeros)</span>
+                <button onclick="downloadSheet('sheet2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet2')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet2" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 2 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet2', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet2', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet2', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet2', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet2" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 2 (Ahora 4) -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Combate y Habilidades</h2>
@@ -990,14 +1068,11 @@
             </div>
             <!-- PÁGINA 11 (Ahora 13) -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-4">Compañeros y Monturas</h2>
@@ -1035,19 +1110,31 @@
     </div>
 
     <!-- HOJA 3 & 10 (Inventario/Notas) -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 3 (Inventario y Notas)</span><button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 3 (Inventario y Notas)</span>
+                <button onclick="downloadSheet('sheet3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet3')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet3" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 3 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet3', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet3', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet3', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet3', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet3" class="sheet-landscape">
             <div class="divider"></div>
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Notas Adicionales</h2>
@@ -1055,14 +1142,11 @@
                  <div class="page-num">12</div>
             </div>
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <div class="w-full box-border p-3 flex flex-col h-full">
@@ -1121,20 +1205,32 @@
     </div>
 
     <!-- HOJA 4 -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 4 (Magia/Técnicas y Bio)</span><button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 4 (Magia/Técnicas y Bio)</span>
+                <button onclick="downloadSheet('sheet4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet4')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet4" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 4 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet4', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet4', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet4', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet4', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet4" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
             <div class="page-a5">
+                 <div class="pattern-layer"></div>
                  <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                  <!-- HEADER UNIFICADO (Solo Mágico) -->
@@ -1376,14 +1472,11 @@
             
             <!-- PÁGINA 11 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-3">Biografía y Apariencia</h2>
@@ -1405,20 +1498,32 @@
     </div>
 
     <!-- HOJA 5: P8 & P5 -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 5 (Reglas y Talentos)</span><button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 5 (Reglas y Talentos)</span>
+                <button onclick="downloadSheet('sheet5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet5')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet5" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 5 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet5', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet5', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet5', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet5', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet5" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 8 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Ayuda de Reglas</h2>
@@ -1462,14 +1567,11 @@
             </div>
             <!-- PÁGINA 5 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <!-- CONTENIDO MÁGICO P5 -->
@@ -1582,20 +1684,32 @@
     </div>
 
     <!-- HOJA 6: P6 & P7 -->
-    <div class="sheet-wrapper">
-        <div class="sheet-controls no-print text-white mb-1"><span>Hoja Núcleo 6 (Combate Avanzado y Diario)</span><button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+    <div class="sheet-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div>
+                <span>Hoja Núcleo 6 (Combate Avanzado y Diario)</span>
+                <button onclick="downloadSheet('sheet6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button>
+            </div>
+            <button onclick="toggleLocalControls('sheet6')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500 flex gap-1 items-center">
+                <span>⚙️ AJUSTES TRAMA LOCAL</span>
+            </button>
+            <div id="local-sheet6" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 6 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet6', '--pat-offset-a', this.value + 'px')">
+                <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet6', '--pat-offset-b', this.value + 'px')">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet6', '--pat-size', this.value + 'px')">
+                <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet6', '--pat-rotation', this.value + 'deg')">
+            </div>
+        </div>
         <div id="sheet6" class="sheet-landscape">
             <div class="divider"></div>
             <!-- PÁGINA 6 -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                 <!-- CONTENIDO MÁGICO P6 -->
@@ -1711,14 +1825,11 @@
             </div>
             <!-- PÁGINA 7 (NPCs) -->
             <div class="page-a5">
+                <div class="pattern-layer"></div>
                 <div class="page-settings">
                      <div class="setting-btn" title="Color de Fondo">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg>
                         <input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value">
-                     </div>
-                     <div class="setting-btn" title="Trama/Patrón Individual">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-                        <input type="file" accept="image/*" onchange="applyLocalPattern(this)">
                      </div>
                 </div>
                  <h2 class="text-title text-center border-b-2 border-black mb-4">Registro de NPCs y Contactos</h2>
@@ -1752,6 +1863,28 @@
     </div>
 
     <script>
+        // --- NEW LOGIC FOR INTERLEAVED PATTERNS ---
+        
+        function initPatterns() {
+            // Find all pattern layers and inject the two sub-layers (odd/even)
+            // This allows us to use masks to offset lines independently
+            const layers = document.querySelectorAll('.pattern-layer');
+            layers.forEach(layer => {
+                // Clear existing just in case
+                layer.innerHTML = '';
+                
+                // Create odd layer (rows 1, 3, 5...)
+                const odd = document.createElement('div');
+                odd.className = 'pat-split pat-odd';
+                layer.appendChild(odd);
+                
+                // Create even layer (rows 2, 4, 6...)
+                const even = document.createElement('div');
+                even.className = 'pat-split pat-even';
+                layer.appendChild(even);
+            });
+        }
+
         function applyGlobalColor(color) {
             // Apply to all pages
             const pages = document.querySelectorAll('.page-a5');
@@ -1776,37 +1909,53 @@
             }
         }
 
-        // --- NEW PATTERN LOGIC ---
-
         function togglePatternControls() {
             const panel = document.getElementById('patternControls');
+            // Hide all local panels first
+            document.querySelectorAll('.local-pattern-panel').forEach(p => p.style.display = 'none');
             panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        function toggleLocalControls(sheetId) {
+            // Hide global
+            document.getElementById('patternControls').style.display = 'none';
+            // Hide other locals
+            document.querySelectorAll('.local-pattern-panel').forEach(p => {
+                if(p.id !== 'local-' + sheetId) p.style.display = 'none';
+            });
+            
+            const panel = document.getElementById('local-' + sheetId);
+            if(panel) panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
         }
 
         function updatePatternVar(variable, value) {
             document.documentElement.style.setProperty(variable, value);
+        }
+        
+        function updateLocalVar(sheetId, variable, value) {
+            const sheet = document.getElementById(sheetId);
+            if(sheet) {
+                // Apply the variable to the specific sheet ID scope
+                // This overrides :root variables due to CSS specificity/cascade
+                sheet.style.setProperty(variable, value);
+            }
         }
 
         function applyPattern(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Reset pattern settings to visible defaults when loading new
-                    document.documentElement.style.setProperty('--pat-opacity', '1');
-                    document.documentElement.style.setProperty('--pat-contrast', '1');
+                    // Reset global pattern settings to visible defaults
+                    updatePatternVar('--pat-opacity', '1');
                     
                     // Show control panel
                     document.getElementById('patternControls').style.display = 'block';
 
-                    const pages = document.querySelectorAll('.page-a5');
-                    pages.forEach(page => {
-                        let patternLayer = page.querySelector('.pattern-layer');
-                        if (!patternLayer) {
-                            patternLayer = document.createElement('div');
-                            patternLayer.className = 'pattern-layer';
-                            page.insertBefore(patternLayer, page.firstChild);
-                        }
-                        patternLayer.style.backgroundImage = `url('${e.target.result}')`;
+                    // Update all pattern layers
+                    // We need to set background image on the .pat-split children
+                    const splits = document.querySelectorAll('.pat-split');
+                    splits.forEach(div => {
+                        div.style.backgroundImage = `url('${e.target.result}')`;
                     });
                 }
                 reader.readAsDataURL(input.files[0]);
@@ -1814,17 +1963,24 @@
         }
 
         function applyLocalPattern(input) {
+            // No longer used directly for "single page" pattern override in the old way,
+            // but kept for compatibility. Updated logic sets pattern on children.
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const page = input.closest('.page-a5');
                     let patternLayer = page.querySelector('.pattern-layer');
-                    if (!patternLayer) {
-                        patternLayer = document.createElement('div');
-                        patternLayer.className = 'pattern-layer';
-                        page.insertBefore(patternLayer, page.firstChild);
+                    
+                    // Ensure children exist
+                    if (patternLayer.children.length === 0) {
+                        const odd = document.createElement('div'); odd.className = 'pat-split pat-odd'; patternLayer.appendChild(odd);
+                        const even = document.createElement('div'); even.className = 'pat-split pat-even'; patternLayer.appendChild(even);
                     }
-                    patternLayer.style.backgroundImage = `url('${e.target.result}')`;
+                    
+                    const splits = patternLayer.querySelectorAll('.pat-split');
+                    splits.forEach(div => {
+                        div.style.backgroundImage = `url('${e.target.result}')`;
+                    });
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -1882,6 +2038,10 @@
 
         function downloadSheet(id) {
             const element = document.getElementById(id);
+            // Hide local controls momentarily for clean screenshot
+            const localPanels = document.querySelectorAll('.local-pattern-panel');
+            localPanels.forEach(p => p.style.display = 'none');
+            
             html2canvas(element, { scale: 3, useCORS: true, backgroundColor: null, onclone: (clonedDoc) => {
                 const inputs = clonedDoc.querySelectorAll('input[type="text"]');
                 inputs.forEach(input => { input.style.marginTop = '-3px'; });
@@ -1897,6 +2057,10 @@
 
         async function downloadAllSheets() {
             const sheets = document.querySelectorAll('.sheet-landscape');
+            // Hide controls
+            const localPanels = document.querySelectorAll('.local-pattern-panel');
+            localPanels.forEach(p => p.style.display = 'none');
+            
             for (let i = 0; i < sheets.length; i++) {
                 const sheet = sheets[i];
                 const canvas = await html2canvas(sheet, { scale: 3, backgroundColor: null, onclone: (clonedDoc) => {
