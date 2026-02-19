@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Custom Pattern)</title>
+    <title>D&D Booklet (16 Páginas) - Edición Deluxe (Full Control)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- FUENTES ACTUALIZADAS -->
@@ -32,9 +32,9 @@
             --pat-rotation: 0deg;
             --pat-blend: multiply;
             
-            /* VARIABLES DE DESPLAZAMIENTO (NUEVO) */
-            --pat-offset-a: 0px; /* Desplazamiento Lineas Impares */
-            --pat-offset-b: 0px; /* Desplazamiento Lineas Pares */
+            /* VARIABLES DE DESPLAZAMIENTO */
+            --pat-offset-a: 0px; 
+            --pat-offset-b: 0px; 
         }
         
         /* --- ESTILOS DE PORTADA (COVER STYLES) --- */
@@ -205,7 +205,7 @@
         .text-stat { font-size: var(--s-stat) !important; font-weight: 700; line-height: 1; font-family: var(--font-title); }
         .text-body { font-size: var(--s-body) !important; line-height: 1.3; font-weight: 400; font-family: var(--font-body); }
         .text-label { font-size: var(--s-label) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; color: #444; font-family: var(--font-body); }
-        .text-condensed { letter-spacing: -0.5px; } /* Nueva clase para textos apretados */
+        .text-condensed { letter-spacing: -0.5px; } 
 
         input[type="text"], textarea { 
             background: transparent; border: none; border-bottom: 0.5px dotted #666; 
@@ -229,9 +229,9 @@
         .page-a5 { 
             width: 148.5mm; height: 210mm; padding: 6mm 8mm 14mm 8mm; 
             box-sizing: border-box; display: flex; flex-direction: column; position: relative; 
-            background-color: var(--bg-paper); /* Default Background */
+            background-color: var(--bg-paper); 
             z-index: 0;
-            overflow: hidden; /* CRITICAL for rotated pattern */
+            overflow: hidden; 
             transition: background-color 0.3s ease;
         }
 
@@ -248,31 +248,27 @@
             filter: contrast(var(--pat-contrast));
             mix-blend-mode: var(--pat-blend);
             
-            display: block; /* Wrapper Logic */
+            display: block; 
         }
         
-        /* Capas internas para el efecto entrelazado */
         .pat-split {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-repeat: repeat;
             background-position: center;
             background-size: var(--pat-size);
-            /* Image is set dynamically via JS */
         }
 
         .pat-odd {
-            /* Muestra filas impares (1, 3, 5...) */
             -webkit-mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2));
             mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2));
-            transform: translateX(var(--pat-offset-a)); /* Desplazamiento Linea 1 */
+            transform: translateX(var(--pat-offset-a)); 
         }
 
         .pat-even {
-            /* Muestra filas pares (2, 4, 6...) */
             -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2));
             mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2));
-            transform: translateX(var(--pat-offset-b)); /* Desplazamiento Linea 2 */
+            transform: translateX(var(--pat-offset-b)); 
         }
         
         .page-a5 > *:not(.pattern-layer):not(.page-num):not(.cover-element):not(.page-settings) { position: relative; z-index: 1; }
@@ -305,7 +301,7 @@
             left: 50%; 
             top: 0; 
             bottom: 0; 
-            width: 1px; /* Ancho de la guía */
+            width: 1px; 
             transform: translateX(-50%); 
             z-index: 10;
             background-image: linear-gradient(to bottom, #000 1.5px, transparent 1.5px);
@@ -333,10 +329,10 @@
         body.theme-gothic .stat-box { border-radius: 2px; border: 2px solid #000; }
         .stat-score-bubble { 
             border: var(--border-stat-circle); border-radius: 50%; 
-            background: rgba(255, 255, 255, 0.9); /* Ligeramente más opaco para leer el número */
+            background: rgba(255, 255, 255, 0.9); 
             position: absolute; bottom: -8px; display: flex; align-items: center; justify-content: center; z-index: 10; width: 24px; height: 20px; font-weight: bold;
         }
-        /* Shield SVG actualizado para usar fill transparente */
+        
         .shield-shape { 
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)" stroke="black" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>') no-repeat center center; 
             background-size: contain; filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.1)); 
@@ -531,14 +527,32 @@
             <!-- PANEL LOCAL POPUP -->
             <div id="local-sheetCover" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: CUBIERTA <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetCover', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetCover', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label>
                 <input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetCover', '--pat-offset-a', this.value + 'px')">
+                
                 <label>Desplazar Línea B</label>
                 <input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetCover', '--pat-offset-b', this.value + 'px')">
+                
                 <label>Tamaño Local</label>
                 <input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetCover', '--pat-size', this.value + 'px')">
+                
                 <label>Rotación Local</label>
                 <input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheetCover', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheetCover', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         
@@ -711,10 +725,25 @@
             </button>
             <div id="local-sheetInner" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: INTERIOR <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetInner', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetInner', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetInner', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheetInner', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetInner', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheetInner', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheetInner', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         
@@ -807,10 +836,25 @@
             </button>
             <div id="local-sheet1" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 1 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet1', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet1', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet1', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet1', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet1', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet1', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet1', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet1" class="sheet-landscape">
@@ -1027,10 +1071,25 @@
             </button>
             <div id="local-sheet2" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 2 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet2', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet2', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet2', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet2', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet2', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet2', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet2', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet2" class="sheet-landscape">
@@ -1121,10 +1180,25 @@
             </button>
             <div id="local-sheet3" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 3 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet3', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet3', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet3', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet3', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet3', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet3', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet3', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet3" class="sheet-landscape">
@@ -1216,10 +1290,25 @@
             </button>
             <div id="local-sheet4" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 4 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet4', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet4', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet4', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet4', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet4', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet4', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet4', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet4" class="sheet-landscape">
@@ -1509,10 +1598,25 @@
             </button>
             <div id="local-sheet5" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 5 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet5', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet5', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet5', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet5', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet5', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet5', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet5', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet5" class="sheet-landscape">
@@ -1695,10 +1799,25 @@
             </button>
             <div id="local-sheet6" class="local-pattern-panel ctrl-group">
                 <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: NÚCLEO 6 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                
+                <label>Opacidad Local</label>
+                <input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheet6', '--pat-opacity', this.value)">
+                
+                <label>Contraste Local</label>
+                <input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheet6', '--pat-contrast', this.value)">
+
                 <label>Desplazar Línea A</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet6', '--pat-offset-a', this.value + 'px')">
                 <label>Desplazar Línea B</label><input type="range" min="0" max="200" value="0" oninput="updateLocalVar('sheet6', '--pat-offset-b', this.value + 'px')">
                 <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheet6', '--pat-size', this.value + 'px')">
                 <label>Rotación Local</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateLocalVar('sheet6', '--pat-rotation', this.value + 'deg')">
+
+                <label class="mt-2">Modo Mezcla Local</label>
+                <select onchange="updateLocalVar('sheet6', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white">
+                    <option value="multiply" selected>Multiplicar</option>
+                    <option value="normal">Normal</option>
+                    <option value="overlay">Superponer</option>
+                    <option value="screen">Pantalla</option>
+                </select>
             </div>
         </div>
         <div id="sheet6" class="sheet-landscape">
