@@ -393,6 +393,12 @@
         body.mode-martial .martial-content, body.mode-magic .magic-content, body.mode-expert .expert-content, body.mode-sacred .sacred-content { display: block !important; }
         body.mode-martial .martial-content.flex, body.mode-magic .magic-content.flex, body.mode-expert .expert-content.flex, body.mode-sacred .sacred-content.flex { display: flex !important; }
 
+        /* --- NUEVAS CLASES PARA MODO ANEXO --- */
+        .core-wrapper { transition: opacity 0.3s ease; }
+        .annex-wrapper { display: none; transition: opacity 0.3s ease; }
+        body.view-annex .core-wrapper { display: none !important; }
+        body.view-annex .annex-wrapper { display: flex !important; }
+
         /* Vectores SVG de Portada (Control de visibilidad) */
         .svg-diamond { display: none; }
         .svg-skull { display: none; }
@@ -509,6 +515,9 @@
              <button onclick="document.getElementById('bgInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-blue-700 text-xs transition-colors ml-2">SUBIR FONDO</button>
              <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-green-700 text-xs transition-colors ml-2">DESCARGAR</button>
              <button onclick="window.print()" class="bg-gray-800 text-white px-3 py-2 rounded shadow font-bold hover:bg-gray-700 text-xs transition-colors">IMPRIMIR</button>
+             
+             <!-- NUEVO: BOTÓN MODO ANEXOS -->
+             <button id="viewToggleBtn" onclick="toggleViewMode()" class="bg-amber-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-amber-700 text-xs transition-colors ml-4 border border-amber-400">VER ANEXOS</button>
          </div>
     </div>
 
@@ -1992,10 +2001,257 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- SECCIÓN DE ANEXOS (EXPANSIONES) -->
+    <!-- ========================================== -->
+
+    <!-- ANEXO 1: HECHIZOS Y TÉCNICAS -->
+    <div class="sheet-wrapper annex-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Hoja Anexo 1 (Hechizos y Técnicas)</span><button onclick="downloadSheet('sheetAnnex1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+            <button onclick="toggleLocalControls('sheetAnnex1')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500">⚙️ AJUSTES TRAMA LOCAL</button>
+            <div id="local-sheetAnnex1" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: ANEXO 1 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Opacidad Local</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetAnnex1', '--pat-opacity', this.value)">
+                <label>Contraste Local</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetAnnex1', '--pat-contrast', this.value)">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetAnnex1', '--pat-size', this.value + 'px')">
+                <label>Modo Mezcla</label><select onchange="updateLocalVar('sheetAnnex1', '--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white mb-2"><option value="multiply" selected>Multiplicar</option><option value="normal">Normal</option><option value="overlay">Superponer</option></select>
+            </div>
+        </div>
+        <div id="sheetAnnex1" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- PÁGINA A1 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Expansión de Hechizos</h2>
+                <div class="flex flex-col gap-2 h-full">
+                    <script>
+                        for(let i=0; i<4; i++) {
+                            document.write(`
+                            <div class="spell-card flex-1 flex gap-2 mb-0 pb-2">
+                                <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">NIVEL</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
+                                <div class="flex-grow flex flex-col gap-1">
+                                    <div class="flex items-end gap-1 mb-1"><label class="text-label">NOMBRE</label><input class="border-b border-black flex-grow h-6 text-title"></div>
+                                    <div class="flex gap-1 mb-1 text-[10px]">
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">CAST:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">RNG:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-center gap-0.5 w-auto justify-end"><span class="text-label text-[9px] mr-0.5">COMPS:</span><label class="flex items-center gap-0.5 text-label text-[8px]">V<input type="checkbox" class="comp-check"></label><label class="flex items-center gap-0.5 text-label text-[8px]">S<input type="checkbox" class="comp-check"></label><label class="flex items-center gap-0.5 text-label text-[8px]">M<input type="checkbox" class="comp-check"></label></div>
+                                    </div>
+                                    <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white/60 px-1">DESCRIPCIÓN</label><div class="w-full lined-bg pt-2 h-16"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
+                                </div>
+                            </div>
+                            `);
+                        }
+                    </script>
+                </div>
+                <div class="page-num">A1</div>
+            </div>
+            <!-- PÁGINA A2 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Expansión de Técnicas</h2>
+                <div class="flex flex-col gap-2 h-full">
+                    <script>
+                        for(let i=0; i<4; i++) {
+                            document.write(`
+                            <div class="spell-card flex-1 flex gap-2 mb-0 pb-2">
+                                <div class="w-10 flex flex-col items-center justify-start pt-1"><label class="text-label mb-1 block">COSTO</label><div class="spell-level-diamond"><input class="spell-level-input"></div></div>
+                                <div class="flex-grow flex flex-col gap-1">
+                                    <div class="flex items-end gap-1 mb-1"><label class="text-label">HABILIDAD</label><input class="border-b border-black flex-grow h-6 text-title"></div>
+                                    <div class="flex gap-1 mb-1 text-[10px]">
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">ACCIÓN:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">DUR:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                        <div class="flex items-end gap-0.5 flex-1"><label class="text-label text-[9px]">OBJ:</label><input class="border-b border-gray-400 w-full h-4 text-body text-center min-w-0"></div>
+                                    </div>
+                                    <div class="relative mt-2"><label class="text-label absolute top-[-8px] left-0 bg-white/60 px-1">EFECTO / DAÑO</label><div class="w-full lined-bg pt-2 h-16"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0"></textarea></div></div>
+                                </div>
+                            </div>
+                            `);
+                        }
+                    </script>
+                </div>
+                <div class="page-num">A2</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANEXO 2: INVENTARIO Y ARMAS -->
+    <div class="sheet-wrapper annex-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Hoja Anexo 2 (Inventario y Armas)</span><button onclick="downloadSheet('sheetAnnex2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+            <button onclick="toggleLocalControls('sheetAnnex2')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500">⚙️ AJUSTES TRAMA LOCAL</button>
+            <div id="local-sheetAnnex2" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: ANEXO 2 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Opacidad Local</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetAnnex2', '--pat-opacity', this.value)">
+                <label>Contraste Local</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetAnnex2', '--pat-contrast', this.value)">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetAnnex2', '--pat-size', this.value + 'px')">
+            </div>
+        </div>
+        <div id="sheetAnnex2" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- PÁGINA A3 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Arsenal y Munición</h2>
+                <div class="box-border p-2 mb-3 bg-white/60 h-full flex flex-col">
+                    <div class="grid grid-cols-[1.5fr_2.5rem_1fr_1fr] gap-2 h-6 mb-1 px-1 items-center text-[10px] font-bold uppercase text-center border-b border-black">
+                        <div class="text-left px-1">ARMA / OBJETO OFENSIVO</div><div>BONO</div><div>DAÑO</div><div>PROPIEDADES</div>
+                    </div>
+                    <div class="flex flex-col gap-1.5 flex-grow overflow-hidden">
+                        <script>
+                            for(let i=0; i<16; i++) {
+                                document.write(`
+                                <div class="grid grid-cols-[1.5fr_2.5rem_1fr_1fr] gap-2 h-6 px-1 border-b border-gray-300 pb-0.5">
+                                    <div class="h-full px-1 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body font-bold text-gray-800"></div>
+                                    <div class="h-full flex items-center justify-center border-l border-r border-gray-300"><input type="text" class="w-full bg-transparent no-line text-stat text-center"></div>
+                                    <div class="h-full px-1 flex items-center"><input type="text" class="w-full bg-transparent no-line text-body text-center"></div>
+                                    <div class="h-full px-1 flex items-center border-l border-gray-300"><input type="text" class="w-full bg-transparent no-line text-xs text-center text-gray-600"></div>
+                                </div>
+                                `);
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="page-num">A3</div>
+            </div>
+            <!-- PÁGINA A4 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Mochila y Posesiones</h2>
+                <div class="flex flex-col gap-2 h-full">
+                    <div class="box-border p-2 bg-white/60 flex-grow relative">
+                        <span class="text-label block border-b border-gray-400 mb-2">ESPACIOS DE INVENTARIO / OBJETOS</span>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 h-[85%]">
+                            <script>
+                                for(let i=0; i<20; i++) {
+                                    document.write(`<div class="border-b border-dotted border-gray-500 flex items-end gap-1 pb-0.5"><div class="w-5 h-5 border border-black rounded-sm flex items-center justify-center flex-shrink-0 bg-white/80 text-[10px] text-gray-400">#</div><input type="text" class="w-full no-line text-body h-5"></div>`);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="box-border p-2 bg-white/60 h-28 flex gap-2 items-center">
+                        <div class="w-1/3 flex flex-col items-center justify-center text-center border-r border-gray-400 pr-2">
+                            <label class="text-label text-gray-600 mb-1">CAPACIDAD CARGA</label>
+                            <div class="border-2 border-black p-1 w-full h-10 bg-white"><input type="text" class="text-center font-bold text-xl no-line w-full h-full p-0"></div>
+                        </div>
+                        <div class="w-2/3 flex flex-col justify-center gap-2 pl-1">
+                            <div class="flex items-center gap-2"><label class="text-[10px] uppercase font-bold w-16">LIGEROS</label><input type="text" class="border-b border-gray-400 w-full no-line text-body h-4"></div>
+                            <div class="flex items-center gap-2"><label class="text-[10px] uppercase font-bold w-16">MEDIANOS</label><input type="text" class="border-b border-gray-400 w-full no-line text-body h-4"></div>
+                            <div class="flex items-center gap-2"><label class="text-[10px] uppercase font-bold w-16 text-red-700">PESADOS</label><input type="text" class="border-b border-gray-400 w-full no-line text-body h-4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-num">A4</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANEXO 3: HABILIDADES Y DONES -->
+    <div class="sheet-wrapper annex-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Hoja Anexo 3 (Dones y Rasgos)</span><button onclick="downloadSheet('sheetAnnex3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+            <button onclick="toggleLocalControls('sheetAnnex3')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500">⚙️ AJUSTES TRAMA LOCAL</button>
+            <div id="local-sheetAnnex3" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: ANEXO 3 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Opacidad Local</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetAnnex3', '--pat-opacity', this.value)">
+                <label>Contraste Local</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetAnnex3', '--pat-contrast', this.value)">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetAnnex3', '--pat-size', this.value + 'px')">
+            </div>
+        </div>
+        <div id="sheetAnnex3" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- PÁGINA A5 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Dones y Facultades</h2>
+                <div class="flex-grow box-border p-3 flex flex-col bg-white/60">
+                    <span class="text-label text-center border-b-2 border-black mb-2 block text-gray-800">RASGOS DE RAZA, CLASE O SUBCLASE</span>
+                    <textarea class="w-full flex-grow border-none resize-none p-0 lined-bg bg-transparent text-body"></textarea>
+                </div>
+                <div class="page-num">A5</div>
+            </div>
+            <!-- PÁGINA A6 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Conocimiento e Historia</h2>
+                <div class="flex-grow box-border p-3 flex flex-col bg-white/60">
+                    <span class="text-label text-center border-b-2 border-black mb-2 block text-gray-800">IDIOMAS EXTRA, FACCIONES Y RELACIONES</span>
+                    <textarea class="w-full flex-grow border-none resize-none p-0 lined-bg bg-transparent text-body"></textarea>
+                </div>
+                <div class="page-num">A6</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANEXO 4: NOTAS EXPANDIDAS -->
+    <div class="sheet-wrapper annex-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Hoja Anexo 4 (Notas Expandidas)</span><button onclick="downloadSheet('sheetAnnex4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+            <button onclick="toggleLocalControls('sheetAnnex4')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded border border-gray-500">⚙️ AJUSTES TRAMA LOCAL</button>
+            <div id="local-sheetAnnex4" class="local-pattern-panel ctrl-group">
+                <h4 class="text-xs font-bold border-b border-gray-600 pb-1 mb-2 flex justify-between">TRAMA: ANEXO 4 <button onclick="this.parentElement.parentElement.style.display='none'">✕</button></h4>
+                <label>Opacidad Local</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateLocalVar('sheetAnnex4', '--pat-opacity', this.value)">
+                <label>Contraste Local</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateLocalVar('sheetAnnex4', '--pat-contrast', this.value)">
+                <label>Tamaño Local</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateLocalVar('sheetAnnex4', '--pat-size', this.value + 'px')">
+            </div>
+        </div>
+        <div id="sheetAnnex4" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- PÁGINA A7 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Diario de Campaña</h2>
+                <div class="h-full w-full lined-bg box-border p-4 bg-white/60"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 leading-[20px]"></textarea></div>
+                <div class="page-num">A7</div>
+            </div>
+            <!-- PÁGINA A8 -->
+            <div class="page-a5"><div class="pattern-layer"></div>
+                <h2 class="text-title text-center border-b-2 border-black mb-3">Diario de Campaña</h2>
+                <div class="h-full w-full dot-grid box-border p-4 bg-white/60 border-2 border-gray-400"><textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 leading-snug"></textarea></div>
+                <div class="page-num">A8</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- NEW LOGIC FOR INTERLEAVED PATTERNS ---
         
+        let isAnnexMode = false;
+
+        function toggleViewMode() {
+            isAnnexMode = !isAnnexMode;
+            document.body.classList.toggle('view-annex', isAnnexMode);
+            const btn = document.getElementById('viewToggleBtn');
+            if(isAnnexMode) {
+                btn.innerText = 'VER NÚCLEO (PRINCIPAL)';
+                btn.classList.replace('bg-amber-600', 'bg-blue-600');
+                btn.classList.replace('hover:bg-amber-700', 'hover:bg-blue-700');
+                btn.classList.replace('border-amber-400', 'border-blue-400');
+            } else {
+                btn.innerText = 'VER ANEXOS';
+                btn.classList.replace('bg-blue-600', 'bg-amber-600');
+                btn.classList.replace('hover:bg-blue-700', 'hover:bg-amber-700');
+                btn.classList.replace('border-blue-400', 'border-amber-400');
+            }
+        }
+
+        // --- SUBIDA INDIVIDUAL DE TRAMAS POR HOJA ---
+        function applySpecificSheetPattern(input, sheetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const sheet = document.getElementById(sheetId);
+                    if(sheet) {
+                        // Cambiamos el fondo a cada sub-capa (odd/even) de esa hoja específica
+                        const splits = sheet.querySelectorAll('.pat-split');
+                        splits.forEach(div => {
+                            div.style.backgroundImage = `url('${e.target.result}')`;
+                            div.style.backgroundSize = "var(--pat-size)";
+                        });
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function initPatterns() {
+            // Marcar las hojas originales como "núcleo" automáticamente
+            document.querySelectorAll('.sheet-wrapper:not(.annex-wrapper)').forEach(el => el.classList.add('core-wrapper'));
+
             // Find all pattern layers and inject the two sub-layers (odd/even)
             // This allows us to use masks to offset lines independently
             const layers = document.querySelectorAll('.pattern-layer');
@@ -2012,6 +2268,21 @@
                 const even = document.createElement('div');
                 even.className = 'pat-split pat-even';
                 layer.appendChild(even);
+            });
+
+            // NUEVO: Inyectar botón de subida de imagen local en TODOS los paneles
+            document.querySelectorAll('.local-pattern-panel').forEach(panel => {
+                // Evitar duplicados por si se llama varias veces
+                if(panel.querySelector('.local-img-uploader')) return; 
+                
+                const sheetId = panel.id.replace('local-', '');
+                const uploadHtml = `
+                    <div class="mt-3 border-t border-gray-600 pt-3 local-img-uploader">
+                        <label class="text-[10px] text-gray-300 block mb-1 uppercase font-bold">🖼️ Cargar textura para esta hoja</label>
+                        <input type="file" accept="image/*" class="w-full text-[10px] text-gray-400 file:bg-blue-700 file:text-white file:border-0 file:rounded file:px-2 file:py-1 file:cursor-pointer file:font-bold file:mr-2 hover:file:bg-blue-600" onchange="applySpecificSheetPattern(this, '${sheetId}')">
+                    </div>
+                `;
+                panel.insertAdjacentHTML('beforeend', uploadHtml);
             });
         }
 
