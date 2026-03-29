@@ -676,180 +676,250 @@
                 <!-- Marco Decorativo Principal -->
                 <div class="main-frame cover-element"></div>
 
-                <!-- LIBRERÍA DE ICONOS ÚNICOS POR CLASE (DISEÑOS MEJORADOS) -->
-                <svg style="display: none;">
-                    <defs>
-                        <!-- Bárbaro: Hachas de batalla cruzadas y detalladas -->
-                        <g id="icon-barbarian" fill="none" stroke="black" stroke-linejoin="round">
-                            <path d="M25,25 L75,75 M75,25 L25,75" stroke-width="4" stroke-linecap="round"/>
-                            <!-- Hoja Hacha 1 -->
-                            <path d="M65,15 C80,15 90,30 85,45 C80,45 75,35 65,35 Z" fill="black"/>
-                            <!-- Hoja Hacha 2 -->
-                            <path d="M15,65 C15,80 30,90 45,85 C45,80 35,75 35,65 Z" fill="black"/>
-                            <!-- Detalles de amarre -->
-                            <line x1="45" y1="55" x2="55" y2="45" stroke-width="2"/>
-                            <circle cx="25" cy="75" r="3" fill="white" stroke-width="2"/>
-                            <circle cx="75" cy="25" r="3" fill="white" stroke-width="2"/>
-                        </g>
+                <!-- LIBRERÍA DE ICONOS ÚNICOS POR CLASE (CON BORDES SÓLIDOS) -->
 
-                        <!-- Guerrero: Escudo Heater y Espada Larga -->
-                        <g id="icon-fighter" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Espada -->
-                            <path d="M50,10 L50,90" stroke-width="3"/>
-                            <path d="M35,30 L65,30" stroke-width="4"/>
-                            <polygon points="50,10 46,20 54,20" fill="black"/>
-                            <circle cx="50" cy="90" r="3" fill="black"/>
-                            <!-- Escudo Heater -->
-                            <path d="M30,35 L70,35 L70,55 C70,75 50,85 50,85 C50,85 30,75 30,55 Z" fill="white" stroke-width="2.5"/>
-                            <path d="M36,41 L64,41 L64,55 C64,70 50,78 50,78 C50,78 36,70 36,55 Z" fill="none" stroke-width="1"/>
-                            <circle cx="50" cy="55" r="6" fill="black"/>
-                        </g>
+<svg style="display: none;">
+<defs>
+<!-- Bárbaro: Hachas de batalla cruzadas y detalladas -->
+<g id="icon-barbarian" fill="none" stroke="black" stroke-linejoin="round">
+<!-- Fondo Sólido de Esquina -->
+<path d="M0,0 L100,0 L100,15 L80,20 L60,15 L40,22 L20,15 L15,20 L15,100 L0,100 Z" fill="black" stroke="none"/>
 
-                        <!-- Monje: Flor de Loto Estilizada y Energía Ki -->
-                        <g id="icon-monk" fill="none" stroke="black">
-                            <circle cx="50" cy="50" r="30" stroke-width="1.5" stroke-dasharray="4 2"/>
-                            <!-- Pétalos de Loto -->
-                            <path d="M50,20 Q65,45 50,70 Q35,45 50,20 Z" fill="black"/>
-                            <path d="M50,70 Q75,65 80,40 Q65,60 50,70 Z" fill="none" stroke-width="2"/>
-                            <path d="M50,70 Q25,65 20,40 Q35,60 50,70 Z" fill="none" stroke-width="2"/>
-                            <path d="M50,70 Q65,85 80,80 Q65,75 50,70 Z" fill="black"/>
-                            <path d="M50,70 Q35,85 20,80 Q35,75 50,70 Z" fill="black"/>
-                            <circle cx="50" cy="45" r="3" fill="white"/>
-                        </g>
+    <g transform="translate(35, 35) scale(0.55)">
+        <path d="M25,25 L75,75 M75,25 L25,75" stroke-width="5" stroke-linecap="round"/>
+        <!-- Hoja Hacha 1 -->
+        <path d="M65,15 C80,15 90,30 85,45 C80,45 75,35 65,35 Z" fill="black"/>
+        <!-- Hoja Hacha 2 -->
+        <path d="M15,65 C15,80 30,90 45,85 C45,80 35,75 35,65 Z" fill="black"/>
+        <!-- Detalles de amarre -->
+        <line x1="45" y1="55" x2="55" y2="45" stroke-width="3"/>
+        <circle cx="25" cy="75" r="4" fill="white" stroke-width="2"/>
+        <circle cx="75" cy="25" r="4" fill="white" stroke-width="2"/>
+    </g>
+</g>
 
-                        <!-- Brujo: Ojo Arcano y Geometría Impía -->
-                        <g id="icon-warlock" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Hexagrama místico -->
-                            <polygon points="50,15 80,75 20,75" stroke-width="1.5"/>
-                            <polygon points="50,85 20,25 80,25" stroke-width="1.5"/>
-                            <!-- Ojo Central -->
-                            <path d="M25,50 Q50,30 75,50 Q50,70 25,50 Z" fill="white" stroke-width="2"/>
-                            <circle cx="50" cy="50" r="10" fill="black"/>
-                            <line x1="50" y1="42" x2="50" y2="58" stroke="white" stroke-width="2"/>
-                        </g>
+<!-- Guerrero: Escudo Heater y Espada Larga -->
+<g id="icon-fighter" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Sólido Doble -->
+    <path d="M0,0 L100,0 L100,8 L8,8 L8,100 L0,100 Z" fill="black" stroke="none"/>
+    <path d="M12,12 L85,12 L85,16 L16,16 L16,85 L12,85 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Espada -->
+        <path d="M50,10 L50,90" stroke-width="4"/>
+        <path d="M35,30 L65,30" stroke-width="5"/>
+        <polygon points="50,10 46,20 54,20" fill="black"/>
+        <circle cx="50" cy="90" r="4" fill="black"/>
+        <!-- Escudo Heater -->
+        <path d="M30,35 L70,35 L70,55 C70,75 50,85 50,85 C50,85 30,75 30,55 Z" fill="white" stroke-width="3"/>
+        <path d="M36,41 L64,41 L64,55 C64,70 50,78 50,78 C50,78 36,70 36,55 Z" fill="none" stroke-width="2"/>
+        <circle cx="50" cy="55" r="6" fill="black"/>
+    </g>
+</g>
 
-                        <!-- Hechicero: Cristal de Magia Salvaje / Estrella Caótica -->
-                        <g id="icon-sorcerer" fill="black" stroke="black" stroke-linejoin="round">
-                            <polygon points="50,10 58,38 85,30 65,50 85,70 58,62 50,90 42,62 15,70 35,50 15,30 42,38" fill="none" stroke-width="2"/>
-                            <polygon points="50,25 54,42 70,38 58,50 70,62 54,58 50,75 46,58 30,62 42,50 30,38 46,42"/>
-                            <circle cx="50" cy="50" r="4" fill="white"/>
-                        </g>
+<!-- Monje: Flor de Loto Estilizada y Energía Ki -->
+<g id="icon-monk" fill="none" stroke="black">
+    <!-- Fondo Curvo Zen -->
+    <path d="M0,0 L100,0 L100,12 C50,12 12,50 12,100 L0,100 Z" fill="black" stroke="none"/>
+    <path d="M18,100 C18,55 55,18 100,18 L100,20 C56,20 20,56 20,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <circle cx="50" cy="50" r="30" stroke-width="2" stroke-dasharray="6 3"/>
+        <!-- Pétalos de Loto -->
+        <path d="M50,20 Q65,45 50,70 Q35,45 50,20 Z" fill="black"/>
+        <path d="M50,70 Q75,65 80,40 Q65,60 50,70 Z" fill="none" stroke-width="2.5"/>
+        <path d="M50,70 Q25,65 20,40 Q35,60 50,70 Z" fill="none" stroke-width="2.5"/>
+        <path d="M50,70 Q65,85 80,80 Q65,75 50,70 Z" fill="black"/>
+        <path d="M50,70 Q35,85 20,80 Q35,75 50,70 Z" fill="black"/>
+        <circle cx="50" cy="45" r="4" fill="white"/>
+    </g>
+</g>
 
-                        <!-- Mago: Grimoire Abierto y Órbitas -->
-                        <g id="icon-wizard" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Órbitas mágicas -->
-                            <circle cx="50" cy="40" r="25" stroke-width="1"/>
-                            <ellipse cx="50" cy="40" rx="35" ry="10" transform="rotate(30 50 40)" stroke-width="1"/>
-                            <!-- Libro -->
-                            <path d="M20,65 L50,75 L80,65 L80,35 L50,45 L20,35 Z" fill="white" stroke-width="2"/>
-                            <path d="M50,45 L50,75" stroke-width="2"/>
-                            <!-- Páginas -->
-                            <line x1="25" y1="45" x2="45" y2="50" stroke-width="1.5"/>
-                            <line x1="25" y1="52" x2="45" y2="57" stroke-width="1.5"/>
-                            <line x1="75" y1="45" x2="55" y2="50" stroke-width="1.5"/>
-                            <polygon points="45,25 50,15 55,25 65,30 55,35 50,45 45,35 35,30" fill="black"/>
-                        </g>
+<!-- Brujo: Ojo Arcano y Geometría Impía -->
+<g id="icon-warlock" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Jagged Ocultista -->
+    <path d="M0,0 L100,0 L100,10 L75,25 L45,15 L25,45 L15,75 L10,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Hexagrama místico -->
+        <polygon points="50,15 80,75 20,75" stroke-width="2"/>
+        <polygon points="50,85 20,25 80,25" stroke-width="2"/>
+        <!-- Ojo Central -->
+        <path d="M25,50 Q50,30 75,50 Q50,70 25,50 Z" fill="white" stroke-width="3"/>
+        <circle cx="50" cy="50" r="10" fill="black"/>
+        <line x1="50" y1="42" x2="50" y2="58" stroke="white" stroke-width="2"/>
+    </g>
+</g>
 
-                        <!-- Artífice: Engranaje Mecánico y Forja -->
-                        <g id="icon-artificer" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Dientes del Engranaje -->
-                            <path d="M42,15 L58,15 L62,25 L75,28 L82,40 L72,48 L72,52 L82,60 L75,72 L62,75 L58,85 L42,85 L38,75 L25,72 L18,60 L28,52 L28,48 L18,40 L25,28 L38,25 Z" fill="black"/>
-                            <!-- Interior -->
-                            <circle cx="50" cy="50" r="22" fill="white" stroke-width="2"/>
-                            <circle cx="50" cy="50" r="12" stroke-width="2"/>
-                            <!-- Tuercas / Ejes -->
-                            <circle cx="50" cy="50" r="4" fill="black"/>
-                            <line x1="50" y1="28" x2="50" y2="38" stroke-width="2"/>
-                            <line x1="50" y1="62" x2="50" y2="72" stroke-width="2"/>
-                            <line x1="28" y1="50" x2="38" y2="50" stroke-width="2"/>
-                            <line x1="62" y1="50" x2="72" y2="50" stroke-width="2"/>
-                        </g>
+<!-- Hechicero: Cristal de Magia Salvaje / Estrella Caótica -->
+<g id="icon-sorcerer" fill="black" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Fragmentado -->
+    <path d="M0,0 L100,0 L90,12 L70,8 L50,18 L30,8 L18,30 L8,70 L12,90 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <polygon points="50,10 58,38 85,30 65,50 85,70 58,62 50,90 42,62 15,70 35,50 15,30 42,38" fill="none" stroke-width="3"/>
+        <polygon points="50,25 54,42 70,38 58,50 70,62 54,58 50,75 46,58 30,62 42,50 30,38 46,42"/>
+        <circle cx="50" cy="50" r="5" fill="white"/>
+    </g>
+</g>
 
-                        <!-- Bardo: Lira Orquestal -->
-                        <g id="icon-bard" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Marco de la Lira -->
-                            <path d="M25,25 C10,50 15,85 50,85 C85,85 90,50 75,25" stroke-width="4"/>
-                            <path d="M20,25 C30,25 35,40 25,40" fill="black"/>
-                            <path d="M80,25 C70,25 65,40 75,40" fill="black"/>
-                            <!-- Barra superior -->
-                            <line x1="20" y1="30" x2="80" y2="30" stroke-width="3"/>
-                            <!-- Cuerdas -->
-                            <line x1="38" y1="30" x2="38" y2="82" stroke-width="1.5"/>
-                            <line x1="46" y1="30" x2="46" y2="85" stroke-width="1.5"/>
-                            <line x1="54" y1="30" x2="54" y2="85" stroke-width="1.5"/>
-                            <line x1="62" y1="30" x2="62" y2="82" stroke-width="1.5"/>
-                            <!-- Nota Musical Flotante -->
-                            <circle cx="45" cy="65" r="3" fill="black"/>
-                            <path d="M48,65 L48,50 C55,50 55,55 58,55" stroke-width="1.5"/>
-                        </g>
+<!-- Mago: Grimoire Abierto y Órbitas -->
+<g id="icon-wizard" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Rígido Cuadrado -->
+    <path d="M0,0 L100,0 L100,12 L30,12 L30,30 L12,30 L12,100 L0,100 Z" fill="black" stroke="none"/>
+    <rect x="16" y="16" width="10" height="10" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Órbitas mágicas -->
+        <circle cx="50" cy="40" r="25" stroke-width="2"/>
+        <ellipse cx="50" cy="40" rx="35" ry="10" transform="rotate(30 50 40)" stroke-width="2"/>
+        <!-- Libro -->
+        <path d="M20,65 L50,75 L80,65 L80,35 L50,45 L20,35 Z" fill="white" stroke-width="3"/>
+        <path d="M50,45 L50,75" stroke-width="3"/>
+        <!-- Páginas -->
+        <line x1="25" y1="45" x2="45" y2="50" stroke-width="2"/>
+        <line x1="25" y1="52" x2="45" y2="57" stroke-width="2"/>
+        <line x1="75" y1="45" x2="55" y2="50" stroke-width="2"/>
+        <polygon points="45,25 50,15 55,25 65,30 55,35 50,45 45,35 35,30" fill="black"/>
+    </g>
+</g>
 
-                        <!-- Pícaro: Dagas Gemelas Cruzadas -->
-                        <g id="icon-rogue" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Daga 1 -->
-                            <path d="M25,75 L65,35" stroke-width="2"/>
-                            <polygon points="65,35 85,15 90,25 75,45" fill="black"/>
-                            <line x1="60" y1="30" x2="70" y2="40" stroke-width="3"/>
-                            <circle cx="20" cy="80" r="3" fill="black"/>
-                            <!-- Daga 2 -->
-                            <path d="M75,75 L35,35" stroke-width="2"/>
-                            <polygon points="35,35 15,15 10,25 25,45" fill="black"/>
-                            <line x1="40" y1="30" x2="30" y2="40" stroke-width="3"/>
-                            <circle cx="80" cy="80" r="3" fill="black"/>
-                            <!-- Gota de veneno / sangre -->
-                            <path d="M50,60 C55,70 55,75 50,80 C45,75 45,70 50,60 Z" fill="black"/>
-                        </g>
+<!-- Artífice: Engranaje Mecánico y Forja -->
+<g id="icon-artificer" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Mecánico (Engranaje) -->
+    <path d="M0,0 L100,0 L100,10 L80,10 L80,18 L60,18 L60,26 L26,26 L26,60 L18,60 L18,80 L10,80 L10,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Dientes del Engranaje -->
+        <path d="M42,15 L58,15 L62,25 L75,28 L82,40 L72,48 L72,52 L82,60 L75,72 L62,75 L58,85 L42,85 L38,75 L25,72 L18,60 L28,52 L28,48 L18,40 L25,28 L38,25 Z" fill="black"/>
+        <!-- Interior -->
+        <circle cx="50" cy="50" r="22" fill="white" stroke-width="3"/>
+        <circle cx="50" cy="50" r="12" stroke-width="3"/>
+        <!-- Tuercas / Ejes -->
+        <circle cx="50" cy="50" r="5" fill="black"/>
+        <line x1="50" y1="28" x2="50" y2="38" stroke-width="3"/>
+        <line x1="50" y1="62" x2="50" y2="72" stroke-width="3"/>
+        <line x1="28" y1="50" x2="38" y2="50" stroke-width="3"/>
+        <line x1="62" y1="50" x2="72" y2="50" stroke-width="3"/>
+    </g>
+</g>
 
-                        <!-- Clérigo: Relicario / Sol Sagrado -->
-                        <g id="icon-cleric" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Rayos del Sol -->
-                            <path d="M50,10 L50,20 M50,80 L50,90 M10,50 L20,50 M80,50 L90,50 M22,22 L28,28 M78,78 L72,72 M22,78 L28,72 M78,22 L72,28" stroke-width="2"/>
-                            <!-- Círculo Relicario -->
-                            <circle cx="50" cy="50" r="22" fill="white" stroke-width="2.5"/>
-                            <!-- Cruz Interior -->
-                            <polygon points="45,35 55,35 55,45 65,45 65,55 55,55 55,65 45,65 45,55 35,55 35,45 45,45" fill="black"/>
-                        </g>
+<!-- Bardo: Lira Orquestal -->
+<g id="icon-bard" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Cortina Teatral -->
+    <path d="M0,0 L100,0 L100,10 C70,10 60,25 35,25 C25,25 10,40 10,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Marco de la Lira -->
+        <path d="M25,25 C10,50 15,85 50,85 C85,85 90,50 75,25" stroke-width="5"/>
+        <path d="M20,25 C30,25 35,40 25,40" fill="black"/>
+        <path d="M80,25 C70,25 65,40 75,40" fill="black"/>
+        <!-- Barra superior -->
+        <line x1="20" y1="30" x2="80" y2="30" stroke-width="4"/>
+        <!-- Cuerdas -->
+        <line x1="38" y1="30" x2="38" y2="82" stroke-width="2"/>
+        <line x1="46" y1="30" x2="46" y2="85" stroke-width="2"/>
+        <line x1="54" y1="30" x2="54" y2="85" stroke-width="2"/>
+        <line x1="62" y1="30" x2="62" y2="82" stroke-width="2"/>
+        <!-- Nota Musical Flotante -->
+        <circle cx="45" cy="65" r="4" fill="black"/>
+        <path d="M48,65 L48,50 C55,50 55,55 58,55" stroke-width="2"/>
+    </g>
+</g>
 
-                        <!-- Druida: Hoja de Roble Estilizada y Luna -->
-                        <g id="icon-druid" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Luna Creciente de fondo -->
-                            <path d="M70,25 A30 30 0 1 0 70,75 A35 35 0 1 1 70,25 Z" fill="black"/>
-                            <!-- Hoja de roble -->
-                            <path d="M50,85 L50,75 C30,75 25,55 30,45 C25,35 35,25 45,25 C50,15 60,20 60,30 C75,30 75,45 65,55 C75,65 65,80 50,75 Z" fill="white" stroke-width="2"/>
-                            <!-- Nervadura Central -->
-                            <path d="M50,80 C48,60 55,40 58,25" stroke-width="1.5"/>
-                            <path d="M52,60 L40,55 M54,45 L65,40 M55,35 L48,30" stroke-width="1.5"/>
-                        </g>
+<!-- Pícaro: Dagas Gemelas Cruzadas -->
+<g id="icon-rogue" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Afilado Oculto -->
+    <path d="M0,0 L100,0 L100,10 L25,10 L45,45 L10,25 L10,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Daga 1 -->
+        <path d="M25,75 L65,35" stroke-width="3"/>
+        <polygon points="65,35 85,15 90,25 75,45" fill="black"/>
+        <line x1="60" y1="30" x2="70" y2="40" stroke-width="4"/>
+        <circle cx="20" cy="80" r="4" fill="black"/>
+        <!-- Daga 2 -->
+        <path d="M75,75 L35,35" stroke-width="3"/>
+        <polygon points="35,35 15,15 10,25 25,45" fill="black"/>
+        <line x1="40" y1="30" x2="30" y2="40" stroke-width="4"/>
+        <circle cx="80" cy="80" r="4" fill="black"/>
+        <!-- Gota de veneno / sangre -->
+        <path d="M50,60 C55,70 55,75 50,80 C45,75 45,70 50,60 Z" fill="black"/>
+    </g>
+</g>
 
-                        <!-- Explorador: Arco Recurvo y Flecha Nockeada -->
-                        <g id="icon-ranger" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Arco -->
-                            <path d="M20,20 C10,40 10,60 20,80 C35,80 40,65 30,50 C40,35 35,20 20,20 Z" fill="black"/>
-                            <!-- Cuerda del Arco -->
-                            <line x1="20" y1="20" x2="60" y2="50" stroke-width="1.5" stroke-dasharray="2 2"/>
-                            <line x1="20" y1="80" x2="60" y2="50" stroke-width="1.5" stroke-dasharray="2 2"/>
-                            <!-- Flecha -->
-                            <line x1="10" y1="50" x2="85" y2="50" stroke-width="2"/>
-                            <!-- Punta de la Flecha -->
-                            <polygon points="80,45 95,50 80,55" fill="black"/>
-                            <!-- Plumas -->
-                            <line x1="15" y1="50" x2="25" y2="45" stroke-width="1.5"/>
-                            <line x1="15" y1="50" x2="25" y2="55" stroke-width="1.5"/>
-                        </g>
+<!-- Clérigo: Relicario / Sol Sagrado -->
+<g id="icon-cleric" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Arcos de Catedral -->
+    <path d="M0,0 L100,0 L100,12 L35,12 A23,23 0 0 0 12,35 L12,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Rayos del Sol -->
+        <path d="M50,10 L50,20 M50,80 L50,90 M10,50 L20,50 M80,50 L90,50 M22,22 L28,28 M78,78 L72,72 M22,78 L28,72 M78,22 L72,28" stroke-width="3"/>
+        <!-- Círculo Relicario -->
+        <circle cx="50" cy="50" r="22" fill="white" stroke-width="3"/>
+        <!-- Cruz Interior -->
+        <polygon points="45,35 55,35 55,45 65,45 65,55 55,55 55,65 45,65 45,55 35,55 35,45 45,45" fill="black"/>
+    </g>
+</g>
 
-                        <!-- Paladín: Escudo Templario y Alas -->
-                        <g id="icon-paladin" fill="none" stroke="black" stroke-linejoin="round">
-                            <!-- Ala Izquierda -->
-                            <path d="M40,35 C20,25 10,40 15,55 C20,50 25,50 30,55 C25,65 30,70 35,70 C35,65 40,60 45,60" fill="black"/>
-                            <!-- Ala Derecha -->
-                            <path d="M60,35 C80,25 90,40 85,55 C80,50 75,50 70,55 C75,65 70,70 65,70 C65,65 60,60 55,60" fill="black"/>
-                            <!-- Escudo -->
-                            <path d="M35,25 L65,25 L65,55 C65,75 50,85 50,85 C50,85 35,75 35,55 Z" fill="white" stroke-width="2.5"/>
-                            <!-- Cruz del Escudo -->
-                            <path d="M50,25 L50,80 M35,40 L65,40" stroke-width="3"/>
-                        </g>
-                    </defs>
-                </svg>
+<!-- Druida: Hoja de Roble Estilizada y Luna -->
+<g id="icon-druid" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Orgánico / Naturaleza -->
+    <path d="M0,0 L100,0 L100,10 C80,20 60,10 40,20 C30,25 25,30 20,40 C10,60 20,80 10,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Luna Creciente de fondo -->
+        <path d="M70,25 A30 30 0 1 0 70,75 A35 35 0 1 1 70,25 Z" fill="black" stroke="none"/>
+        <!-- Hoja de roble -->
+        <path d="M50,85 L50,75 C30,75 25,55 30,45 C25,35 35,25 45,25 C50,15 60,20 60,30 C75,30 75,45 65,55 C75,65 65,80 50,75 Z" fill="white" stroke-width="3"/>
+        <!-- Nervadura Central -->
+        <path d="M50,80 C48,60 55,40 58,25" stroke-width="2"/>
+        <path d="M52,60 L40,55 M54,45 L65,40 M55,35 L48,30" stroke-width="2"/>
+    </g>
+</g>
 
+<!-- Explorador: Arco Recurvo y Flecha Nockeada -->
+<g id="icon-ranger" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo de Tramos y Bosque -->
+    <path d="M0,0 L100,0 L70,10 L85,25 L25,25 L25,85 L10,70 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Arco -->
+        <path d="M20,20 C10,40 10,60 20,80 C35,80 40,65 30,50 C40,35 35,20 20,20 Z" fill="black"/>
+        <!-- Cuerda del Arco -->
+        <line x1="20" y1="20" x2="60" y2="50" stroke-width="2" stroke-dasharray="3 3"/>
+        <line x1="20" y1="80" x2="60" y2="50" stroke-width="2" stroke-dasharray="3 3"/>
+        <!-- Flecha -->
+        <line x1="10" y1="50" x2="85" y2="50" stroke-width="3"/>
+        <!-- Punta de la Flecha -->
+        <polygon points="80,45 95,50 80,55" fill="black"/>
+        <!-- Plumas -->
+        <line x1="15" y1="50" x2="25" y2="45" stroke-width="2"/>
+        <line x1="15" y1="50" x2="25" y2="55" stroke-width="2"/>
+    </g>
+</g>
+
+<!-- Paladín: Escudo Templario y Alas -->
+<g id="icon-paladin" fill="none" stroke="black" stroke-linejoin="round">
+    <!-- Fondo Bastión -->
+    <path d="M0,0 L100,0 L100,18 L85,18 L85,12 L25,12 L25,25 L12,25 L12,85 L18,85 L18,100 L0,100 Z" fill="black" stroke="none"/>
+    
+    <g transform="translate(35, 35) scale(0.55)">
+        <!-- Ala Izquierda -->
+        <path d="M40,35 C20,25 10,40 15,55 C20,50 25,50 30,55 C25,65 30,70 35,70 C35,65 40,60 45,60" fill="black" stroke="none"/>
+        <!-- Ala Derecha -->
+        <path d="M60,35 C80,25 90,40 85,55 C80,50 75,50 70,55 C75,65 70,70 65,70 C65,65 60,60 55,60" fill="black" stroke="none"/>
+        <!-- Escudo -->
+        <path d="M35,25 L65,25 L65,55 C65,75 50,85 50,85 C50,85 35,75 35,55 Z" fill="white" stroke-width="3.5"/>
+        <!-- Cruz del Escudo -->
+        <path d="M50,25 L50,80 M35,40 L65,40" stroke-width="4"/>
+    </g>
+</g>
+
+
+</defs>
+</svg>
                 <!-- Esquinas Decorativas Dinámicas -->
                 <div class="corner-decoration corner-tl cover-element">
                     <svg class="w-full h-full" viewBox="0 0 100 100">
