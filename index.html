@@ -477,15 +477,35 @@
     <!-- BARRA SUPERIOR -->
     <div class="top-bar no-print sticky top-0 z-50 w-full bg-[#222] border-b border-gray-600 shadow-xl py-3 flex justify-center items-center backdrop-blur-md bg-opacity-95">
          <div class="w-[297mm] flex gap-2 items-center px-4 md:px-0 overflow-x-auto">
+             
+             <!-- NUEVO: SELECTOR ÚNICO DE CLASE -->
              <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 whitespace-nowrap">
                  <span class="text-white text-xs font-bold px-1">CLASE:</span>
-                 <select id="classSelector" onchange="changeClassMode(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
-                     <option value="martial" selected>Marciales</option>
-                     <option value="magic">Arcanos</option>
-                     <option value="expert">Expertos</option>
-                     <option value="sacred">Sacros</option>
+                 <select onchange="changeClassMode(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
+                     <optgroup label="Marciales">
+                         <option value="martial">Bárbaro</option>
+                         <option value="martial" selected>Guerrero</option>
+                         <option value="martial">Monje</option>
+                     </optgroup>
+                     <optgroup label="Arcanos">
+                         <option value="magic">Brujo</option>
+                         <option value="magic">Hechicero</option>
+                         <option value="magic">Mago</option>
+                     </optgroup>
+                     <optgroup label="Expertos">
+                         <option value="expert">Artífice</option>
+                         <option value="expert">Bardo</option>
+                         <option value="expert">Pícaro</option>
+                     </optgroup>
+                     <optgroup label="Sacros">
+                         <option value="sacred">Clérigo</option>
+                         <option value="sacred">Druida</option>
+                         <option value="sacred">Explorador</option>
+                         <option value="sacred">Paladín</option>
+                     </optgroup>
                  </select>
              </div>
+
              <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 ml-2 whitespace-nowrap">
                  <span class="text-white text-xs font-bold px-1">ESTILO:</span>
                  <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer hover:bg-gray-600 focus:outline-none">
@@ -495,7 +515,7 @@
                  </select>
              </div>
              
-             <!-- NUEVO CONTROL DE COLOR GLOBAL -->
+             <!-- CONTROL DE COLOR GLOBAL -->
              <div class="flex items-center gap-2 bg-gray-800 p-1 rounded border border-gray-600 ml-2 whitespace-nowrap">
                  <span class="text-white text-xs font-bold px-1">PAPEL:</span>
                  <input type="color" id="globalColorPicker" value="#fdfbf7" onchange="applyGlobalColor(this.value)" class="w-8 h-6 p-0 border-0 rounded cursor-pointer">
@@ -516,10 +536,14 @@
              <button onclick="downloadAllSheets()" class="bg-green-600 text-white px-3 py-2 rounded shadow font-bold hover:bg-green-700 text-xs transition-colors ml-2">DESCARGAR</button>
              <button onclick="window.print()" class="bg-gray-800 text-white px-3 py-2 rounded shadow font-bold hover:bg-gray-700 text-xs transition-colors">IMPRIMIR</button>
              
-             <!-- NUEVO: BOTÓN MODO ANEXOS -->
+             <!-- BOTONES DE NAVEGACIÓN Y EXTRAS -->
              <button id="viewToggleBtn" onclick="toggleViewMode()" class="bg-amber-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-amber-700 text-xs transition-colors ml-4 border border-amber-400">VER ANEXOS</button>
+             
+             <!-- BOTÓN: CARTAS DE HECHIZOS -->
+             <a href="[https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/](https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/)" target="_blank" class="bg-indigo-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-indigo-700 text-xs transition-colors ml-2 border border-indigo-400 flex items-center no-underline text-center">CARTAS DE HECHIZOS</a>
          </div>
     </div>
+
 
     <!-- CUBIERTA EXTERIOR -->
     <div class="sheet-wrapper relative">
