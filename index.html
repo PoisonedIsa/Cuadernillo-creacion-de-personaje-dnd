@@ -467,6 +467,10 @@
                 border-bottom: none !important;
             }
         }
+       /* --- MODO LITE (2 HOJAS) --- */
+        body.mode-lite .lite-hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="mode-martial class-fighter" onload="initPatterns()">
@@ -569,7 +573,9 @@
              
              <!-- BOTONES DE NAVEGACIÓN Y EXTRAS -->
              <button id="viewToggleBtn" onclick="toggleViewMode()" class="bg-amber-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-amber-700 text-xs transition-colors ml-4 border border-amber-400">VER ANEXOS</button>
-             
+             <!-- NUEVO BOTÓN QUE DEBES PEGAR AQUÍ: -->
+             <button id="liteToggleBtn" onclick="toggleLiteMode()" class="bg-teal-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-teal-700 text-xs transition-colors ml-2 border border-teal-400">MODO 2 HOJAS</button>
+
              <!-- BOTÓN: CARTAS DE HECHIZOS -->
              <a href="[https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/](https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/)" target="_blank" class="bg-indigo-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-indigo-700 text-xs transition-colors ml-2 border border-indigo-400 flex items-center no-underline text-center">CARTAS DE HECHIZOS</a>
          </div>
@@ -577,7 +583,7 @@
 
 
     <!-- CUBIERTA EXTERIOR -->
-    <div class="sheet-wrapper relative">
+    <div class="sheet-wrapper relative lite-hidden">
         <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
             <div>
                 <span>Cubierta Exterior (P16 Contraportada - P1 Portada)</span> 
@@ -982,7 +988,7 @@
     </div>
 
     <!-- CUBIERTA INTERIOR -->
-    <div class="sheet-wrapper relative">
+   <div class="sheet-wrapper relative lite-hidden">
         <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
             <div>
                 <span>Cubierta Interior (P2 Grupo - P15 Log)</span> 
@@ -1765,7 +1771,7 @@
     </div>
 
     <!-- HOJA 5: P8 & P5 -->
-    <div class="sheet-wrapper relative">
+    <div class="sheet-wrapper relative lite-hidden">
         <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
             <div>
                 <span>Hoja Núcleo 5 (Reglas y Talentos)</span>
@@ -1963,7 +1969,7 @@
     </div>
 
     <!-- HOJA 6: P6 & P7 -->
-    <div class="sheet-wrapper relative">
+    <div class="sheet-wrapper relative lite-hidden">
         <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
             <div>
                 <span>Hoja Núcleo 6 (Combate Avanzado y Diario)</span>
@@ -2450,6 +2456,54 @@
         // --- NEW LOGIC FOR INTERLEAVED PATTERNS ---
         
         let isAnnexMode = false;
+let isLiteMode = false;
+
+        function toggleLiteMode() {
+            isLiteMode = !isLiteMode;
+            document.body.classList.toggle('mode-lite', isLiteMode);
+            
+            const btn = document.getElementById('liteToggleBtn');
+            if(isLiteMode) {
+                btn.innerText = 'MODO FULL';
+                btn.classList.replace('bg-teal-600', 'bg-emerald-600');
+                btn.classList.replace('hover:bg-teal-700', 'hover:bg-emerald-700');
+                btn.classList.replace('border-teal-400', 'border-emerald-400');
+            } else {
+                btn.innerText = 'MODO 2 HOJAS';
+                btn.classList.replace('bg-emerald-600', 'bg-teal-600');
+                btn.classList.replace('hover:bg-emerald-700', 'hover:bg-teal-700');
+                btn.classList.replace('border-emerald-400', 'border-teal-400');
+            }
+            
+            setTimeout(updatePageNumbers, 50);
+        }
+
+        function updatePageNumbers() {
+            const allCoreWrappers = Array.from(document.querySelectorAll('.core-wrapper'));
+            const visibleWrappers = allCoreWrappers.filter(w => !w.classList.contains('lite-hidden') || !isLiteMode);
+            const totalPages = visibleWrappers.length * 2; 
+            
+            visibleWrappers.forEach((wrapper, index) => {
+                const pages = wrapper.querySelectorAll('.page-a5');
+                if (pages.length === 2) {
+                    const pageNumLeft = pages[0].querySelector('.page-num');
+                    const pageNumRight = pages[1].querySelector('.page-num');
+                    let leftNum, rightNum;
+                    
+                    if (index % 2 === 0) { 
+                        leftNum = totalPages - index;
+                        rightNum = index + 1;
+                    } else {
+                        leftNum = index + 1;
+                        rightNum = totalPages - index;
+                    }
+                    
+                    if(pageNumLeft) pageNumLeft.innerText = leftNum;
+                    if(pageNumRight) pageNumRight.innerText = rightNum;
+                }
+            });
+        }
+
 
         function toggleViewMode() {
             isAnnexMode = !isAnnexMode;
@@ -2523,6 +2577,7 @@
                 `;
                 panel.insertAdjacentHTML('beforeend', uploadHtml);
             });
+setTimeout(updatePageNumbers, 100);
         }
 
         function applyGlobalColor(color) {
