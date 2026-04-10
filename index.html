@@ -1841,42 +1841,74 @@ border: 1.5px solid #2c2c2c !important;
                      </div>
                 </div>
                 <h2 class="text-title text-center border-b-2 border-black mb-3">Ayuda de Reglas</h2>
-                <div class="flex flex-col h-full gap-3">
+                <div class="flex flex-col h-full gap-2 pb-1">
                     <!-- ACCIONES -->
                     <div class="rules-box">
                         <span class="rules-title text-center">Acciones en Combate</span>
-                        <div class="grid grid-cols-2 gap-x-4 gap-y-1 px-1">
-                            <div class="ref-row"><span class="ref-key">Atacar</span><span class="ref-val">Realizar un ataque cuerpo a cuerpo o a distancia.</span></div>
-                            <div class="ref-row"><span class="ref-key">Lanzar Conj.</span><span class="ref-val">Lanzar hechizo según tiempo (gralm. 1 acción).</span></div>
-                            <div class="ref-row"><span class="ref-key">Esprintar</span><span class="ref-val">Ganas movimiento extra igual a tu velocidad actual.</span></div>
-                            <div class="ref-row"><span class="ref-key">Destrabarse</span><span class="ref-val">Movimiento no provoca ataques de oportunidad.</span></div>
-                            <div class="ref-row"><span class="ref-key">Esquivar</span><span class="ref-val">Ataques contra ti con Desventaja. Ventaja en Salv. DES.</span></div>
-                            <div class="ref-row"><span class="ref-key">Ayudar</span><span class="ref-val">Otorga ventaja a aliado en su próxima prueba/ataque.</span></div>
-                            <div class="ref-row"><span class="ref-key">Buscar</span><span class="ref-val">Dedicar tu acción a percibir algo o investigar.</span></div>
-                            <div class="ref-row"><span class="ref-key">Usar Obj.</span><span class="ref-val">Interactuar con objeto que requiera acción.</span></div>
-                            <div class="ref-row"><span class="ref-key">Esconderse</span><span class="ref-val">Prueba de Sigilo para ocultarte (si no eres visto).</span></div>
-                            <div class="ref-row"><span class="ref-key">Preparar</span><span class="ref-val">Retener acción para usarla como reacción.</span></div>
+                        <div class="grid grid-cols-1 gap-y-1.5 px-3 pb-1 text-[11px] leading-tight">
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Atacar</span><span class="w-2/3 text-right">Realiza un ataque cuerpo a cuerpo o a distancia.</span></div>
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Lanzar Conjuro</span><span class="w-2/3 text-right">Lanza un hechizo con tiempo de lanzamiento de 1 acción.</span></div>
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Esprintar</span><span class="w-2/3 text-right">Obtienes movimiento extra igual a tu velocidad actual.</span></div>
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Destrabarse</span><span class="w-2/3 text-right">Tu movimiento no provoca ataques de oportunidad este turno.</span></div>
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Esquivar</span><span class="w-2/3 text-right">Los atacantes tienen Desventaja. Tienes Ventaja en Salv. Destreza.</span></div>
+                            <div class="flex justify-between border-b border-gray-300 border-dashed pb-1"><span class="font-bold w-1/3">Ayudar</span><span class="w-2/3 text-right">Das Ventaja a un aliado en su próxima prueba de habilidad o ataque.</span></div>
+                            <div class="flex justify-between"><span class="font-bold w-1/3">Preparar / Ocultarse</span><span class="w-2/3 text-right">Retienes una acción para usarla de Reacción / Haces prueba de Sigilo.</span></div>
                         </div>
                     </div>
+                    
                     <!-- CONDICIONES -->
-                    <div class="rules-box flex-grow">
+                    <div class="rules-box flex-grow flex flex-col">
                         <span class="rules-title text-center">Estados y Condiciones</span>
-                        <div class="flex flex-col gap-1 px-1 leading-tight overflow-hidden h-full justify-between">
-                            <div class="ref-row"><span class="ref-key">Agarrado</span><span class="ref-val">Velocidad 0. Termina si agarrador es incapacitado/te liberan.</span></div>
-                            <div class="ref-row"><span class="ref-key">Asustado</span><span class="ref-val">Desventaja pruebas/ataques si ves fuente. No puedes acercarte.</span></div>
-                            <div class="ref-row"><span class="ref-key">Aturdido</span><span class="ref-val">Incapacitado. Fallo auto. Salv FUE/DES. Ataques vs ti con Ventaja.</span></div>
-                            <div class="ref-row"><span class="ref-key">Cegado</span><span class="ref-val">Fallo auto visión. Ataques vs ti con Ventaja. Tus ataques con Desventaja.</span></div>
-                            <div class="ref-row"><span class="ref-key">Derribado</span><span class="ref-val">Solo gatear. Tus ataques Desventaja. Vs ti: Ventaja (cerca), Desv (lejos).</span></div>
-                            <div class="ref-row"><span class="ref-key">Envenenado</span><span class="ref-val">Desventaja en tiradas de ataque y pruebas de habilidad.</span></div>
-                            <div class="ref-row"><span class="ref-key">Hechizado</span><span class="ref-val">No puedes atacar a encantador. Él tiene Ventaja social contra ti.</span></div>
-                            <div class="ref-row"><span class="ref-key">Incapacitado</span><span class="ref-val">No puedes tomar acciones, acciones adicionales ni reacciones.</span></div>
-                            <div class="ref-row"><span class="ref-key">Inconsciente</span><span class="ref-val">Incapacitado/Derribado. Fallo Salv FUE/DES. Vs ti: Ventaja y Crítico (5 pies).</span></div>
-                            <div class="ref-row"><span class="ref-key">Invisible</span><span class="ref-val">Imposible ver. Ataques vs ti con Desventaja. Tus ataques con Ventaja.</span></div>
-                            <div class="ref-row"><span class="ref-key">Paralizado</span><span class="ref-val">Incapacitado/Inmóvil. Fallo Salv FUE/DES. Vs ti: Ventaja y Crítico (5 pies).</span></div>
-                            <div class="ref-row"><span class="ref-key">Restringido</span><span class="ref-val">Velocidad 0. Vs ti: Ventaja. Tus ataques: Desventaja. Desventaja Salv DES.</span></div>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 px-2 pt-1 flex-grow content-start text-[10px] leading-tight">
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Agarrado</span><span>Velocidad 0. Termina si el agresor es incapacitado o te alejan de él.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Asustado</span><span>Desventaja en atq/pruebas. No puedes acercarte al origen de tu miedo.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Aturdido</span><span>Incapaz de actuar. Fallas Salv. FUE/DES. Atacantes tienen Ventaja.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Cegado</span><span>Fallas al ver. Atacantes tienen Ventaja. Tus ataques con Desventaja.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Derribado</span><span>Solo gatear. Atacantes: Ventaja (si están a 5 pies) / Desventaja (lejos).</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Envenenado</span><span>Desventaja en tus tiradas de ataque y en pruebas de habilidad.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Hechizado</span><span>No puedes atacar al lanzador. Él tiene Ventaja social contra ti.</span></div>
+                            <div class="flex flex-col border-b border-gray-300 pb-1"><span class="font-bold text-[11px] mb-0.5">Invisible</span><span>Imposible de ver. Atacantes tienen Desventaja. Tus ataques: Ventaja.</span></div>
+                            <div class="flex flex-col"><span class="font-bold text-[11px] mb-0.5">Inconsciente / Paralizado</span><span>Incapaz. Fallas FUE/DES. Atacantes tienen Ventaja y logran Crítico si están a 5 pies.</span></div>
+                            <div class="flex flex-col"><span class="font-bold text-[11px] mb-0.5">Restringido</span><span>Velocidad 0. Atacantes: Ventaja. Tus atq: Desventaja. Salv. DES con Desventaja.</span></div>
+                        </div>
+                    </div>
+
+                    <!-- MECÁNICAS Y TU TURNO -->
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <div class="rules-box">
+                            <span class="rules-title text-center">Cobertura y Concentración</span>
+                            <div class="flex flex-col px-2 gap-y-1.5 text-[10px] leading-tight pb-1 pt-1">
+                                <div class="flex justify-between border-b border-gray-300 pb-0.5"><span class="font-bold">Cob. Media (1/2)</span><span>+2 a CA y Salv. DES</span></div>
+                                <div class="flex justify-between border-b border-gray-300 pb-0.5"><span class="font-bold">Cob. Alta (3/4)</span><span>+5 a CA y Salv. DES</span></div>
+                                <div class="flex justify-between border-b border-gray-300 pb-0.5"><span class="font-bold">Cob. Total</span><span>Inmune a atq. directos</span></div>
+                                <div class="flex flex-col mt-0.5"><span class="font-bold mb-0.5">Concentración (Recibir Daño)</span><span>Tira Salv. CON (Dificultad 10 o la mitad del daño, lo que sea mayor).</span></div>
+                            </div>
+                        </div>
+                        <div class="rules-box bg-gray-100">
+                            <span class="rules-title text-center">Tu Turno en Combate</span>
+                            <div class="flex flex-col px-2 gap-y-1.5 text-[10px] leading-tight pb-1 pt-1">
+                                <div class="flex flex-col border-b border-gray-300 pb-0.5">
+                                    <span class="font-bold text-gray-800">1 Acción</span>
+                                    <span>La principal (Atacar, Conjuro, etc.)</span>
+                                </div>
+                                <div class="flex flex-col border-b border-gray-300 pb-0.5">
+                                    <span class="font-bold text-gray-800">1 Acción Adicional (Bonus)</span>
+                                    <span>Solo si un rasgo o conjuro te lo permite.</span>
+                                </div>
+                                <div class="flex flex-col border-b border-gray-300 pb-0.5">
+                                    <span class="font-bold text-gray-800">Movimiento</span>
+                                    <span>Puedes dividirlo antes/después de actuar.</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-gray-800">1 Reacción (Fuera de turno)</span>
+                                    <span>Respuesta a un evento (Ej. Ataque Oportunidad).</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="page-num">10</div>
             </div>
             <!-- PÁGINA 5 -->
