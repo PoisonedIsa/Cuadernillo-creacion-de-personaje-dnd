@@ -472,7 +472,27 @@
         body.mode-notebook .core-wrapper, 
         body.mode-notebook .annex-wrapper { display: none !important; }
         body.mode-notebook .notebook-wrapper { display: flex !important; }
-    </style>
+    /* ========================================== /
+/ CORRECCIÓN DE BORDES: MODO CUADERNILLO     /
+/ ========================================== */
+.notebook-wrapper .box-border {
+border-style: solid !important;
+border-width: 1px !important;
+border-color: #444 !important;
+}
+.notebook-wrapper .main-frame {
+outline: none !important;
+border: 1.5px solid #2c2c2c !important;
+}
+  /* ========================================== */
+    /* OCULTAR NÚMEROS EN PORTADAS CUADERNILLO    */
+    /* (Páginas 20, 1, 2 y 19)                    */
+    /* ========================================== */
+    #sheetNotebook1 .page-num,
+    #sheetNotebook2 .page-num {
+        display: none !important;
+    }
+</style>
 </head>
 <body class="mode-martial class-fighter" onload="initPatterns()">
 
