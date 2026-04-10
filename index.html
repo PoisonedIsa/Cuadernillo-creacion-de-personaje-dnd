@@ -467,10 +467,11 @@
                 border-bottom: none !important;
             }
         }
-       /* --- MODO LITE (2 HOJAS) --- */
-        body.mode-lite .lite-hidden {
-            display: none !important;
-        }
+       /* --- MODO CUADERNILLO GENERAL --- */
+        .notebook-wrapper { display: none; transition: opacity 0.3s ease; }
+        body.mode-notebook .core-wrapper, 
+        body.mode-notebook .annex-wrapper { display: none !important; }
+        body.mode-notebook .notebook-wrapper { display: flex !important; }
     </style>
 </head>
 <body class="mode-martial class-fighter" onload="initPatterns()">
@@ -574,7 +575,7 @@
              <!-- BOTONES DE NAVEGACIÓN Y EXTRAS -->
              <button id="viewToggleBtn" onclick="toggleViewMode()" class="bg-amber-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-amber-700 text-xs transition-colors ml-4 border border-amber-400">VER ANEXOS</button>
              <!-- NUEVO BOTÓN QUE DEBES PEGAR AQUÍ: -->
-             <button id="liteToggleBtn" onclick="toggleLiteMode()" class="bg-teal-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-teal-700 text-xs transition-colors ml-2 border border-teal-400">MODO 2 HOJAS</button>
+             <button id="notebookToggleBtn" onclick="toggleNotebookMode()" class="bg-teal-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-teal-700 text-xs transition-colors ml-2 border border-teal-400">MODO CUADERNILLO</button>
 
              <!-- BOTÓN: CARTAS DE HECHIZOS -->
              <a href="[https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/](https://poisonedisa.github.io/Generador-de-cartas-de-hechizo/)" target="_blank" class="bg-indigo-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-indigo-700 text-xs transition-colors ml-2 border border-indigo-400 flex items-center no-underline text-center">CARTAS DE HECHIZOS</a>
@@ -2171,7 +2172,404 @@
             </div>
         </div>
     </div>
+ <!-- ========================================== -->
+    <!-- SECCIÓN: CUADERNILLO GENERAL (20 PAGINAS)-->
+    <!-- ========================================== -->
 
+    <!-- HOJA CUADERNILLO 1 (EXTERIORES MICADOS: Pág 20 y Pág 1) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 1 (Cubiertas Exteriores)</span><button onclick="downloadSheet('sheetNotebook1')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook1" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- CONTRAPORTADA EXTERIOR (Laminada) -->
+            <div class="page-a5 cover-container justify-center items-center flex flex-col">
+                <div class="pattern-layer"></div>
+                <div class="main-frame cover-element"></div>
+                <div class="z-20 text-center px-10 w-full flex flex-col items-center">
+                    <div class="art-frame-wrapper cover-element my-4" style="border-radius: 4px; width: 160px; height: 160px;">
+                         <div class="art-placeholder-text">SÍMBOLO / SELLO<br>CLICK AQUÍ</div>
+                         <input type="file" class="art-input-trigger" accept="image/*" onchange="loadCoverArtCustom(this)">
+                         <img class="art-preview" style="object-fit: contain; padding: 4px;">
+                    </div>
+                    <p class="subtitle-text text-gray-500 text-[11px] uppercase tracking-widest mt-6 border-t border-black pt-2 w-3/4">Registro de Aventuras y Bocetos</p>
+                </div>
+                <div class="page-num"></div>
+            </div>
+            <!-- PORTADA EXTERIOR (Laminada - Llenar en PC antes de imprimir) -->
+            <div class="page-a5 cover-container">
+                <div class="pattern-layer"></div>
+                <div class="main-frame cover-element"></div>
+                <div class="z-20 w-full flex flex-col items-center justify-center h-full py-8 gap-6">
+                    <div class="text-center w-full px-8">
+                        <input type="text" class="cover-title text-center text-4xl mb-1 uppercase text-black drop-shadow-sm bg-transparent w-full no-line" value="CUADERNILLO">
+                        <input type="text" class="subtitle-text text-center text-label text-gray-600 block text-[10px] uppercase mt-1 w-full bg-transparent no-line" value="NOTAS Y BOCETOS">
+                    </div>
+                    <div class="art-frame-wrapper cover-element my-4" style="border-radius: 4px;">
+                         <div class="art-placeholder-text">ARTE / LOGO<br>CLICK AQUÍ</div>
+                         <input type="file" class="art-input-trigger" accept="image/*" onchange="loadCoverArtCustom(this)">
+                         <img class="art-preview" style="object-fit: contain; padding: 4px;">
+                    </div>
+                    <div class="w-full text-center mb-6 px-10">
+                        <div class="mb-4">
+                            <label class="subtitle-text text-[9px] uppercase tracking-widest text-gray-500 block mb-0.5 font-bold">PROPIETARIO / AUTOR</label>
+                            <input type="text" class="text-center font-bold text-2xl border-b-2 border-black w-full bg-transparent font-['Cinzel'] no-line">
+                        </div>
+                        <div class="flex gap-4 justify-center">
+                            <div class="w-full"><label class="subtitle-text text-[8px] uppercase tracking-widest text-gray-500 block">FECHA DE INICIO</label><input type="text" class="text-center text-sm border-b border-gray-400 w-full bg-transparent no-line"></div>
+                            <div class="w-full"><label class="subtitle-text text-[8px] uppercase tracking-widest text-gray-500 block">PROYECTO / TEMA</label><input type="text" class="text-center text-sm border-b border-gray-400 w-full bg-transparent no-line"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOJA CUADERNILLO 2 (INTERIORES DE TAPAS: Pág 2 y Pág 19) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 2 (Interiores: Agenda y Registros)</span><button onclick="downloadSheet('sheetNotebook2')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook2" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- INTERIOR PORTADA (Pág 2): AGENDA -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <h2 class="text-title text-center mb-2 border-b-2 border-black pb-1 mt-2">AGENDA Y TAREAS</h2>
+                <div class="flex-grow flex flex-col gap-1.5">
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">LUNES</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">MARTES</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">MIÉRCOLES</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">JUEVES</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">VIERNES</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                    <div class="box-border p-1 bg-white/60 flex-1 flex flex-col"><span class="text-label border-b border-gray-400 pl-1">FIN DE SEMANA</span><textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 px-1 leading-tight"></textarea></div>
+                </div>
+                <div class="page-num"></div>
+            </div>
+            <!-- INTERIOR CONTRAPORTADA (Pág 19): REGISTROS IMPORTANTES -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <h2 class="text-title text-center mb-2 border-b-2 border-black pb-1 mt-2">REGISTROS IMPORTANTES</h2>
+                <div class="flex-grow flex flex-col gap-2">
+                    <div class="box-border p-1.5 bg-white/60 h-1/3 flex flex-col">
+                        <span class="text-label border-b border-gray-400 pl-1 mb-1">METAS / RECORDATORIOS</span>
+                        <textarea class="w-full h-full border-none resize-none bg-transparent text-body p-1 leading-tight"></textarea>
+                    </div>
+                    <div class="box-border p-1.5 bg-white/60 flex-grow flex flex-col lined-bg relative">
+                        <span class="text-label border-b border-gray-400 pl-1 mb-1 relative z-10">CONTACTOS / LUGARES CLAVE</span>
+                        <textarea class="absolute inset-0 top-7 w-full h-[calc(100%-28px)] border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea>
+                    </div>
+                </div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOJA CUADERNILLO 3 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 3 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook3')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook3" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOJA CUADERNILLO 4 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 4 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook4')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook4" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOJA CUADERNILLO 5 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 5 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook5')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook5" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HOJA CUADERNILLO 6 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 6 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook6')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook6" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HOJA CUADERNILLO 7 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 7 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook7')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook7" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HOJA CUADERNILLO 8 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 8 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook8')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook8" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HOJA CUADERNILLO 9 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 9 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook9')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook9" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HOJA CUADERNILLO 10 (Notas Dinámicas x2) -->
+    <div class="sheet-wrapper notebook-wrapper relative">
+        <div class="sheet-controls no-print text-white mb-1 flex justify-between items-center relative">
+            <div><span>Cuadernillo 10 (Páginas Dinámicas)</span><button onclick="downloadSheet('sheetNotebook10')" class="hover:text-blue-300 underline cursor-pointer text-xs ml-2">Descargar</button></div>
+        </div>
+        <div id="sheetNotebook10" class="sheet-landscape">
+            <div class="divider"></div>
+            <!-- Página Interna A -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+            <!-- Página Interna B -->
+            <div class="page-a5">
+                <div class="pattern-layer"></div>
+                <div class="page-settings">
+                    <div class="setting-btn" title="Color de Fondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 9.9 8.1 8.1c1.3 1.3 3.3 1.3 4.6 0l2.7-2.7c1.3-1.3 1.3-3.3 0-4.6z"></path><path d="M22 22l-4-4"></path></svg><input type="color" onchange="this.closest('.page-a5').style.backgroundColor = this.value"></div>
+                    <div class="setting-btn" title="Cambiar a Puntos / Blanco / Líneas" onclick="toggleBg(this)"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="w-3.5 h-3.5"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+                </div>
+                <div class="flex gap-2 border-b-2 border-black pb-1 mb-2 items-end mt-2">
+                    <div class="w-1/3"><label class="text-[9px] uppercase font-bold text-gray-500">FECHA</label><input type="text" class="w-full text-center text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                    <div class="flex-grow"><label class="text-[9px] uppercase font-bold text-gray-500">TEMA / TÍTULO</label><input type="text" class="w-full text-body font-bold bg-transparent no-line border-b border-gray-400 h-5"></div>
+                </div>
+                <div class="flex-grow w-full lined-bg dynamic-bg box-border p-2 bg-white/60 relative"><textarea class="absolute inset-0 w-full h-full border-none resize-none bg-transparent p-2 text-body leading-[20px]"></textarea></div>
+                <div class="page-num"></div>
+            </div>
+        </div>
+    </div>
     <!-- ========================================== -->
     <!-- SECCIÓN DE ANEXOS (EXPANSIONES) -->
     <!-- ========================================== -->
@@ -2456,31 +2854,43 @@
         // --- NEW LOGIC FOR INTERLEAVED PATTERNS ---
         
         let isAnnexMode = false;
-let isLiteMode = false;
+        let isNotebookMode = false;
 
-        function toggleLiteMode() {
-            isLiteMode = !isLiteMode;
-            document.body.classList.toggle('mode-lite', isLiteMode);
+        function toggleNotebookMode() {
+            isNotebookMode = !isNotebookMode;
+            document.body.classList.toggle('mode-notebook', isNotebookMode);
             
-            const btn = document.getElementById('liteToggleBtn');
-            if(isLiteMode) {
-                btn.innerText = 'MODO FULL';
-                btn.classList.replace('bg-teal-600', 'bg-emerald-600');
-                btn.classList.replace('hover:bg-teal-700', 'hover:bg-emerald-700');
-                btn.classList.replace('border-teal-400', 'border-emerald-400');
+            // Si el modo anexos estaba activo, lo apagamos para no mezclar vistas
+            if(isNotebookMode && isAnnexMode) {
+                toggleViewMode();
+            }
+            
+            const btn = document.getElementById('notebookToggleBtn');
+            if(isNotebookMode) {
+                btn.innerText = 'VOLVER A D&D';
+                btn.classList.replace('bg-teal-600', 'bg-red-600');
+                btn.classList.replace('hover:bg-teal-700', 'hover:bg-red-700');
+                btn.classList.replace('border-teal-400', 'border-red-400');
             } else {
-                btn.innerText = 'MODO 2 HOJAS';
-                btn.classList.replace('bg-emerald-600', 'bg-teal-600');
-                btn.classList.replace('hover:bg-emerald-700', 'hover:bg-teal-700');
-                btn.classList.replace('border-emerald-400', 'border-teal-400');
+                btn.innerText = 'MODO CUADERNILLO';
+                btn.classList.replace('bg-red-600', 'bg-teal-600');
+                btn.classList.replace('hover:bg-red-700', 'hover:bg-teal-700');
+                btn.classList.replace('border-red-400', 'border-teal-400');
             }
             
             setTimeout(updatePageNumbers, 50);
         }
 
         function updatePageNumbers() {
-            const allCoreWrappers = Array.from(document.querySelectorAll('.core-wrapper'));
-            const visibleWrappers = allCoreWrappers.filter(w => !w.classList.contains('lite-hidden') || !isLiteMode);
+            // Seleccionamos dinámicamente qué páginas estamos mostrando
+            let activeWrappersClass = '.core-wrapper';
+            if (document.body.classList.contains('mode-notebook')) {
+                activeWrappersClass = '.notebook-wrapper';
+            } else if (document.body.classList.contains('view-annex')) {
+                activeWrappersClass = '.annex-wrapper';
+            }
+            
+            const visibleWrappers = Array.from(document.querySelectorAll(activeWrappersClass));
             const totalPages = visibleWrappers.length * 2; 
             
             visibleWrappers.forEach((wrapper, index) => {
@@ -2490,6 +2900,7 @@ let isLiteMode = false;
                     const pageNumRight = pages[1].querySelector('.page-num');
                     let leftNum, rightNum;
                     
+                    // Lógica para encuadernación (Impresión doblada por la mitad)
                     if (index % 2 === 0) { 
                         leftNum = totalPages - index;
                         rightNum = index + 1;
@@ -2504,6 +2915,36 @@ let isLiteMode = false;
             });
         }
 
+        // Nueva función específica para la imagen de portada del cuadernillo
+        function loadCoverArtCustom(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = input.nextElementSibling;
+                    const placeholder = input.previousElementSibling;
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    if(placeholder) placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        // Nueva función para alternar entre Líneas, Puntos y Fondo Blanco
+        function toggleBg(btn) {
+            const container = btn.closest('.page-a5').querySelector('.dynamic-bg');
+            if (!container) return;
+            
+            if (container.classList.contains('lined-bg')) {
+                container.classList.remove('lined-bg');
+                container.classList.add('dot-grid');
+            } else if (container.classList.contains('dot-grid')) {
+                container.classList.remove('dot-grid');
+                // Se queda sin clases (Fondo blanco)
+            } else {
+                container.classList.add('lined-bg');
+            }
+        }
 
         function toggleViewMode() {
             isAnnexMode = !isAnnexMode;
