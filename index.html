@@ -1784,7 +1784,12 @@ border: 1.5px solid #2c2c2c !important;
                              <textarea class="w-full h-full border border-gray-300 p-2 resize-none rounded bg-transparent text-body"></textarea>
                          </div>
                      </div>
-                     <div class="box-border p-3 flex-grow"><span class="text-label block mb-2 border-b border-gray-300 pb-1">Historia del Personaje</span><textarea class="w-full h-full border-none resize-none lined-bg bg-transparent text-body"></textarea></div>
+                     <div class="box-border p-3 flex-grow flex flex-col">
+                         <span class="text-label block mb-2 border-b border-gray-300 pb-1 flex-shrink-0">Historia del Personaje</span>
+                         <div class="w-full flex-grow relative lined-bg">
+                             <textarea class="w-full h-full border-none resize-none bg-transparent text-body p-0 absolute inset-0 leading-[20px]"></textarea>
+                         </div>
+                     </div>
                  </div>
                 <div class="page-num">11</div>
             </div>
@@ -1884,27 +1889,29 @@ border: 1.5px solid #2c2c2c !important;
                      </div>
                 </div>
                   <!-- CONTENIDO MÁGICO P5 (LISTA DE HECHIZOS 6-9) -->
-                <div class="magic-content flex-grow w-full mb-4">
-                    <h2 class="text-title text-center border-b-2 border-black mb-2">Libro de Hechizos - Altos Niveles</h2>
-                    <div class="h-full grid grid-cols-2 gap-x-4 gap-y-3">
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 6</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 7</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 8</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<5; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 9</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<4; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col col-span-2 mt-2 border-t border-black pt-2">
-                             <span class="text-[10px] font-bold text-gray-600 uppercase mb-1">Notas Adicionales de Magia:</span>
-                             <textarea class="w-full h-full bg-transparent resize-none border-none text-body lined-bg p-0" style="min-height: 80px;"></textarea>
-                        </div>
-                    </div>
+        <div class="magic-content flex-grow flex flex-col w-full mb-4">
+            <h2 class="text-title text-center border-b-2 border-black mb-2">Libro de Hechizos - Altos Niveles</h2>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-3 mb-2">
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 6</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<8; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
                 </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 7</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<8; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 8</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<7; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 9</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+            </div>
+            <div class="flex flex-col flex-grow mt-2 border-t border-black pt-2">
+                 <span class="text-[10px] font-bold text-gray-600 uppercase mb-1">Notas Adicionales de Magia:</span>
+                 <div class="w-full flex-grow lined-bg relative">
+                     <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea>
+                 </div>
+            </div>
+        </div>
 
                 <!-- CONTENIDO MARCIAL P5 -->
                 <div class="martial-content flex-grow flex flex-col gap-2 mb-6">
@@ -1962,27 +1969,29 @@ border: 1.5px solid #2c2c2c !important;
                 </div>
 
                 <!-- CONTENIDO SACROS P5 (LISTA DE HECHIZOS 6-9) -->
-                <div class="sacred-content flex-grow w-full mb-4">
-                    <h2 class="text-title text-center border-b-2 border-black mb-2">Poderes Divinos - Altos Niveles</h2>
-                    <div class="h-full grid grid-cols-2 gap-x-4 gap-y-3">
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 6</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 7</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 8</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<5; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 9</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
-                            <script>for(let i=0; i<4; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
-                        </div>
-                        <div class="flex flex-col col-span-2 mt-2 border-t border-black pt-2">
-                             <span class="text-[10px] font-bold text-gray-600 uppercase mb-1">Notas Adicionales Sagradas:</span>
-                             <textarea class="w-full h-full bg-transparent resize-none border-none text-body lined-bg p-0" style="min-height: 80px;"></textarea>
-                        </div>
-                    </div>
+        <div class="sacred-content flex-grow flex flex-col w-full mb-4">
+            <h2 class="text-title text-center border-b-2 border-black mb-2">Poderes Divinos - Altos Niveles</h2>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-3 mb-2">
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 6</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<8; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
                 </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 7</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<8; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 8</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<7; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+                <div class="flex flex-col"><div class="border-b-2 border-black flex justify-between items-end mb-1"><span class="text-title text-sm">NIVEL 9</span><div class="flex gap-1 items-center mb-0.5"><span class="text-[9px] font-bold">USOS</span><div class="flex gap-0.5"><input type="checkbox" class="hex-check"></div></div></div>
+                    <script>for(let i=0; i<6; i++) document.write('<div class="flex items-center gap-1 border-b border-gray-300 pb-0.5"><input type="checkbox" class="comp-check flex-shrink-0" title="Preparado"><input type="text" class="w-full bg-transparent no-line text-body text-[11px]"></div>');</script>
+                </div>
+            </div>
+            <div class="flex flex-col flex-grow mt-2 border-t border-black pt-2">
+                 <span class="text-[10px] font-bold text-gray-600 uppercase mb-1">Notas Adicionales Sagradas:</span>
+                 <div class="w-full flex-grow lined-bg relative">
+                     <textarea class="w-full h-full bg-transparent resize-none border-none text-body p-0 absolute inset-0 leading-[20px]"></textarea>
+                 </div>
+            </div>
+        </div>
 
                 <div class="page-num">7</div>
             </div>
