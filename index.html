@@ -3004,7 +3004,7 @@ border: 1.5px solid #2c2c2c !important;
 
         function initPatterns() {
             // Marcar las hojas originales como "núcleo" automáticamente
-            document.querySelectorAll('.sheet-wrapper:not(.annex-wrapper)').forEach(el => el.classList.add('core-wrapper'));
+            document.querySelectorAll('.sheet-wrapper:not(.annex-wrapper):not(.notebook-wrapper)').forEach(el => el.classList.add('core-wrapper'));
 
             // Find all pattern layers and inject the two sub-layers (odd/even)
             // This allows us to use masks to offset lines independently
