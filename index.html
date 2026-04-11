@@ -2233,7 +2233,7 @@ border: 1.5px solid #2c2c2c !important;
             </div>
         </div>
     </div>
-  <!-- ========================================== -->
+   <!-- ========================================== -->
     <!-- SECCIÓN: CUADERNILLO GENERAL (20 PAGINAS)-->
     <!-- ========================================== -->
 
@@ -2265,6 +2265,13 @@ border: 1.5px solid #2c2c2c !important;
                      </div>
                 </div>
                 <div class="main-frame cover-element"></div>
+
+                <!-- Esquinas Decorativas Dinámicas Limpias -->
+                <div class="corner-decoration corner-tl cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-tr cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-br cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-bl cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+
                 <div class="z-20 text-center px-10 w-full flex flex-col items-center">
                     <div class="art-frame-wrapper cover-element my-4" style="border-radius: 4px; width: 160px; height: 160px;">
                          <div class="art-placeholder-text">SÍMBOLO / SELLO<br>CLICK AQUÍ</div>
@@ -2285,12 +2292,39 @@ border: 1.5px solid #2c2c2c !important;
                      </div>
                 </div>
                 <div class="main-frame cover-element"></div>
+                
+                <!-- Definición de fondos de esquinas limpios para el cuadernillo -->
+                <svg style="display: none;">
+                    <defs>
+                        <g id="bg-barbarian"><path d="M0,0 L100,0 L100,15 L80,20 L60,15 L40,22 L20,15 L15,20 L15,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-fighter"><path d="M0,0 L100,0 L100,8 L8,8 L8,100 L0,100 Z" fill="black" stroke="none"/><path d="M12,12 L85,12 L85,16 L16,16 L16,85 L12,85 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-monk"><path d="M0,0 L100,0 L100,12 C50,12 12,50 12,100 L0,100 Z" fill="black" stroke="none"/><path d="M18,100 C18,55 55,18 100,18 L100,20 C56,20 20,56 20,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-warlock"><path d="M0,0 L100,0 L100,10 L75,25 L45,15 L25,45 L15,75 L10,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-sorcerer"><path d="M0,0 L100,0 L90,12 L70,8 L50,18 L30,8 L18,30 L8,70 L12,90 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-wizard"><path d="M0,0 L100,0 L100,12 L30,12 L30,30 L12,30 L12,100 L0,100 Z" fill="black" stroke="none"/><rect x="16" y="16" width="10" height="10" fill="black" stroke="none"/></g>
+                        <g id="bg-artificer"><path d="M0,0 L100,0 L100,10 L80,10 L80,18 L60,18 L60,26 L26,26 L26,60 L18,60 L18,80 L10,80 L10,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-bard"><path d="M0,0 L100,0 L100,10 C70,10 60,25 35,25 C25,25 10,40 10,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-rogue"><path d="M0,0 L100,0 L100,10 L25,10 L45,45 L10,25 L10,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-cleric"><path d="M0,0 L100,0 L100,12 L35,12 A23,23 0 0 0 12,35 L12,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-druid"><path d="M0,0 L100,0 L100,10 C80,20 60,10 40,20 C30,25 25,30 20,40 C10,60 20,80 10,100 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-ranger"><path d="M0,0 L100,0 L70,10 L85,25 L25,25 L25,85 L10,70 L0,100 Z" fill="black" stroke="none"/></g>
+                        <g id="bg-paladin"><path d="M0,0 L100,0 L100,18 L85,18 L85,12 L25,12 L25,25 L12,25 L12,85 L18,85 L18,100 L0,100 Z" fill="black" stroke="none"/></g>
+                    </defs>
+                </svg>
+
+                <!-- Esquinas Decorativas Dinámicas Limpias -->
+                <div class="corner-decoration corner-tl cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-tr cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-br cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+                <div class="corner-decoration corner-bl cover-element"><svg class="w-full h-full" viewBox="0 0 100 100"><use href="#bg-barbarian" class="corner-icon icon-barbarian"/><use href="#bg-fighter" class="corner-icon icon-fighter"/><use href="#bg-monk" class="corner-icon icon-monk"/><use href="#bg-warlock" class="corner-icon icon-warlock"/><use href="#bg-sorcerer" class="corner-icon icon-sorcerer"/><use href="#bg-wizard" class="corner-icon icon-wizard"/><use href="#bg-artificer" class="corner-icon icon-artificer"/><use href="#bg-bard" class="corner-icon icon-bard"/><use href="#bg-rogue" class="corner-icon icon-rogue"/><use href="#bg-cleric" class="corner-icon icon-cleric"/><use href="#bg-druid" class="corner-icon icon-druid"/><use href="#bg-ranger" class="corner-icon icon-ranger"/><use href="#bg-paladin" class="corner-icon icon-paladin"/></svg></div>
+
                 <div class="z-20 w-full flex flex-col items-center justify-center h-full py-8 gap-6">
-                    <div class="text-center w-full px-8">
-                        <input type="text" class="cover-title text-center text-4xl mb-1 uppercase text-black drop-shadow-sm bg-transparent w-full no-line" value="CUADERNILLO">
-                        <input type="text" class="subtitle-text text-center text-label text-gray-600 block text-[10px] uppercase mt-1 w-full bg-transparent no-line" value="NOTAS Y BOCETOS">
+                    <div class="text-center w-full px-8 flex flex-col items-center justify-center">
+                        <!-- TÍTULOS MULTILINEA -->
+                        <h1 contenteditable="true" class="cover-title text-center text-4xl mb-1 uppercase text-black drop-shadow-sm bg-transparent w-full no-line outline-none break-words whitespace-pre-wrap leading-none">CUADERNILLO</h1>
+                        <div contenteditable="true" class="subtitle-text text-center text-label text-gray-600 block text-[10px] uppercase mt-1 w-full bg-transparent no-line outline-none break-words whitespace-pre-wrap">NOTAS Y BOCETOS</div>
                     </div>
-                    <div class="art-frame-wrapper cover-element my-4" style="border-radius: 4px;">
+                    <div class="art-frame-wrapper cover-element my-2" style="border-radius: 4px;">
                          <div class="art-placeholder-text">ARTE / LOGO<br>CLICK AQUÍ</div>
                          <input type="file" class="art-input-trigger" accept="image/*" onchange="loadCoverArtCustom(this)">
                          <img class="art-preview" style="object-fit: contain; padding: 4px;">
@@ -2306,6 +2340,15 @@ border: 1.5px solid #2c2c2c !important;
                         </div>
                     </div>
                 </div>
+                
+                <!-- FOOTER DISEÑO MODIFICABLE -->
+                <div class="text-center absolute bottom-6 w-full px-10 z-30">
+                     <svg width="40" height="20" viewBox="0 0 40 20" class="mx-auto mb-1 opacity-60">
+                         <path d="M0 10 Q10 0 20 10 Q30 20 40 10" stroke="black" fill="none" stroke-width="1.5"/>
+                     </svg>
+                     <input type="text" class="subtitle-text text-[8px] uppercase tracking-[2px] text-gray-400 font-['Cinzel'] bg-transparent border-none text-center w-full outline-none no-line" value="Designed by Poisoned Isa">
+                </div>
+
                 <div class="page-num"></div>
             </div>
         </div>
